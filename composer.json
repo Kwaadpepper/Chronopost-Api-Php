@@ -25,6 +25,22 @@
             "email": "github@jeremydev.ovh"
         }
     ],
+    "scripts": {
+        "lint": [
+            "@php vendor/bin/phpcs src",
+            "@php vendor/bin/phpcs src"
+        ],
+        "lint-fix": [
+            "@php vendor/bin/phpcbf src",
+            "@php vendor/bin/phpcbf src"
+        ],
+        "phpstan": [
+            "@php vendor/bin/phpstan analyse -c phpstan.neon"
+        ],
+        "phpstan-fix": [
+            "@php vendor/bin/phpstan analyse -c phpstan.neon --error-format=checkstyle > phpstan-report.xml"
+        ]
+    },
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
