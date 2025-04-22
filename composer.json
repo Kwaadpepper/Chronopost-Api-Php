@@ -1,0 +1,33 @@
+{
+    "name": "kwaadpepper/chronopost-api-php",
+    "description": "Chronopost Api usage with php",
+    "type": "library",
+    "require": {
+        "kwaadpepper/chronopost-tracking": "^1.0",
+        "kwaadpepper/chronopost-relay": "^1.0",
+        "kwaadpepper/chronopost-shipping": "^1.0",
+        "kwaadpepper/chronopost-searchbt": "^1.0",
+        "kwaadpepper/chronopost-creneau": "^1.0"
+    },
+    "require-dev": {
+        "slevomat/coding-standard": "^8.17",
+        "phpstan/phpstan": "^2.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Kwaadpepper\\ChronopostApiPhp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jérémy Munsch",
+            "email": "github@jeremydev.ovh"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}
