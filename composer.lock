@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8454e5b06bab580ea0ec32e523289e67",
+    "content-hash": "e592ad5fccdf4e9f3ca7c2604ff03b0e",
     "packages": [
         {
             "name": "kwaadpepper/chronopost-creneau",
@@ -171,16 +171,16 @@
         },
         {
             "name": "kwaadpepper/chronopost-tracking",
-            "version": "1.0.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kwaadpepper/chronopost-tracking.git",
-                "reference": "3ae300bdc09fbf51e5ec8950dbf03dc7f85c2e25"
+                "reference": "7519644363a9c40c179f3a0870c18ab734060afb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kwaadpepper/chronopost-tracking/zipball/3ae300bdc09fbf51e5ec8950dbf03dc7f85c2e25",
-                "reference": "3ae300bdc09fbf51e5ec8950dbf03dc7f85c2e25",
+                "url": "https://api.github.com/repos/Kwaadpepper/chronopost-tracking/zipball/7519644363a9c40c179f3a0870c18ab734060afb",
+                "reference": "7519644363a9c40c179f3a0870c18ab734060afb",
                 "shasum": ""
             },
             "require": {
@@ -193,20 +193,16 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "": "./src/"
+                    "ChronopostTracking\\": "./src/ChronopostTracking"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
             "description": "Package generated from https://ws.chronopost.fr/tracking-cxf/TrackingServiceWS?wsdl using wsdltophp/packagegenerator",
-            "homepage": "https://github.com/Kwaadpepper/chronopost-tracking",
             "support": {
                 "issues": "https://github.com/Kwaadpepper/chronopost-tracking/issues",
-                "source": "https://github.com/Kwaadpepper/chronopost-tracking/tree/1.0.0"
+                "source": "https://github.com/Kwaadpepper/chronopost-tracking/tree/2.0.0"
             },
-            "time": "2022-12-23T10:31:06+00:00"
+            "time": "2025-04-22T20:04:05+00:00"
         },
         {
             "name": "wsdltophp/packagebase",

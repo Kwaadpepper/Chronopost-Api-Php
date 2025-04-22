@@ -5,7 +5,7 @@
     "require": {
         "php": "^8.3",
         "ext-soap": "*",
-        "kwaadpepper/chronopost-tracking": "^1.0",
+        "kwaadpepper/chronopost-tracking": "2.0.0",
         "kwaadpepper/chronopost-relay": "^1.0",
         "kwaadpepper/chronopost-shipping": "^1.0",
         "kwaadpepper/chronopost-searchbt": "^1.0",
