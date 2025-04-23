@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e592ad5fccdf4e9f3ca7c2604ff03b0e",
+    "content-hash": "14dcfcf334be6e0b16b4da7dc5bc0b0d",
     "packages": [
         {
             "name": "kwaadpepper/chronopost-creneau",
@@ -44,6 +44,44 @@
                 "source": "https://github.com/Kwaadpepper/chronopost-creneau/tree/1.0.0"
             },
             "time": "2022-12-23T10:33:35+00:00"
+        },
+        {
+            "name": "kwaadpepper/chronopost-quickcost",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Kwaadpepper/Chronopost-QuickCost.git",
+                "reference": "85bd0da669161196811c9ddd8be9c29e43df2b45"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Kwaadpepper/Chronopost-QuickCost/zipball/85bd0da669161196811c9ddd8be9c29e43df2b45",
+                "reference": "85bd0da669161196811c9ddd8be9c29e43df2b45",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-mbstring": "*",
+                "ext-soap": "*",
+                "php": ">=7.4",
+                "wsdltophp/packagebase": "~5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ChronopostQuickCost\\": "./src/ChronopostQuickCost"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Package generated from https://ws.chronopost.fr/quickcost-cxf/QuickcostServiceWS?wsdl using wsdltophp/packagegenerator",
+            "support": {
+                "issues": "https://github.com/Kwaadpepper/Chronopost-QuickCost/issues",
+                "source": "https://github.com/Kwaadpepper/Chronopost-QuickCost/tree/1.0.0"
+            },
+            "time": "2025-04-23T17:13:44+00:00"
         },
         {
             "name": "kwaadpepper/chronopost-relay",

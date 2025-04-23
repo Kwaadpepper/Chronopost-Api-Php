@@ -4,31 +4,31 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\Tracking;
 
+use ChronopostQuickCost\ServiceType\Quick;
 use ChronopostTracking\ClassMap;
-use ChronopostTracking\ServiceType\Track;
 use ChronopostTracking\StructType\EventInfoComp;
 use ChronopostTracking\StructType\TrackSkybillV2;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\TrackingException;
 use Kwaadpepper\ChronopostApiPhp\Factory\TrackingSkybillEventInfoFactory;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
-class TrackSearchService
+class QuickCostService
 {
     /**
      * Soap tracking service
      *
-     * @var \ChronopostTracking\ServiceType\Track
+     * @var \ChronopostQuickCost\ServiceType\Quick
      */
-    private Track $trackService;
+    private Quick $quickService;
 
     /**
      * Tracking service soap url
      *
      * @var string
      */
-    protected static string $serviceUrl = 'https://ws.chronopost.fr/tracking-cxf/TrackingServiceWS?wsdl';
+    protected static string $serviceUrl = 'https://ws.chronopost.fr/quickcost-cxf/QuickcostServiceWS?wsdl';
 
     /**
      * Constructor
@@ -46,11 +46,11 @@ class TrackSearchService
             ],
         );
 
-        $this->trackService = new Track($soapOptions);
+        $this->quickService = new Quick($soapOptions);
     }
 
     /**
-     * Find tracking information using a tracking number.
+     * Calculate shipping costs with different criterias.
      *
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber $trackingNumber The tracking number to search for.
      * @param string                                                    $language       The language for the response (default is 'fr').
@@ -60,14 +60,14 @@ class TrackSearchService
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError          If the API call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\TrackingException If the tracking number is invalid or if there are no events found.
      */
-    public function findUsingTrackingNumber(TrackingNumber $trackingNumber, string $language = 'fr'): array
+    public function quickCostV3(ProductCode $productCode, string $language = 'fr'): array
     {
         $parameters = new TrackSkybillV2(
             language: $language,
             skybillNumber: (string)$trackingNumber,
         );
 
-        $result = $this->trackService->trackSkybillV2($parameters);
+        $result = $this->quickService->quickCostV3($parameters);
 
         if ($result === false) {
             $lastError = $this->trackService->getLastErrorForMethod(methodName: 'trackSkybillV2');
