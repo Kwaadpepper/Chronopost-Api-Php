@@ -60,11 +60,11 @@ class ChronopostApi
     /**
      * Estimate the shipping cost for a shipment.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode    $from         The sender's postal code.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode    $to           The recipient's postal code.
-     * @param integer                                                $weight       The weight of the shipment in grams.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode $productCode  The product code for the shipment.
-     * @param \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType       $shippingType The shipping type.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode    $from          The sender's postal code.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode    $to            The recipient's postal code.
+     * @param integer                                                $weightInGrams The weight of the shipment in grams.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode $productCode   The product code for the shipment.
+     * @param \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType       $shippingType  The shipping type.
      *
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCostV3 The estimated shipping cost.
      *
@@ -74,7 +74,7 @@ class ChronopostApi
     public function estimateShippingCost(
         PostCode $from,
         PostCode $to,
-        int $weight,
+        int $weightInGrams,
         ProductCode $productCode,
         ShippingType $shippingType
     ): QuickCostV3 {
@@ -83,7 +83,7 @@ class ChronopostApi
             $this->password,
             $from,
             $to,
-            $weight,
+            $weightInGrams / 1000,
             $productCode,
             $shippingType
         );

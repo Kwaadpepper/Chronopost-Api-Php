@@ -56,13 +56,14 @@ class QuickCostService
     /**
      * Get quick cost for a shipment.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode      $from
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode      $to
-     * @param float                                                    $weight
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode   $productCode
-     * @param \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType         $shippingType
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber The account number.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      The password.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode      $from          The sender's postal code.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode      $to            The recipient's postal code.
+     * @phpcs:ignore Generic.Files.LineLength.TooLong
+     * @param float                                                    $weight        The weight of the shipment in kilograms.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode   $productCode   The product code for the shipment.
+     * @param \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType         $shippingType  The shipping type.
      *
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCostV3
      *

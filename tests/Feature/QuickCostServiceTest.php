@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\Tests\Feature;
 
+use Kwaadpepper\ChronopostApiPhp\ChronopostApi;
 use Kwaadpepper\ChronopostApiPhp\Enums\CountryDelivery;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
@@ -29,7 +30,7 @@ class QuickCostServiceTest extends TestCase
 
     public function testCanGetQuickCost(): void
     {
-    // GIVEN.
+        // GIVEN.
         $accountNumber    = new AccountNumber('19869502');
         $password         = new Password('255562');
         $from             = PostCode::create(
@@ -49,6 +50,37 @@ class QuickCostServiceTest extends TestCase
         $result = $quickCostService->quickCostV3(
             $accountNumber,
             $password,
+            $from,
+            $to,
+            $weight,
+            $productCode,
+            $shippingType,
+        );
+
+        // THEN.
+        $this->expectNotToPerformAssertions();
+    }
+
+    public function testCanGetQuickCostWithChronopostApiClass(): void
+    {
+        // GIVEN.
+        $accountNumber = new AccountNumber('19869502');
+        $password      = new Password('255562');
+        $from          = PostCode::create(
+            '75001',
+            CountryDelivery::FRANCE,
+        );
+        $to            = PostCode::create(
+            '67420',
+            CountryDelivery::FRANCE,
+        );
+        $weight        = 1250;
+        $productCode   = new ProductCode('01');
+        $shippingType  = ShippingType::MERCHANDISE;
+        $chronopostApi = new ChronopostApi($accountNumber, $password);
+
+        // WHEN.
+        $chronopostApi->estimateShippingCost(
             $from,
             $to,
             $weight,
