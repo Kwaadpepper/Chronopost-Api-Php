@@ -59,7 +59,7 @@ class TrackSearchService
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber   $trackingNumber The tracking number to search for.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale $locale         The language for the response (default is 'fr').
      *
-     * @return array An array of tracking events.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SkybillV2\EventInfo[] An array of tracking events.
      *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError          If the API call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\TrackingException If the tracking number is invalid or if there are no events found.

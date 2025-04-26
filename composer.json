@@ -10,7 +10,8 @@
         "kwaadpepper/chronopost-shipping": "^1.0",
         "kwaadpepper/chronopost-searchbt": "^1.0",
         "kwaadpepper/chronopost-creneau": "^1.0",
-        "kwaadpepper/chronopost-quickcost": "^1.0"
+        "kwaadpepper/chronopost-quickcost": "^1.0",
+        "moneyphp/money": "^4.7"
     },
     "require-dev": {
         "slevomat/coding-standard": "^8.17",

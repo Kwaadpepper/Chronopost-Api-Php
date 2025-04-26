@@ -26,8 +26,11 @@ class ProductCode implements \Stringable
         }
     }
 
+
     /**
-     * @return string The tracking number.
+     * Get the product code value.
+     *
+     * @return string The product code value.
      */
     public function getValue(): string
     {
@@ -35,7 +38,7 @@ class ProductCode implements \Stringable
     }
 
     /**
-     * @return string The tracking number.
+     * @return string
      */
     public function __toString(): string
     {

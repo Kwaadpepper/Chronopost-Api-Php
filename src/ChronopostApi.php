@@ -5,15 +5,12 @@ declare(strict_types=1);
 namespace Kwaadpepper\ChronopostApiPhp;
 
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
-use Kwaadpepper\ChronopostApiPhp\Tracking\TrackSearchService;
+use Kwaadpepper\ChronopostApiPhp\Services\Tracking\TrackSearchService;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
 class ChronopostApi
 {
-    /**
-     * @var TrackSearchService|null
-     */
-    private TrackSearchService|null $trackSearchService = null;
+    private TrackSearchService $trackSearchService;
 
     /**
      * Summary of __construct
@@ -33,8 +30,19 @@ class ChronopostApi
         $this->trackSearchService = new TrackSearchService($defaultSopapOptions);
     }
 
-    public function trackSingleShipment(TrackingNumber $trackingNumber): void
+    /**
+     * Track a single shipment using the tracking number.
+     *
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber $trackingNumber The tracking number to search.
+     *
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SkybillV2\EventInfo[] The tracking information.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError          If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\TrackingException If the tracking number is invalid
+     *                                                                    or if there are no events found.
+     */
+    public function trackSingleShipment(TrackingNumber $trackingNumber): array
     {
-        $this->trackSearchService->findUsingTrackingNumber($trackingNumber);
+        return $this->trackSearchService->findUsingTrackingNumber($trackingNumber);
     }
 }

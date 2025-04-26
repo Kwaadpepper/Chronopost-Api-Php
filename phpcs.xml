@@ -117,7 +117,9 @@
         <exclude name="Squiz.Commenting.LongConditionClosingComment.SpacingBefore" />
     </rule>
     <rule ref="Squiz.Commenting.PostStatementComment"/>
-    <rule ref="Squiz.Commenting.VariableComment"/>
+    <rule ref="Squiz.Commenting.VariableComment">
+        <exclude name="Squiz.Commenting.VariableComment.Missing" />
+    </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse" />
 
 </ruleset>

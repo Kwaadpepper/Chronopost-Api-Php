@@ -14,6 +14,8 @@ enum Locale: string
     case NL = 'nl_NL';
     case PT = 'pt_PT';
 
+    case US = 'en_US';
+
     /**
      * Get the name of the locale
      *
@@ -29,6 +31,7 @@ enum Locale: string
             self::DE => 'Deutsch',
             self::NL => 'Nederlands',
             self::PT => 'Português',
+            self::US => 'English (United States)',
         };
     }
 }
