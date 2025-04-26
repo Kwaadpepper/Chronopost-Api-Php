@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kwaadpepper\ChronopostApiPhp\Tests\Unit;
+namespace Kwaadpepper\ChronopostApiPhp\Tests\Unit\ObjectValues;
 
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
 use PHPUnit\Framework\TestCase;

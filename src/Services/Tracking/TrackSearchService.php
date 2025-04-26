@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Kwaadpepper\ChronopostApiPhp\Tracking;
+namespace Kwaadpepper\ChronopostApiPhp\Services\Tracking;
 
 use ChronopostTracking\ClassMap;
 use ChronopostTracking\ServiceType\Track;
 use ChronopostTracking\StructType\EventInfoComp;
 use ChronopostTracking\StructType\TrackSkybillV2;
+use Kwaadpepper\ChronopostApiPhp\Enums\Locale;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\TrackingException;
-use Kwaadpepper\ChronopostApiPhp\Factory\TrackingSkybillEventInfoFactory;
+use Kwaadpepper\ChronopostApiPhp\Factory\TrackingSkybillV2EventFactory;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
 class TrackSearchService
@@ -52,18 +54,22 @@ class TrackSearchService
     /**
      * Find tracking information using a tracking number.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber $trackingNumber The tracking number to search for.
-     * @param string                                                    $language       The language for the response (default is 'fr').
+     * @phpcs:disable Generic.Files.LineLength.TooLong
+     *
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber   $trackingNumber The tracking number to search for.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale $locale         The language for the response (default is 'fr').
      *
      * @return array An array of tracking events.
      *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError          If the API call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\TrackingException If the tracking number is invalid or if there are no events found.
      */
-    public function findUsingTrackingNumber(TrackingNumber $trackingNumber, string $language = 'fr'): array
+    public function findUsingTrackingNumber(TrackingNumber $trackingNumber, TrackingV2Locale $locale = null): array
     {
+        // phpcs:enable
+        $locale     = $locale ?? TrackingV2Locale::create(Locale::FR);
         $parameters = new TrackSkybillV2(
-            language: $language,
+            language: (string)$locale,
             skybillNumber: (string)$trackingNumber,
         );
 
@@ -89,7 +95,7 @@ class TrackSearchService
 
         $events = $response->getListEventInfoComp()?->getEvents() ?? [];
 
-        $factory = new TrackingSkybillEventInfoFactory();
+        $factory = new TrackingSkybillV2EventFactory();
 
         return array_map(
             fn (EventInfoComp $event) => $factory->create($event),
