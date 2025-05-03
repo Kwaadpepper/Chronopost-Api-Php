@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63cfc43516ee6058ae472291eda71f16",
+    "content-hash": "0374c16aec50181b031f4b460aaf8443",
     "packages": [
         {
             "name": "kwaadpepper/chronopost-creneau",
@@ -163,16 +163,16 @@
         },
         {
             "name": "kwaadpepper/chronopost-shipping",
-            "version": "1.0.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Kwaadpepper/chronopost-shipping.git",
-                "reference": "bac1df6f48d1f24c9e5311d48985a267a87b097f"
+                "url": "https://github.com/Kwaadpepper/Chronopost-Shipping.git",
+                "reference": "71a5d6bd4279836e7c70880ec43248767bc9cc4d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kwaadpepper/chronopost-shipping/zipball/bac1df6f48d1f24c9e5311d48985a267a87b097f",
-                "reference": "bac1df6f48d1f24c9e5311d48985a267a87b097f",
+                "url": "https://api.github.com/repos/Kwaadpepper/Chronopost-Shipping/zipball/71a5d6bd4279836e7c70880ec43248767bc9cc4d",
+                "reference": "71a5d6bd4279836e7c70880ec43248767bc9cc4d",
                 "shasum": ""
             },
             "require": {
@@ -185,7 +185,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "": "./src/"
+                    "ChronopostShipping\\": "./src/ChronopostShipping"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -193,19 +193,11 @@
                 "MIT"
             ],
             "description": "Package generated from https://ws.chronopost.fr/shipping-cxf/ShippingServiceWS?wsdl using wsdltophp/packagegenerator",
-            "homepage": "https://github.com/Kwaadpepper/chronopost-shipping",
-            "keywords": [
-                "api",
-                "chronopost",
-                "lib",
-                "shipping",
-                "wsdl"
-            ],
             "support": {
-                "issues": "https://github.com/Kwaadpepper/chronopost-shipping/issues",
-                "source": "https://github.com/Kwaadpepper/chronopost-shipping/tree/1.0.0"
+                "issues": "https://github.com/Kwaadpepper/Chronopost-Shipping/issues",
+                "source": "https://github.com/Kwaadpepper/Chronopost-Shipping/tree/2.0.0"
             },
-            "time": "2022-12-23T10:04:16+00:00"
+            "time": "2025-05-03T15:51:28+00:00"
         },
         {
             "name": "kwaadpepper/chronopost-tracking",
