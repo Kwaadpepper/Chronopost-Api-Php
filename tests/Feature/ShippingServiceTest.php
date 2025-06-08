@@ -20,6 +20,8 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode;
 use Kwaadpepper\ChronopostApiPhp\Services\Shipping\ShippingService;
 
 /**
@@ -47,8 +49,8 @@ class ShippingServiceTest extends \PHPUnit\Framework\TestCase
         $referenceValue = new ReferenceValue();
         $skybillValue   = new SkyBillValue(
             ShippingType::MERCHANDISE,
-            ChronopostProductCode::CHRONO_13,
-            DeliveryServiceCode::DELIVERY_ON_MONDAY,
+            ProductCode::fromEnum(ChronopostProductCode::CHRONO_13),
+            ServiceCode::fromEnum(DeliveryServiceCode::DELIVERY_ON_MONDAY),
             25.23,
         );
         $customerValue  = new CustomerValue(

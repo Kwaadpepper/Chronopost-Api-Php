@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\ObjectValues;
 
+use Kwaadpepper\ChronopostApiPhp\Enums\ChronopostProductCode;
+
 readonly class ProductCode implements \Stringable
 {
     /**
@@ -43,5 +45,31 @@ readonly class ProductCode implements \Stringable
     public function __toString(): string
     {
         return $this->value;
+    }
+
+    /**
+     * Get the name of the product code.
+     *
+     * @return string The name of the product code.
+     */
+    public function getName(): string
+    {
+        try {
+            return ChronopostProductCode::from($this->value)->name;
+        } catch (\ValueError $e) {
+            return 'Unknown Product Code';
+        }
+    }
+
+    /**
+     * Create a ProductCode from a ChronopostProductCode enum.
+     *
+     * @param \Kwaadpepper\ChronopostApiPhp\Enums\ChronopostProductCode $productCode The product code enum.
+     *
+     * @return self
+     */
+    public static function fromEnum(ChronopostProductCode $productCode): self
+    {
+        return new self($productCode->value);
     }
 }

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel;
 
-use Kwaadpepper\ChronopostApiPhp\Enums\ChronopostProductCode;
-use Kwaadpepper\ChronopostApiPhp\Enums\DeliveryServiceCode;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\Helpers\StringHelper;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode;
 
 /**
  * @phpcs:disable Generic.Files.LineLength.TooLong
@@ -54,8 +54,8 @@ readonly class SkyBillValue
      * SkyBillValue constructor.
      *
      * @param \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType                     $objectType
-     * @param \Kwaadpepper\ChronopostApiPhp\Enums\ChronopostProductCode|string     $productCode
-     * @param \Kwaadpepper\ChronopostApiPhp\Enums\DeliveryServiceCode|string       $serviceCode
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode               $productCode
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode               $serviceCode
      * @param float                                                                $weight
      * @param integer                                                              $height
      * @param integer                                                              $width
@@ -83,12 +83,12 @@ readonly class SkyBillValue
          * Code produit de livraison. Les produits à utiliser sont ceux contractualisés avec Chronopost.
          * !Codes fournis par votre contact IT Chronopost
          */
-        ChronopostProductCode|string $productCode,
+        ProductCode $productCode,
         /**
          * Jour de livraison
          * !Codes fournis par votre contact IT Chronopost
          */
-        DeliveryServiceCode|string $serviceCode,
+        ServiceCode $serviceCode,
         /** Poids du colis en kilogrammes */
         public float $weight,
         /** Hauteur colis en cm (0 si inconnu)  */
@@ -134,20 +134,10 @@ readonly class SkyBillValue
         /** Ordre du colis, impératif avec bulk number */
         public int $skybillRank = 1,
     ) {
-        if ($productCode instanceof ChronopostProductCode) {
-            $this->productCode = $productCode->value;
-            $this->productName = $productCode->name;
-        } else {
-            $this->productCode = $productCode;
-            $this->productName = 'Unknown product name';
-        }
-        if ($serviceCode instanceof DeliveryServiceCode) {
-            $this->serviceCode = $serviceCode->value;
-            $this->serviceName = $serviceCode->name;
-        } else {
-            $this->serviceCode = $serviceCode;
-            $this->serviceName = 'Unknown service name';
-        }
+        $this->productCode = $productCode->getValue();
+        $this->productName = $productCode->getName();
+        $this->serviceCode = $serviceCode->getValue();
+        $this->serviceName = $serviceCode->getName();
 
         if ($this->codValue < 0) {
             throw new \InvalidArgumentException(
