@@ -86,7 +86,7 @@ class QuickCostService
             $to->getPostCode(),
             (string)$weight,
             $productCode->getValue(),
-            $shippingType->value,
+            $shippingType->oneLetterCode(),
         );
 
         $result = $this->quickService->quickCostV3($parameters);
