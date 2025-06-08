@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp;
 
-use Kwaadpepper\ChronopostApiPhp\Dto\QuickCostV3;
+use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
@@ -66,7 +66,7 @@ class ChronopostApi
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode $productCode   The product code for the shipment.
      * @param \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType       $shippingType  The shipping type.
      *
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCostV3 The estimated shipping cost.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3 The estimated shipping cost.
      *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError                     If the API call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException If the API returns an error.

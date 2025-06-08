@@ -12,7 +12,7 @@ use Money\Money;
  *
  * @phpcs:disable Generic.Files.LineLength.TooLong
  */
-class Supplement implements Dto
+readonly class Supplement implements Dto
 {
     /**
      * @param \Money\Money                                               $amount    Montant hors taxe du supplément trouvé.

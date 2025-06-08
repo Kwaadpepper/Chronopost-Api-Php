@@ -9,7 +9,7 @@ use Kwaadpepper\ChronopostApiPhp\Dto\Dto;
 /**
  * Pourcentage de la surcharge carburant liée au carburant.
  */
-class Overload implements Dto
+readonly class Overload implements Dto
 {
     /**
      * @param float $planePercent Pourcentage de la surcharge carburant Avion.

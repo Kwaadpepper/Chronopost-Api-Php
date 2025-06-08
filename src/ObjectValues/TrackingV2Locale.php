@@ -6,12 +6,16 @@ namespace Kwaadpepper\ChronopostApiPhp\ObjectValues;
 
 use Kwaadpepper\ChronopostApiPhp\Enums\Locale;
 
-class TrackingV2Locale implements \Stringable
+readonly class TrackingV2Locale implements \Stringable
 {
     /**
-     * @var array
+     * The allowed locales for the tracking V2 API.
+     * These are the locales that can be used in the tracking V2 API.
+     * If a locale is not in this list, it will throw an exception.
+     *
+     * @var \Kwaadpepper\ChronopostApiPhp\Enums\Locale[]
      */
-    private array $allowedLocales = [
+    private const ALLOWED_LOCALES = [
         Locale::FR,
         Locale::EN,
         Locale::ES,
@@ -28,12 +32,12 @@ class TrackingV2Locale implements \Stringable
     private function __construct(
         private Locale $locale,
     ) {
-        if (!in_array($locale, $this->allowedLocales, true)) {
+        if (!in_array($locale, self::ALLOWED_LOCALES, true)) {
             throw new \InvalidArgumentException(
                 "Locale `{$locale->value}` must be one of: " .
                 implode(', ', array_map(
                     fn($locale) => $locale->value,
-                    $this->allowedLocales
+                    self::ALLOWED_LOCALES
                 ))
             );
         }

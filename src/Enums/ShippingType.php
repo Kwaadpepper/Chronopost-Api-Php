@@ -6,6 +6,6 @@ namespace Kwaadpepper\ChronopostApiPhp\Enums;
 
 enum ShippingType: string
 {
-    case MERCHANDISE = 'M';
-    case DOCUMENTS   = 'D';
+    case MERCHANDISE = 'MAR';
+    case DOCUMENTS   = 'DOC';
 }

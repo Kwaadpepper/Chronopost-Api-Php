@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\ObjectValues;
 
-class Password
+readonly class Password
 {
     /**
      * The password.

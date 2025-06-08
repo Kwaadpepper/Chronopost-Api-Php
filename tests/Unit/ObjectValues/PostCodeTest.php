@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\Tests\Unit\ObjectValues;
 
-use Kwaadpepper\ChronopostApiPhp\Enums\CountryDelivery;
+use Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use PHPUnit\Framework\TestCase;
 
@@ -17,11 +17,11 @@ class PostCodeTest extends TestCase
     {
         // GIVEN.
         $postCode        = '75001';
-        $countryDelivery = CountryDelivery::FRANCE;
+        $countryDelivery = CountryForChronopost::FRANCE;
 
 
         // WHEN.
-        PostCode::create(
+        new PostCode(
             $postCode,
             $countryDelivery,
         );
@@ -37,10 +37,10 @@ class PostCodeTest extends TestCase
 
         // GIVEN.
         $postCode        = 'INVALID_POST_CODE';
-        $countryDelivery = CountryDelivery::FRANCE;
+        $countryDelivery = CountryForChronopost::FRANCE;
 
         // WHEN.
-        PostCode::create(
+        new PostCode(
             $postCode,
             $countryDelivery,
         );
@@ -52,10 +52,10 @@ class PostCodeTest extends TestCase
 
         // GIVEN.
         $postCode        = '75001';
-        $countryDelivery = CountryDelivery::GRANDE_BRETAGNE;
+        $countryDelivery = CountryForChronopost::GRANDE_BRETAGNE;
 
         // WHEN.
-        PostCode::create(
+        new PostCode(
             $postCode,
             $countryDelivery,
         );

@@ -14,7 +14,7 @@ namespace Kwaadpepper\ChronopostApiPhp\Enums;
  * From the Chronopost API documentation:
  * 4.2. LISTE DES CODES PAYS, FORMAT DES CODES POSTAUX, PRODUITS DE LIVRAISON
  */
-enum CountryDelivery
+enum CountryForChronopost
 {
     case ACORES;
     case AFGHANISTAN;

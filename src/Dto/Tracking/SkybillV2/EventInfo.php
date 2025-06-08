@@ -30,7 +30,7 @@ readonly class EventInfo implements Dto
         public ?string $npc = null,
         public ?string $officeLabel = null,
         public ?string $zipCode = null,
-        protected array $events = []
+        public array $events = []
     ) {
         foreach ($events as $event) {
             // @phpstan-ignore instanceof.alwaysTrue
@@ -38,15 +38,5 @@ readonly class EventInfo implements Dto
                 throw new \InvalidArgumentException('Events must be an array of ' . Event::class);
             }
         }
-    }
-
-    /**
-     * Get the events
-     *
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SkybillV2\Event[]
-     */
-    public function getEvents(): array
-    {
-        return $this->events;
     }
 }

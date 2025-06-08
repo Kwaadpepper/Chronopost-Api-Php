@@ -7,7 +7,7 @@ namespace Kwaadpepper\ChronopostApiPhp\Services\Cost;
 use ChronopostQuickCost\ClassMap;
 use ChronopostQuickCost\ServiceType\Quick;
 use ChronopostQuickCost\StructType\QuickCostV3 as QuickCostV3Input;
-use Kwaadpepper\ChronopostApiPhp\Dto\QuickCostV3;
+use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException;
@@ -65,7 +65,7 @@ class QuickCostService
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode   $productCode   The product code for the shipment.
      * @param \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType         $shippingType  The shipping type.
      *
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCostV3
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3
      *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError                     If the API call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException If the API returns an error.

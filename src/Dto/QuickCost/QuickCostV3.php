@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Kwaadpepper\ChronopostApiPhp\Dto;
+namespace Kwaadpepper\ChronopostApiPhp\Dto\QuickCost;
 
+use Kwaadpepper\ChronopostApiPhp\Dto\Dto;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\Insurance;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\Overload;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\Supplement;

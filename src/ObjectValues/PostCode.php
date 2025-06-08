@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\ObjectValues;
 
-use Kwaadpepper\ChronopostApiPhp\Enums\CountryDelivery;
+use Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost;
 
-class PostCode implements \Stringable
+readonly class PostCode implements \Stringable
 {
     /**
      * A valid post code for the country.
@@ -20,22 +20,22 @@ class PostCode implements \Stringable
      * The country delivery object.
      * This object contains the post code format for the country.
      *
-     * @var \Kwaadpepper\ChronopostApiPhp\Enums\CountryDelivery
+     * @var \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost
      */
-    private CountryDelivery $countryDelivery;
+    private CountryForChronopost $countryDelivery;
 
     /**
      * Constructor.
      *
-     * @param string                                              $postCode        The post code to validate.
-     * @param \Kwaadpepper\ChronopostApiPhp\Enums\CountryDelivery $countryDelivery The country delivery object.
+     * @param string                                                   $postCode        The post code to validate.
+     * @param \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost $countryDelivery The country delivery object.
      *
      * @throws \InvalidArgumentException If the post code does not match
      *                                   the format defined in the country delivery object.
      */
-    private function __construct(
+    public function __construct(
         string $postCode,
-        CountryDelivery $countryDelivery
+        CountryForChronopost $countryDelivery
     ) {
         $this->validate($postCode, $countryDelivery);
         $this->postCode        = $postCode;
@@ -51,45 +51,25 @@ class PostCode implements \Stringable
     }
 
     /**
-     * @return \Kwaadpepper\ChronopostApiPhp\Enums\CountryDelivery
+     * @return \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost
      */
-    public function getCountryDelivery(): CountryDelivery
+    public function getCountryDelivery(): CountryForChronopost
     {
         return $this->countryDelivery;
     }
 
     /**
-     * Create a new instance of the PostCode class.
-     *
-     * @param string                                              $postCode  The post code to validate.
-     * @param \Kwaadpepper\ChronopostApiPhp\Enums\CountryDelivery $ofCountry The country delivery object.
-     *
-     * @return \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode
-     *
-     * @throws \InvalidArgumentException If the post code does not match
-     *                                   the format defined in the country delivery object.
-     */
-    public static function create(string $postCode, CountryDelivery $ofCountry): self
-    {
-        $instance = new self(
-            postCode: $postCode,
-            countryDelivery: $ofCountry,
-        );
-        return $instance;
-    }
-
-    /**
      * Validate the post code format based on the country delivery object.
      *
-     * @param string                                              $postCode  The post code to validate.
-     * @param \Kwaadpepper\ChronopostApiPhp\Enums\CountryDelivery $ofCountry The country delivery object.
+     * @param string                                                   $postCode  The post code to validate.
+     * @param \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost $ofCountry The country delivery object.
      *
      * @return void
      *
      * @throws \InvalidArgumentException If the post code does not match
      *                                   the format defined in the country delivery object.
      */
-    private function validate(string $postCode, CountryDelivery $ofCountry)
+    private function validate(string $postCode, CountryForChronopost $ofCountry)
     {
         $postCodes = $ofCountry->getPostCodeFormats();
         foreach ($postCodes as $postCodeFormat) {

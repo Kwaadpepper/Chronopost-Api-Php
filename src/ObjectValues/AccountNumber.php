@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\ObjectValues;
 
-class AccountNumber
+readonly class AccountNumber
 {
     /**
      * The account number.

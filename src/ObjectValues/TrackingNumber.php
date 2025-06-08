@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\ObjectValues;
 
-class TrackingNumber implements \Stringable
+readonly class TrackingNumber implements \Stringable
 {
     /**
      * @param string $value The tracking number.

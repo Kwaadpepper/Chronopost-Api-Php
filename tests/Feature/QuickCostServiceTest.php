@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kwaadpepper\ChronopostApiPhp\Tests\Feature;
 
 use Kwaadpepper\ChronopostApiPhp\ChronopostApi;
-use Kwaadpepper\ChronopostApiPhp\Enums\CountryDelivery;
+use Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
@@ -33,13 +33,13 @@ class QuickCostServiceTest extends TestCase
         // GIVEN.
         $accountNumber    = new AccountNumber('19869502');
         $password         = new Password('255562');
-        $from             = PostCode::create(
+        $from             = new PostCode(
             '75001',
-            CountryDelivery::FRANCE,
+            CountryForChronopost::FRANCE,
         );
-        $to               = PostCode::create(
+        $to               = new PostCode(
             '67420',
-            CountryDelivery::FRANCE,
+            CountryForChronopost::FRANCE,
         );
         $weight           = 12.50;
         $productCode      = new ProductCode('01');
@@ -66,13 +66,13 @@ class QuickCostServiceTest extends TestCase
         // GIVEN.
         $accountNumber = new AccountNumber('19869502');
         $password      = new Password('255562');
-        $from          = PostCode::create(
+        $from          = new PostCode(
             '75001',
-            CountryDelivery::FRANCE,
+            CountryForChronopost::FRANCE,
         );
-        $to            = PostCode::create(
+        $to            = new PostCode(
             '67420',
-            CountryDelivery::FRANCE,
+            CountryForChronopost::FRANCE,
         );
         $weight        = 1250;
         $productCode   = new ProductCode('01');

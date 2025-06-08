@@ -7,11 +7,12 @@
         "ext-soap": "*",
         "kwaadpepper/chronopost-tracking": "2.0.0",
         "kwaadpepper/chronopost-relay": "^1.0",
-        "kwaadpepper/chronopost-shipping": "2.0.0",
+        "kwaadpepper/chronopost-shipping": "2.1.0",
         "kwaadpepper/chronopost-searchbt": "^1.0",
         "kwaadpepper/chronopost-creneau": "^1.0",
         "kwaadpepper/chronopost-quickcost": "^1.0",
-        "moneyphp/money": "^4.7"
+        "moneyphp/money": "^4.7",
+        "giggsey/libphonenumber-for-php-lite": "^9.0"
     },
     "require-dev": {
         "slevomat/coding-standard": "^8.17",

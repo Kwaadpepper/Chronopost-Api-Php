@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\ObjectValues;
 
-class ProductCode implements \Stringable
+readonly class ProductCode implements \Stringable
 {
     /**
      * @param string $value Delivery product code.

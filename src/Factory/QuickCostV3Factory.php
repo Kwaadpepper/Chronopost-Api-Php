@@ -9,9 +9,9 @@ use ChronopostQuickCost\StructType\Cap;
 use ChronopostQuickCost\StructType\Service;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\Insurance;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\Overload;
+use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\Supplement;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\SupplementType;
-use Kwaadpepper\ChronopostApiPhp\Dto\QuickCostV3;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Money;
@@ -52,7 +52,7 @@ class QuickCostV3Factory implements Factory
      *
      * @param \ChronopostQuickCost\StructType\ResultQuickCostV3 $result
      *
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCostV3
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3
      * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
     public function create($result): QuickCostV3
