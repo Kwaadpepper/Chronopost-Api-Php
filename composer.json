@@ -1,17 +1,18 @@
 {
     "name": "kwaadpepper/chronopost-api-php",
     "description": "Chronopost Api usage with php",
+    "license": "MIT",
     "type": "library",
     "require": {
         "php": "^8.3",
         "ext-soap": "*",
-        "kwaadpepper/chronopost-tracking": "2.0.0",
-        "kwaadpepper/chronopost-relay": "^1.0",
-        "kwaadpepper/chronopost-shipping": "2.1.0",
-        "kwaadpepper/chronopost-searchbt": "^1.0",
-        "kwaadpepper/chronopost-creneau": "^1.0",
-        "kwaadpepper/chronopost-quickcost": "^1.0",
-        "moneyphp/money": "^4.7",
+        "kwaadpepper/chronopost-tracking": "^2.0",
+        "kwaadpepper/chronopost-relay": "^2.0",
+        "kwaadpepper/chronopost-shipping": "^2.0",
+        "kwaadpepper/chronopost-searchbt": "^2.0",
+        "kwaadpepper/chronopost-creneau": "^2.0",
+        "kwaadpepper/chronopost-quickcost": "^2.0",
+        "moneyphp/money": "~4.6",
         "giggsey/libphonenumber-for-php-lite": "^9.0"
     },
     "require-dev": {
@@ -19,7 +20,6 @@
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^12"
     },
-    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Kwaadpepper\\ChronopostApiPhp\\": "src/"
