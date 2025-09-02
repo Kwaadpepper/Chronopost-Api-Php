@@ -2,7 +2,6 @@
 
 namespace Kwaadpepper\ChronopostApiPhp\ObjectValues;
 
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\RecipientValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ReferenceValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ScheduledValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue;
@@ -15,14 +14,12 @@ class MultiParcelPart
      *
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue        $skybillValue   The skybill value.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue        $shipperValue   The shipper value.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\RecipientValue      $recipientValue The recipient value.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ReferenceValue      $referenceValue The reference value.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ScheduledValue|null $scheduledValue The scheduled value.
      */
     public function __construct(
         public readonly SkyBillValue $skybillValue,
         public readonly ShipperValue $shipperValue,
-        public readonly RecipientValue $recipientValue,
         public readonly ReferenceValue $referenceValue,
         public readonly ?ScheduledValue $scheduledValue = null
     ) {

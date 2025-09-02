@@ -156,6 +156,7 @@ class ChronopostApi
          *
          * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\MultiParcelPart[]             $multiParcelParts
          * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
+         * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\RecipientValue         $recipientValue
          * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\EsdValue|null          $esdValue
          * @param \Kwaadpepper\ChronopostApiPhp\Enums\SkyBillOutputMode                    $skyBillOutputMode
          * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillParameters|null $skyBillParameters
@@ -167,25 +168,24 @@ class ChronopostApi
          * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the shipping operation fails.
          * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
          */
-    public function multiParcelV4(
+    public function multiParcelV4ToOneRecipient(
         array $multiParcelParts,
         CustomerValue $customerValue,
+        RecipientValue $recipientValue,
         ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
         ?SkyBillParameters $skyBillParameters = null
     ): MultiParcelV4 {
-        $skybillValues    = [];
-        $shippersValues   = [];
-        $recipientsValues = [];
-        $referenceValues  = [];
-        $scheduledValues  = [];
+        $skybillValues   = [];
+        $shippersValues  = [];
+        $referenceValues = [];
+        $scheduledValues = [];
 
         // phpcs:ignore Generic.Files.LineLength.TooLong
-        array_map(function ($part) use (&$skybillValues, &$shippersValues, &$recipientsValues, &$referenceValues, &$scheduledValues) {
-            $skybillValues[]    = $part->skybillValue;
-            $shippersValues[]   = $part->shipperValue;
-            $recipientsValues[] = $part->recipientValue;
-            $referenceValues[]  = $part->referenceValue;
+        array_map(function ($part) use (&$skybillValues, &$shippersValues, &$referenceValues, &$scheduledValues) {
+            $skybillValues[]   = $part->skybillValue;
+            $shippersValues[]  = $part->shipperValue;
+            $referenceValues[] = $part->referenceValue;
             if ($part->scheduledValue !== null) {
                 $scheduledValues[] = $part->scheduledValue;
             }
@@ -196,12 +196,12 @@ class ChronopostApi
             customerValue: $customerValue,
             skybillValues: $skybillValues,
             shippersValues: $shippersValues,
-            recipientsValues: $recipientsValues,
+            recipientsValues: [$recipientValue],
             referenceValues: $referenceValues,
             scheduledValues: $scheduledValues,
             esdValue: $esdValue,
-            numberOfParcel: 1,
-            multiParcel: false,
+            numberOfParcel: count($multiParcelParts),
+            multiParcel: count($multiParcelParts) > 1,
             skyBillOutputMode: $skyBillOutputMode,
             skyBillParameters: $skyBillParameters
         );
