@@ -101,10 +101,10 @@ class ShippingService
         ShipperValue $shipperValue,
         RecipientValue $recipientValue,
         ReferenceValue $referenceValue,
-        ScheduledValue $scheduledValue = null,
-        EsdValue $esdValue = null,
+        ?ScheduledValue $scheduledValue = null,
+        ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null
     ): MultiParcelV4 {
         return $this->multiParcelV4(
             accountNumber: $accountNumber,
@@ -157,11 +157,11 @@ class ShippingService
         array $recipientsValues,
         array $referenceValues = [],
         array $scheduledValues = [],
-        EsdValue $esdValue = null,
+        ?EsdValue $esdValue = null,
         int $numberOfParcel = 1,
         bool $multiParcel = false,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null
     ): MultiParcelV4 {
         // phpcs:enable
 
