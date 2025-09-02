@@ -150,4 +150,60 @@ class ChronopostApi
             skyBillParameters: $skyBillParameters
         );
     }
+
+        /**
+         * Creates a single-parcel shipment with the provided values.
+         *
+         * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\MultiParcelPart[]             $multiParcelParts
+         * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
+         * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\EsdValue|null          $esdValue
+         * @param \Kwaadpepper\ChronopostApiPhp\Enums\SkyBillOutputMode                    $skyBillOutputMode
+         * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillParameters|null $skyBillParameters
+         *
+         * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4
+         *
+         * @throws \InvalidArgumentException If the provided values are invalid.
+         * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+         * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the shipping operation fails.
+         * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
+         */
+    public function multiParcelV4(
+        array $multiParcelParts,
+        CustomerValue $customerValue,
+        ?EsdValue $esdValue = null,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
+        ?SkyBillParameters $skyBillParameters = null
+    ): MultiParcelV4 {
+        $skybillValues    = [];
+        $shippersValues   = [];
+        $recipientsValues = [];
+        $referenceValues  = [];
+        $scheduledValues  = [];
+
+        // phpcs:ignore Generic.Files.LineLength.TooLong
+        array_map(function ($part) use (&$skybillValues, &$shippersValues, &$recipientsValues, &$referenceValues, &$scheduledValues) {
+            $skybillValues[]    = $part->skybillValue;
+            $shippersValues[]   = $part->shipperValue;
+            $recipientsValues[] = $part->recipientValue;
+            $referenceValues[]  = $part->referenceValue;
+            if ($part->scheduledValue !== null) {
+                $scheduledValues[] = $part->scheduledValue;
+            }
+        }, $multiParcelParts);
+        return $this->shippingService->multiParcelV4(
+            $this->accountNumber,
+            $this->password,
+            customerValue: $customerValue,
+            skybillValues: $skybillValues,
+            shippersValues: $shippersValues,
+            recipientsValues: $recipientsValues,
+            referenceValues: $referenceValues,
+            scheduledValues: $scheduledValues,
+            esdValue: $esdValue,
+            numberOfParcel: 1,
+            multiParcel: false,
+            skyBillOutputMode: $skyBillOutputMode,
+            skyBillParameters: $skyBillParameters
+        );
+    }
 }
