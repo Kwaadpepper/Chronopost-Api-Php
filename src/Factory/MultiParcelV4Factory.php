@@ -44,6 +44,7 @@ class MultiParcelV4Factory implements Factory
      *
      * @param \ChronopostShipping\StructType\ResultMultiParcelValue $parcelValue
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelValue
+     * @throws \InvalidArgumentException If the PDF Etiquette is null.
      */
     private function mapToMultiParcelValue(ResultMultiParcelValue $parcelValue): MultiParcelValue
     {
@@ -61,7 +62,15 @@ class MultiParcelV4Factory implements Factory
         $dSort                 = $parcelValue->getDSort();
         $oSort                 = $parcelValue->getOSort();
 
-        $pdfEtiquette    = $parcelValue->getPdfEtiquette();
+        $pdfEtiquette = $parcelValue->getPdfEtiquette();
+
+        if ($pdfEtiquette === null) {
+            throw new \InvalidArgumentException('PDF Etiquette is null');
+        }
+        if (!$this->isBase64($pdfEtiquette)) {
+            $pdfEtiquette = base64_encode($pdfEtiquette);
+        }
+
         $transportTicket = new TransportTicket($pdfEtiquette);
 
         return new MultiParcelValue(
@@ -106,5 +115,25 @@ class MultiParcelV4Factory implements Factory
         }
 
         return null;
+    }
+
+    /**
+     * Check if a string is base64 encoded.
+     *
+     * @param string $input
+     * @return boolean
+     */
+    private function isBase64(string $input): bool
+    {
+        if ($input === '' || strlen($input) % 4 !== 0) {
+            return false;
+        }
+
+        if (!preg_match('/^[A-Za-z0-9+\/]*={0,2}$/', $input)) {
+            return false;
+        }
+
+        $decoded = base64_decode($input, true);
+        return $decoded !== false && base64_encode($decoded) === $input;
     }
 }
