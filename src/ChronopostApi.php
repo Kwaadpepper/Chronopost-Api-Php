@@ -156,6 +156,7 @@ class ChronopostApi
          *
          * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\MultiParcelPart[]             $multiParcelParts
          * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
+         * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue           $shipperValue
          * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\RecipientValue         $recipientValue
          * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\EsdValue|null          $esdValue
          * @param \Kwaadpepper\ChronopostApiPhp\Enums\SkyBillOutputMode                    $skyBillOutputMode
@@ -168,23 +169,22 @@ class ChronopostApi
          * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the shipping operation fails.
          * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
          */
-    public function multiParcelV4ToOneRecipient(
+    public function multiParcelV4OneShipperToOneRecipient(
         array $multiParcelParts,
         CustomerValue $customerValue,
+        ShipperValue $shipperValue,
         RecipientValue $recipientValue,
         ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
         ?SkyBillParameters $skyBillParameters = null
     ): MultiParcelV4 {
         $skybillValues   = [];
-        $shippersValues  = [];
         $referenceValues = [];
         $scheduledValues = [];
 
         // phpcs:ignore Generic.Files.LineLength.TooLong
-        array_map(function ($part) use (&$skybillValues, &$shippersValues, &$referenceValues, &$scheduledValues) {
+        array_map(function ($part) use (&$skybillValues, &$referenceValues, &$scheduledValues) {
             $skybillValues[]   = $part->skybillValue;
-            $shippersValues[]  = $part->shipperValue;
             $referenceValues[] = $part->referenceValue;
             if ($part->scheduledValue !== null) {
                 $scheduledValues[] = $part->scheduledValue;
@@ -195,7 +195,7 @@ class ChronopostApi
             $this->password,
             customerValue: $customerValue,
             skybillValues: $skybillValues,
-            shippersValues: $shippersValues,
+            shippersValues: [$shipperValue],
             recipientsValues: [$recipientValue],
             referenceValues: $referenceValues,
             scheduledValues: $scheduledValues,
