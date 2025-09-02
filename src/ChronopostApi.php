@@ -5,19 +5,32 @@ declare(strict_types=1);
 namespace Kwaadpepper\ChronopostApiPhp;
 
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
+use Kwaadpepper\ChronopostApiPhp\Enums\SkyBillOutputMode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\EsdValue;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\RecipientValue;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ReferenceValue;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ScheduledValue;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillParameters;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
 use Kwaadpepper\ChronopostApiPhp\Services\Cost\QuickCostService;
+use Kwaadpepper\ChronopostApiPhp\Services\Shipping\ShippingService;
 use Kwaadpepper\ChronopostApiPhp\Services\Tracking\TrackSearchService;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
 class ChronopostApi
 {
     private TrackSearchService $trackSearchService;
+
+    private ShippingService $shippingService;
 
     private QuickCostService $quickCostService;
 
@@ -38,6 +51,7 @@ class ChronopostApi
         ];
 
         $this->trackSearchService = new TrackSearchService($defaultSopapOptions);
+        $this->shippingService    = new ShippingService($defaultSopapOptions);
         $this->quickCostService   = new QuickCostService($defaultSopapOptions);
     }
 
@@ -86,6 +100,54 @@ class ChronopostApi
             $weightInGrams / 1000,
             $productCode,
             $shippingType
+        );
+    }
+
+    /**
+     * Creates a single-parcel shipment with the provided values.
+     *
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue           $skybillValue
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue           $shipperValue
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\RecipientValue         $recipientValue
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ReferenceValue         $referenceValue
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ScheduledValue|null    $scheduledValue
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\EsdValue|null          $esdValue
+     * @param \Kwaadpepper\ChronopostApiPhp\Enums\SkyBillOutputMode                    $skyBillOutputMode
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillParameters|null $skyBillParameters
+     *
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4
+     *
+     * @throws \InvalidArgumentException If the provided values are invalid.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the shipping operation fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
+     */
+    public function singleParcelV4(
+        SkyBillValue $skybillValue,
+        CustomerValue $customerValue,
+        ShipperValue $shipperValue,
+        RecipientValue $recipientValue,
+        ReferenceValue $referenceValue,
+        ?ScheduledValue $scheduledValue = null,
+        ?EsdValue $esdValue = null,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
+        ?SkyBillParameters $skyBillParameters = null
+    ): MultiParcelV4 {
+        return $this->shippingService->multiParcelV4(
+            $this->accountNumber,
+            $this->password,
+            skybillValues: [$skybillValue],
+            customerValue: $customerValue,
+            shippersValues: [$shipperValue],
+            recipientsValues: [$recipientValue],
+            referenceValues: [$referenceValue],
+            scheduledValues: $scheduledValue ? [$scheduledValue] : [],
+            esdValue: $esdValue,
+            numberOfParcel: 1,
+            multiParcel: false,
+            skyBillOutputMode: $skyBillOutputMode,
+            skyBillParameters: $skyBillParameters
         );
     }
 }
