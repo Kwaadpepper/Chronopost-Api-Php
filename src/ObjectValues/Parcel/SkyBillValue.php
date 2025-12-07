@@ -53,85 +53,58 @@ readonly class SkyBillValue
     /**
      * SkyBillValue constructor.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType                     $objectType
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode               $productCode
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode               $serviceCode
-     * @param float                                                                $weight
-     * @param integer                                                              $height
-     * @param integer                                                              $width
-     * @param integer                                                              $length
-     * @param string|null                                                          $as
-     * @param string|null                                                          $subAccount
-     * @param string|null                                                          $toTheOrderOf
-     * @param string|null                                                          $alternateProductCode
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ParcelContent|null $content
-     * @param \DateTimeImmutable|null                                              $shipDateTime
-     * @param string                                                               $codCurrency
-     * @param integer                                                              $codValue
-     * @param string                                                               $customsCurrency
-     * @param integer                                                              $customsValue
-     * @param string                                                               $insuredCurrency
-     * @param integer                                                              $insuredValue
-     * @param string|null                                                          $masterSkybillNumber
-     * @param integer                                                              $bulkNumber
-     * @param integer                                                              $skybillRank
+     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType         $objectType             Type de marchandise.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode   $productCode            Code produit de livraison. Les produits à utiliser sont ceux contractualisés avec Chronopost.
+     *                                                                                              !Codes fournis par votre contact IT Chronopost
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode   $serviceCode            Jour de livraison.
+     *                                                                                              !Codes fournis par votre contact IT Chronopost
+     * @param  float                                                    $weight                 Poids du colis en kilogrammes.
+     * @param  int                                                      $height                 Hauteur colis en cm (0 si inconnu).
+     * @param  int                                                      $width                  Largeur colis en cm (0 si inconnu).
+     * @param  int                                                      $length                 Longueur colis en cm (0 si inconnu).
+     * @param  string|null                                              $as                     Code de livraison.
+     *                                                                                              !Codes fournis par votre contact IT Chronopost
+     * @param  string|null                                              $subAccount             Numéro de sous compte.
+     * @param  string|null                                              $toTheOrderOf           Ordre du chèque pour un contre remboursement.
+     * @param  string|null                                              $alternateProductCode   Code produit de 'remplacement' en cas d'indisponibilité du produit principal.
+     *                                                                                          Les produits à utiliser sont ceux contractualisés avec Chronopost.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ParcelContent|null $content    Description du contenu du colis.
+     *                                                                                              ! Must be used for international shipments.
+     * @param  \DateTimeImmutable|null                                $shipDateTime             Date et heure de génération de l'envoi.
+     * @param  string                                                 $codCurrency              Devise du contre remboursement EUR par défaut
+     * @param  int                                                    $codValue                 Montant du contre-remboursement en centimes.
+     * @param  string                                                 $customsCurrency          Devise des douanes EUR par défaut, EUR, USD, GBP.
+     * @param  int                                                    $customsValue             Valeur en centimes pour les douanes.
+     * @param  string                                                 $insuredCurrency          Devise de la valeur assurrée en EUR.
+     * @param  int                                                    $insuredValue             Valeur en centimes pour l'assurance.
+     * @param  string|null                                            $masterSkybillNumber      Numéro du premier colis d'une expédition.
+     * @param  int                                                    $bulkNumber               Nombre total de colis.
+     * @param  int                                                    $skybillRank              Ordre du colis, impératif avec bulk number.
+     *
      * @throws \InvalidArgumentException If any of the numeric values are negative or if the string values do not match the expected patterns.
      */
     public function __construct(
         public ShippingType $objectType,
-        /**
-         * Code produit de livraison. Les produits à utiliser sont ceux contractualisés avec Chronopost.
-         * !Codes fournis par votre contact IT Chronopost
-         */
         ProductCode $productCode,
-        /**
-         * Jour de livraison
-         * !Codes fournis par votre contact IT Chronopost
-         */
         ServiceCode $serviceCode,
-        /** Poids du colis en kilogrammes */
         public float $weight,
-        /** Hauteur colis en cm (0 si inconnu)  */
         public int $height = 0,
-        /** Largeur colis en cm (0 si inconnu) */
         public int $width = 0,
-        /** Longueur colis en cm (0 si inconnu) */
         public int $length = 0,
-        /**
-         * Code de livraison
-         * !Codes fournis par votre contact IT Chronopost
-         */
-        public string|null $as = null,
-        /** Numéro de sous compte */
-        public string|null $subAccount = null,
-        /** Ordre du chèque pour un contre remboursement */
-        public string|null $toTheOrderOf = null,
-        /** Code produit de « remplacement », Les produits à utiliser sont ceux contractualisés avec Chronopost */
-        public string|null $alternateProductCode = null,
-        /**
-         * ! Must be used for international shipments.
-         * Description du contenu du colis.
-         */
-        public ParcelContent|null $content = null,
-        /** Date et heure de génération de l'envoi */
-        public \DateTimeImmutable|null $shipDateTime = null,
-        /** Devise du contre remboursement EUR par défaut */
+        public ?string $as = null,
+        public ?string $subAccount = null,
+        public ?string $toTheOrderOf = null,
+        public ?string $alternateProductCode = null,
+        public ?ParcelContent $content = null,
+        public ?\DateTimeImmutable $shipDateTime = null,
         public string $codCurrency = 'EUR',
-        /** Montant du contre-remboursement en centimes */
         public int $codValue = 0,
-        /** Devise des douanes EUR par défaut, EUR, USD, GBP */
         public string $customsCurrency = 'EUR',
-        /** Valeur en centimes pour les douanes */
         public int $customsValue = 0,
-        /** Devise de la valeur assurrée en EUR */
         public string $insuredCurrency = 'EUR',
-        /** Valeur en centimes pour l'assurance */
         public int $insuredValue = 0,
-        /** Numéro du premier colis d'une expédition */
-        public string|null $masterSkybillNumber = null,
-        /** Nombre total de colis */
+        public ?string $masterSkybillNumber = null,
         public int $bulkNumber = 1,
-        /** Ordre du colis, impératif avec bulk number */
         public int $skybillRank = 1,
     ) {
         $this->productCode = $productCode->getValue();
