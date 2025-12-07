@@ -49,7 +49,7 @@ enum SkyBillMode: string
      *  LT au format PDF sans preuve de dépôt et destinée à être imprimée
      * sur une imprimante thermique compatible ZPL, format A4
      */
-    case The = 'THE';
+    case THE = 'THE';
 
     /**
      * LT au format PDF destinée à être imprimée sur une imprimante
