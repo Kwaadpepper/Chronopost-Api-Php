@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp;
 
+use DateTime;
+use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
@@ -69,6 +71,47 @@ class ChronopostApi
     public function trackSingleShipment(TrackingNumber $trackingNumber): array
     {
         return $this->trackSearchService->findUsingTrackingNumber($trackingNumber);
+    }
+
+    /**
+     * Calculate possible products for a shipment.
+     *
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode    $from          The sender's postal code.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode    $to            The recipient's postal code.
+     * @param \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType       $shippingType  The shipping type.
+     * @param float                                                  $weight        The weight of the shipment in kilograms.
+     * @param float|null                                             $height        The height of the shipment in centimeters.
+     * @param float|null                                             $length        The length of the shipment in centimeters.
+     * @param float|null                                             $width         The width of the shipment in centimeters.
+     * @param \DateTime|null                                         $shippingDate  The desired shipping date.
+     *
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList The list of possible products.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     */
+    public function calculatePossibleProductsForShipping(
+        PostCode $from,
+        PostCode $to,
+        ShippingType $shippingType,
+        float $weight,
+        ?float $height = null,
+        ?float $length = null,
+        ?float $width = null,
+        ?DateTime $shippingDate = null
+    ): ProductList
+    {
+        return $this->quickCostService->calculateProducts(
+            $this->accountNumber,
+            $this->password,
+            $from,
+            $to,
+            $shippingType,
+            $weight,
+            $height,
+            $length,
+            $width,
+            $shippingDate
+        );
     }
 
     /**

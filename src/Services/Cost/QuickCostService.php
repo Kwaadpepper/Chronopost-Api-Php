@@ -5,12 +5,18 @@ declare(strict_types=1);
 namespace Kwaadpepper\ChronopostApiPhp\Services\Cost;
 
 use ChronopostQuickCost\ClassMap;
+use ChronopostQuickCost\ServiceType\Calculate;
 use ChronopostQuickCost\ServiceType\Quick;
+use ChronopostQuickCost\StructType\CalculateProducts;
+use ChronopostQuickCost\StructType\CalculateProductsV2;
 use ChronopostQuickCost\StructType\QuickCostV3 as QuickCostV3Input;
+use DateTime;
+use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException;
+use Kwaadpepper\ChronopostApiPhp\Factory\CalculateProductsFactory;
 use Kwaadpepper\ChronopostApiPhp\Factory\QuickCostV3Factory;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
@@ -26,6 +32,13 @@ class QuickCostService
      * @var \ChronopostQuickCost\ServiceType\Quick
      */
     private Quick $quickService;
+
+    /**
+     * Calculate service
+     *
+     * @var \ChronopostQuickCost\ServiceType\Calculate
+     */
+    private Calculate $calculateService;
 
     /**
      * Tracking service soap url
@@ -51,6 +64,7 @@ class QuickCostService
         );
 
         $this->quickService = new Quick($soapOptions);
+        $this->calculateService = new Calculate($soapOptions);
     }
 
     /**
@@ -109,6 +123,60 @@ class QuickCostService
         }
 
         $factory = new QuickCostV3Factory();
+
+        return $factory->create($response);
+    }
+
+    /**
+     * Calculate available products for a shipment.
+     */
+    public function calculateProducts(
+        AccountNumber $accountNumber,
+        Password $password,
+        PostCode $from,
+        PostCode $to,
+        ShippingType $shippingType,
+        float $weight,
+        ?float $height = null,
+        ?float $length = null,
+        ?float $width = null,
+        ?DateTime $shippingDate = null
+    ): ProductList
+    {
+        $parameters = new CalculateProducts(
+            $accountNumber->getAccountNumber(),
+            $password->getPassword(),
+            $from->getPostCode(),
+            $to->getPostCode(),
+            $shippingType->oneLetterCode(),
+            (string)$weight,
+            $height !== null ? (string)$height : null,
+            $length !== null ? (string)$length : null,
+            $width !== null ? (string)$width : null,
+            $shippingDate !== null ? $shippingDate->format('Y-m-d') : null
+        );
+
+
+        $result = $this->calculateService->calculateProducts($parameters);
+        if ($result === false) {
+            $lastError = $this->calculateService->getLastErrorForMethod(methodName: 'calculateProducts');
+            throw new ApiError('Failed to call from calculate service', $lastError);
+        }
+
+        $response = $result->getReturn();
+
+        if ($response === null) {
+            throw new ApiError('Failed to get result from quickCost service, null response');
+        }
+
+        if ($response->getErrorCode() !== 0) {
+            $errorMessage = $response->getErrorMessage();
+            $errorCode    = $response->getErrorCode();
+
+            throw new QuickCostException($errorMessage, $errorCode);
+        }
+
+        $factory = new CalculateProductsFactory();
 
         return $factory->create($response);
     }
