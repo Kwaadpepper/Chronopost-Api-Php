@@ -12,7 +12,7 @@ class ProductList implements Dto {
      *
      * @param \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\Product[] $products
      */
-    public function __construct(readonly array $products)
+    public function __construct(public readonly array $products)
     {
         array_map(
             fn (Product $item) => $item,

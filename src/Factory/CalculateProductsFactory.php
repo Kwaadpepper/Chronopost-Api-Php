@@ -7,6 +7,7 @@ namespace Kwaadpepper\ChronopostApiPhp\Factory;
 use ChronopostQuickCost\StructType\Product as ChronopostProduct;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\Product;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
+use Kwaadpepper\ChronopostApiPhp\Enums\ChronopostProductCode;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Money;
@@ -73,6 +74,7 @@ class CalculateProductsFactory implements Factory
         $amountTva      = $product->getAmountTva();
 
         return new Product(
+            $product->getProductCode(),
             $this->amountToMoney($amount),
             $this->amountToMoney($amountTtc),
             $this->amountToMoney($amountTva)
