@@ -7,7 +7,6 @@ namespace Kwaadpepper\ChronopostApiPhp\Factory;
 use ChronopostQuickCost\StructType\Product as ChronopostProduct;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\Product;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
-use Kwaadpepper\ChronopostApiPhp\Enums\ChronopostProductCode;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Money;
@@ -18,19 +17,11 @@ class CalculateProductsFactory implements Factory
 {
     /**
      * Service currency used in responses.
-     *
-     * @var string
      */
     private static string $currencyCode = 'EUR';
 
-    /**
-     * @var \Money\MoneyParser
-     */
     private MoneyParser $moneyParser;
 
-    /**
-     * @var \Money\Currency
-     */
     private Currency $currency;
 
     /**
@@ -46,15 +37,13 @@ class CalculateProductsFactory implements Factory
     /**
      * Create a QuickCostV3 DTO from Chronopost ResultCalculateProducts.
      *
-     * @param \ChronopostQuickCost\StructType\ResultCalculateProducts $result
-     *
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList
+     * @param  \ChronopostQuickCost\StructType\ResultCalculateProducts  $result
      */
     public function create($result): ProductList
     {
         $products = array_map(
             $this->toProduct(...),
-            $result->getProductList()
+            $result->getProductList() ?? []
         );
 
         return new ProductList($products);
@@ -62,10 +51,6 @@ class CalculateProductsFactory implements Factory
 
     /**
      * Convert a Chronopost Product to a DTO Product.
-     *
-     * @param \ChronopostQuickCost\StructType\Product $product
-     *
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\Product
      */
     private function toProduct(ChronopostProduct $product): Product
     {
@@ -83,9 +68,6 @@ class CalculateProductsFactory implements Factory
 
     /**
      * Convert a float amount to Money.
-     *
-     * @param float $amount
-     * @return \Money\Money
      */
     private function amountToMoney(float $amount): Money
     {

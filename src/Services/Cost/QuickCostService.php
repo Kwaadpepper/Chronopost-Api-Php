@@ -8,9 +8,7 @@ use ChronopostQuickCost\ClassMap;
 use ChronopostQuickCost\ServiceType\Calculate;
 use ChronopostQuickCost\ServiceType\Quick;
 use ChronopostQuickCost\StructType\CalculateProducts;
-use ChronopostQuickCost\StructType\CalculateProductsV2;
 use ChronopostQuickCost\StructType\QuickCostV3 as QuickCostV3Input;
-use DateTime;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
@@ -28,29 +26,23 @@ class QuickCostService
 {
     /**
      * Soap tracking service
-     *
-     * @var \ChronopostQuickCost\ServiceType\Quick
      */
     private Quick $quickService;
 
     /**
      * Calculate service
-     *
-     * @var \ChronopostQuickCost\ServiceType\Calculate
      */
     private Calculate $calculateService;
 
     /**
      * Tracking service soap url
-     *
-     * @var string
      */
     protected static string $serviceUrl = 'https://ws.chronopost.fr/quickcost-cxf/QuickcostServiceWS?wsdl';
 
     /**
      * Constructor
      *
-     * @param array $soapOptions Additional options for the soap client.
+     * @param  array  $soapOptions  Additional options for the soap client.
      */
     public function __construct(
         array $soapOptions = []
@@ -58,30 +50,30 @@ class QuickCostService
         $soapOptions = array_merge(
             $soapOptions,
             [
-                SoapClientInterface::WSDL_URL => static::$serviceUrl,
+                SoapClientInterface::WSDL_URL      => static::$serviceUrl,
                 SoapClientInterface::WSDL_CLASSMAP => ClassMap::get(),
             ],
         );
 
-        $this->quickService = new Quick($soapOptions);
+        $this->quickService     = new Quick($soapOptions);
         $this->calculateService = new Calculate($soapOptions);
     }
 
     /**
      * Get quick cost for a shipment.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber The account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      The password.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode      $from          The sender's postal code.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode      $to            The recipient's postal code.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber  $accountNumber  The account number.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password  $password  The password.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode  $from  The sender's postal code.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode  $to  The recipient's postal code.
+     *
      * @phpcs:ignore Generic.Files.LineLength.TooLong
-     * @param float                                                    $weight        The weight of the shipment in kilograms.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode   $productCode   The product code for the shipment.
-     * @param \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType         $shippingType  The shipping type.
      *
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3
+     * @param  float  $weight  The weight of the shipment in kilograms.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode  $productCode  The product code for the shipment.
+     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType  $shippingType  The shipping type.
      *
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError                     If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException If the API returns an error.
      */
     public function quickCostV3(
@@ -98,7 +90,7 @@ class QuickCostService
             $password->getPassword(),
             $from->getPostCode(),
             $to->getPostCode(),
-            (string)$weight,
+            (string) $weight,
             $productCode->getValue(),
             $shippingType->oneLetterCode(),
         );
@@ -135,29 +127,32 @@ class QuickCostService
         Password $password,
         PostCode $from,
         PostCode $to,
+        string $toCityName,
         ShippingType $shippingType,
         float $weight,
         ?float $height = null,
         ?float $length = null,
         ?float $width = null,
-        ?DateTime $shippingDate = null
-    ): ProductList
-    {
+        ?\DateTime $shippingDate = null
+    ): ProductList {
         $parameters = new CalculateProducts(
             $accountNumber->getAccountNumber(),
             $password->getPassword(),
+            (string) $from->getCountryDelivery()->getCode(),
             $from->getPostCode(),
+            (string) $to->getCountryDelivery()->getCode(),
             $to->getPostCode(),
+            $toCityName,
             $shippingType->oneLetterCode(),
-            (string)$weight,
-            $height !== null ? (string)$height : null,
-            $length !== null ? (string)$length : null,
-            $width !== null ? (string)$width : null,
+            (string) $weight,
+            $height !== null ? (string) $height : null,
+            $length !== null ? (string) $length : null,
+            $width !== null ? (string) $width : null,
             $shippingDate !== null ? $shippingDate->format('Y-m-d') : null
         );
 
-
         $result = $this->calculateService->calculateProducts($parameters);
+
         if ($result === false) {
             $lastError = $this->calculateService->getLastErrorForMethod(methodName: 'calculateProducts');
             throw new ApiError('Failed to call from calculate service', $lastError);
