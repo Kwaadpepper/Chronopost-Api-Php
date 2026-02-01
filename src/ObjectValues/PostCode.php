@@ -11,24 +11,20 @@ readonly class PostCode implements \Stringable
     /**
      * A valid post code for the country.
      * The post code must match the format defined in the country delivery object.
-     *
-     * @var string
      */
     private string $postCode;
 
     /**
      * The country delivery object.
      * This object contains the post code format for the country.
-     *
-     * @var \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost
      */
     private CountryForChronopost $countryDelivery;
 
     /**
      * Constructor.
      *
-     * @param string                                                   $postCode        The post code to validate.
-     * @param \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost $countryDelivery The country delivery object.
+     * @param  string  $postCode  The post code to validate.
+     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost  $countryDelivery  The country delivery object.
      *
      * @throws \InvalidArgumentException If the post code does not match
      *                                   the format defined in the country delivery object.
@@ -42,17 +38,11 @@ readonly class PostCode implements \Stringable
         $this->countryDelivery = $countryDelivery;
     }
 
-    /**
-     * @return string
-     */
     public function getPostCode(): string
     {
         return $this->postCode;
     }
 
-    /**
-     * @return \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost
-     */
     public function getCountryDelivery(): CountryForChronopost
     {
         return $this->countryDelivery;
@@ -61,9 +51,8 @@ readonly class PostCode implements \Stringable
     /**
      * Validate the post code format based on the country delivery object.
      *
-     * @param string                                                   $postCode  The post code to validate.
-     * @param \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost $ofCountry The country delivery object.
-     *
+     * @param  string  $postCode  The post code to validate.
+     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost  $ofCountry  The country delivery object.
      * @return void
      *
      * @throws \InvalidArgumentException If the post code does not match

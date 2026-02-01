@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kwaadpepper\ChronopostApiPhp;
 
 use DateTime;
+use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\DeliveryTime;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4;
@@ -22,7 +23,9 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
+use Kwaadpepper\ChronopostApiPhp\Services\Calculate\CalculateService;
 use Kwaadpepper\ChronopostApiPhp\Services\Cost\QuickCostService;
 use Kwaadpepper\ChronopostApiPhp\Services\Shipping\ShippingService;
 use Kwaadpepper\ChronopostApiPhp\Services\Tracking\TrackSearchService;
@@ -33,6 +36,8 @@ class ChronopostApi
     private TrackSearchService $trackSearchService;
 
     private ShippingService $shippingService;
+
+    private CalculateService $calculateService;
 
     private QuickCostService $quickCostService;
 
@@ -53,6 +58,7 @@ class ChronopostApi
 
         $this->trackSearchService = new TrackSearchService($defaultSopapOptions);
         $this->shippingService    = new ShippingService($defaultSopapOptions);
+        $this->calculateService   = new CalculateService($defaultSopapOptions);
         $this->quickCostService   = new QuickCostService($defaultSopapOptions);
     }
 
@@ -72,6 +78,38 @@ class ChronopostApi
     }
 
     /**
+     * Calculate the delivery time for a shipment.
+     *
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode  $from  The sender's postal code.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode  $to  The recipient's postal code.
+     * @param  string  $toCityName  The recipient's city name.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode  $productCode  The product code for the shipment.
+     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType  $shippingType  The shipping type.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode  $serviceCode  The service code for the shipment.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\DeliveryTime The delivery time information.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Calculate\CalculateException If the API returns an error.
+     */
+    public function calculateDeliveryTime(
+        PostCode $from,
+        PostCode $to,
+        string $toCityName,
+        ProductCode $productCode,
+        ShippingType $shippingType,
+        ServiceCode $serviceCode
+    ): DeliveryTime {
+        return $this->calculateService->calculateDeliveryTime(
+            $from,
+            $to,
+            $toCityName,
+            $productCode,
+            $shippingType,
+            $serviceCode
+        );
+    }
+
+    /**
      * Calculate possible products for a shipment.
      *
      * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode  $from  The sender's postal code.
@@ -85,6 +123,7 @@ class ChronopostApi
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList The list of possible products.
      *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Calculate\CalculateException If the API returns an error.
      */
     public function calculatePossibleProductsForShipping(
         PostCode $from,
@@ -97,7 +136,7 @@ class ChronopostApi
         ?float $width = null,
         ?DateTime $shippingDate = null
     ): ProductList {
-        return $this->quickCostService->calculateProducts(
+        return $this->calculateService->calculateProducts(
             $this->accountNumber,
             $this->password,
             $from,

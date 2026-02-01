@@ -9,10 +9,10 @@ use Kwaadpepper\ChronopostApiPhp\Enums\ChronopostProductCode;
 readonly class ProductCode implements \Stringable
 {
     /**
-     * @param string $value Delivery product code.
-     *                      The product code must be 1 or 2 characters long,
-     *                      consisting of letters and/or digits.
-     *                      Doc says it is given by an IT contact from Chronopost.
+     * @param  string  $value  Delivery product code.
+     *                         The product code must be 1 or 2 characters long,
+     *                         consisting of letters and/or digits.
+     *                         Doc says it is given by an IT contact from Chronopost.
      *
      * @throws \InvalidArgumentException If the product code is not valid.
      */
@@ -26,8 +26,11 @@ readonly class ProductCode implements \Stringable
         if (count($matches) !== 1) {
             throw new \InvalidArgumentException('Invalid product code');
         }
-    }
 
+        if ($this->value[0] === '0' && strlen($this->value) > 1) {
+            throw new \InvalidArgumentException('Product code cannot start with a leading zero');
+        }
+    }
 
     /**
      * Get the product code value.
@@ -39,9 +42,6 @@ readonly class ProductCode implements \Stringable
         return $this->value;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->value;
@@ -64,9 +64,7 @@ readonly class ProductCode implements \Stringable
     /**
      * Create a ProductCode from a ChronopostProductCode enum.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\Enums\ChronopostProductCode $productCode The product code enum.
-     *
-     * @return self
+     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ChronopostProductCode  $productCode  The product code enum.
      */
     public static function fromEnum(ChronopostProductCode $productCode): self
     {
