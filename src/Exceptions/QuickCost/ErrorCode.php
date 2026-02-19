@@ -26,7 +26,7 @@ enum ErrorCode: int
      * Get the error message.
      *
      * @return string The error message.
-     * 4.3.6. Codes erreurs pour le service ‘quickCost’
+     * 4.3.6. Codes erreurs pour le service 'QuickCost'
      */
     public function getTitle(): string
     {

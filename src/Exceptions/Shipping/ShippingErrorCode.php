@@ -46,7 +46,7 @@ enum ShippingErrorCode: int
             self::PARAMETER_NOT_NUMERIC => 'Le paramètre saisi doit être numérique',
             self::GEOPOS_SERVICE_INCONSISTENCY => 'Erreur dans la cohérence produit, Pays expéditeur, CP expéditeur, Pays destinataire, CP destinataire',
             self::CONFIG_OR_PDF_STORAGE_ERROR => 'Erreur dans les fichiers de configuration ou au stockage du PDF',
-            self::SBRANGE_ALLOCATION_ERROR => 'Message d’erreur système du service d’allocation des numéros de colis (SBrange)',
+            self::SBRANGE_ALLOCATION_ERROR => 'Message d\'erreur système du service d\'allocation des numéros de colis (SBrange)',
             self::ROUTING_INCONSISTENCY_ERROR => 'Erreur dans la cohérence produit, Pays expéditeur, CP expéditeur, Pays destinataire, CP destinataire',
         };
     }
