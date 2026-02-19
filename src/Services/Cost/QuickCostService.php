@@ -87,7 +87,7 @@ class QuickCostService
 
         $result = $this->quickService->quickCostV3($parameters);
         if ($result === false) {
-            $lastError = $this->quickService->getLastErrorForMethod(methodName: 'quickCostV3');
+            $lastError = $this->quickService->getLastErrorForMethod(methodName: Quick::class . '::quickCostV3');
             throw new ApiError('Failed to call from quickCost service', $lastError);
         }
 

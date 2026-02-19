@@ -80,13 +80,13 @@ class CalculateService
             $height !== null ? (string) $height : null,
             $length !== null ? (string) $length : null,
             $width !== null ? (string) $width : null,
-            $shippingDate !== null ? $shippingDate->format('Y-m-d') : null
+            $shippingDate !== null ? $shippingDate->format('d/m/Y') : null
         );
 
         $result = $this->calculateService->calculateProducts($parameters);
 
         if ($result === false) {
-            $lastError = $this->calculateService->getLastErrorForMethod(methodName: 'calculateProducts');
+            $lastError = $this->calculateService->getLastErrorForMethod(methodName: Calculate::class . '::calculateProducts');
             throw new ApiError('Failed to call from calculate service', $lastError);
         }
 
@@ -133,7 +133,7 @@ class CalculateService
         $result = $this->calculateService->calculateDeliveryTime($parameters);
 
         if ($result === false) {
-            $lastError = $this->calculateService->getLastErrorForMethod(methodName: 'calculateDeliveryTime');
+            $lastError = $this->calculateService->getLastErrorForMethod(methodName: Calculate::class . '::calculateDeliveryTime');
             throw new ApiError('Failed to call from calculate service', $lastError);
         }
 

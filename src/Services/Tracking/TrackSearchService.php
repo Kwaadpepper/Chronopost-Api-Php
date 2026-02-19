@@ -64,7 +64,7 @@ class TrackSearchService
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError          If the API call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\TrackingException If the tracking number is invalid or if there are no events found.
      */
-    public function findUsingTrackingNumber(TrackingNumber $trackingNumber, TrackingV2Locale $locale = null): array
+    public function findUsingTrackingNumber(TrackingNumber $trackingNumber, ?TrackingV2Locale $locale = null): array
     {
         // phpcs:enable
         $locale     = $locale ?? TrackingV2Locale::create(Locale::FR);
@@ -76,7 +76,7 @@ class TrackSearchService
         $result = $this->trackService->trackSkybillV2($parameters);
 
         if ($result === false) {
-            $lastError = $this->trackService->getLastErrorForMethod(methodName: 'trackSkybillV2');
+            $lastError = $this->trackService->getLastErrorForMethod(methodName: Track::class . '::trackSkybillV2');
             throw new ApiError('Failed to call from tracking service', $lastError);
         }
 

@@ -249,7 +249,7 @@ class ShippingService
 
         $result = $this->shippingService->shippingMultiParcelV4($parameters);
         if ($result === false) {
-            $lastError = $this->shippingService->getLastErrorForMethod(methodName: 'shippingMultiParcelV4');
+            $lastError = $this->shippingService->getLastErrorForMethod(methodName: Shipping::class . '::shippingMultiParcelV4');
             throw new ApiError('Failed to call from shipping service', $lastError);
         }
 
