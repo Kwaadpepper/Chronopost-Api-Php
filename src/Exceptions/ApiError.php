@@ -14,7 +14,7 @@ class ApiError extends \RuntimeException
      */
     public function __construct(
         string $message = 'An error occurred while processing the request.',
-        \Throwable $previous = null
+        ?\Throwable $previous = null
     ) {
         parent::__construct($message, 0, $previous);
     }
