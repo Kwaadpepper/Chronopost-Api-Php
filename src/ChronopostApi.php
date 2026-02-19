@@ -8,10 +8,12 @@ use DateTime;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\DeliveryTime;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
+use Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\Enums\SkyBillOutputMode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\AddressSearch;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\EsdValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\RecipientValue;
@@ -23,10 +25,14 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayPointType;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayServiceType;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\WantedShippingDate;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
 use Kwaadpepper\ChronopostApiPhp\Services\Calculate\CalculateService;
 use Kwaadpepper\ChronopostApiPhp\Services\Cost\QuickCostService;
+use Kwaadpepper\ChronopostApiPhp\Services\RelayPoint\RelayPointService;
 use Kwaadpepper\ChronopostApiPhp\Services\Shipping\ShippingService;
 use Kwaadpepper\ChronopostApiPhp\Services\Tracking\TrackSearchService;
 use WsdlToPhp\PackageBase\SoapClientInterface;
@@ -40,6 +46,8 @@ class ChronopostApi
     private CalculateService $calculateService;
 
     private QuickCostService $quickCostService;
+
+    private RelayPointService $relayPointService;
 
     /**
      * Constructor
@@ -60,6 +68,7 @@ class ChronopostApi
         $this->shippingService    = new ShippingService($defaultSopapOptions);
         $this->calculateService   = new CalculateService($defaultSopapOptions);
         $this->quickCostService   = new QuickCostService($defaultSopapOptions);
+        $this->relayPointService  = new RelayPointService($defaultSopapOptions);
     }
 
     /**
@@ -266,6 +275,47 @@ class ChronopostApi
             multiParcel: count($multiParcelParts) > 1,
             skyBillOutputMode: $skyBillOutputMode,
             skyBillParameters: $skyBillParameters
+        );
+    }
+
+    /**
+     * Find relay points using search criteria.
+     *
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode   $productCode        The product code for the search.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AddressSearch $addressSearch      The address search criteria.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\WantedShippingDate $wantedShippingDate The desired shipping date.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayPointType $relayPointType    The type of relay point to search for (default is ANY).
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayServiceType $relayServiceType  The type of relay service to search for (default is ANY).
+     * @param float|null $weight Optional weight of the package (in kg) for filtering results.
+     * @param int|null   $maxResults Optional maximum number of results to return (default is 25, max is 25).
+     * @param int|null   $radiusInKm Optional search radius in kilometers (default is 50, max is 50).
+     *
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult An array of relay points matching the search criteria.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Relay\RelaySearchException If the API returns an error response.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError          If the API call fails or returns an invalid response.
+     */
+    public function seachRelayPoint(
+        ProductCode $productCode,
+        AddressSearch $addressSearch,
+        WantedShippingDate $wantedShippingDate,
+        RelayPointType $relayPointType = RelayPointType::ANY,
+        RelayServiceType $relayServiceType = RelayServiceType::ANY,
+        ?float $weight = null,
+        ?int $maxResults = null,
+        ?int $radiusInKm = null
+    ): RelaySearchResult {
+        return $this->relayPointService->seachRelayPoint(
+            $this->accountNumber,
+            $this->password,
+            $productCode,
+            $addressSearch,
+            $wantedShippingDate,
+            $relayPointType,
+            $relayServiceType,
+            $weight,
+            $maxResults,
+            $radiusInKm
         );
     }
 }
