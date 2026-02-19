@@ -26,10 +26,6 @@ readonly class ProductCode implements \Stringable
         if (count($matches) !== 1) {
             throw new \InvalidArgumentException('Invalid product code');
         }
-
-        if ($this->value[0] === '0' && strlen($this->value) > 1) {
-            throw new \InvalidArgumentException('Product code cannot start with a leading zero');
-        }
     }
 
     /**
