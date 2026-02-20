@@ -104,13 +104,24 @@ class MultiParcelV4Factory implements Factory
         $pickupDate    = $result->getPickupDate();
 
         if ($esdFullNumber !== null && $esdNumber !== null && $pickupDate !== null) {
+            $parsedDate = \DateTimeImmutable::createFromFormat(
+                'Y-m-d\TH:i:s',
+                $pickupDate
+            );
+
+            // Fallback: try standard ISO 8601 parsing if the strict format fails
+            if ($parsedDate === false) {
+                try {
+                    $parsedDate = new \DateTimeImmutable($pickupDate);
+                } catch (\Exception) {
+                    return null;
+                }
+            }
+
             return new EsdInfo(
                 $esdFullNumber,
                 $esdNumber,
-                \DateTimeImmutable::createFromFormat(
-                    'Y-m-d\TH:i:s',
-                    $pickupDate
-                )
+                $parsedDate,
             );
         }
 
