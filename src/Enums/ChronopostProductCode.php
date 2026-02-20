@@ -253,7 +253,13 @@ enum ChronopostProductCode: string
             self::CHRONO_RELAIS_EUROPE_STAND,
             self::CHRONO_9_RELAIS,
             self::CHRONO_RELAIS_DOM,
+            self::CHRONO_SHOP_2_SHOP,
         ], true);
+    }
+
+    public function isShop2Shop(): bool
+    {
+        return $this === self::CHRONO_SHOP_2_SHOP;
     }
 
     public function isHomeDelivery(): bool
