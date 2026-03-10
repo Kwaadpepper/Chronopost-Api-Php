@@ -33,7 +33,7 @@ readonly class RecipientValue extends ParcelInfo
      * @param string                                                      $city
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode         $postCode
      * @param \Kwaadpepper\ChronopostApiPhp\Enums\ParcelInfoType          $recipientType The type of recipient (e.g., individual, business).
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber      $mobilePhone
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber|null $mobilePhone
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber|null $phone         Has to be a mobile phone for a relay point, but can be a landline for a home delivery.
      * @param boolean                                                     $preAlert      Indicates if the recipient should be pre-alerted.
      * @param string|null                                                 $contactName   Mandatory for an ESD operation.
@@ -47,8 +47,8 @@ readonly class RecipientValue extends ParcelInfo
         string $city,
         PostCode $postCode,
         public ParcelInfoType $recipientType,
-        PhoneNumber $mobilePhone,
-        PhoneNumber|null $phone = null,
+        ?PhoneNumber $mobilePhone,
+        ?PhoneNumber $phone = null,
         bool $preAlert = false,
         string|null $contactName = null,
     ) {

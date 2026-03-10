@@ -24,7 +24,7 @@ readonly class CustomerValue extends ParcelInfo
      * @param string|null                                                 $address2
      * @param string                                                      $city
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode         $postCode
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber      $mobilePhone
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber|null $mobilePhone
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber|null $phone
      * @param string|null                                                 $contactName   Mandatory for an ESD operation.
      * @param boolean                                                     $printAsSender Indicate if the customer address should be printed as the sender.
@@ -40,25 +40,14 @@ readonly class CustomerValue extends ParcelInfo
         ?string $address2,
         string $city,
         PostCode $postCode,
-        PhoneNumber $mobilePhone,
-        PhoneNumber|null $phone = null,
+        ?PhoneNumber $mobilePhone,
+        ?PhoneNumber $phone = null,
         string|null $contactName = null,
         public bool $printAsSender = false
     ) {
         $splittedName  = StringHelper::cutStringToFitOnMultipleLines($name, 100, 2);
         $customerName  = $splittedName[0];
         $customerName2 = !empty($splittedName[1]) ? $splittedName[1] : null;
-
-        if (!$mobilePhone->isMobile()) {
-            throw new \InvalidArgumentException(
-                'Mobile phone number must be a mobile number for CustomerValue.'
-            );
-        }
-        if ($phone?->isMobile()) {
-            throw new \InvalidArgumentException(
-                'Phone number must not be a mobile number for CustomerValue.'
-            );
-        }
 
         parent::__construct(
             $address1,

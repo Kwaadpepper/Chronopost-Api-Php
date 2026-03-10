@@ -504,7 +504,7 @@ class ShippingService
         $recipientValueV2->setRecipientEmail($recipientValue->email);
         $recipientValueV2->setRecipientName($recipientValue->name);
         $recipientValueV2->setRecipientName2($recipientValue->name2);
-        $recipientValueV2->setRecipientMobilePhone($mobilePhone->getInternationalPhoneNumber());
+        $recipientValueV2->setRecipientMobilePhone($mobilePhone?->getInternationalPhoneNumber());
         $recipientValueV2->setRecipientPhone($phone?->getInternationalPhoneNumber());
         $recipientValueV2->setRecipientZipCode($postCode->getPostCode());
         $recipientValueV2->setRecipientPreAlert($recipientValue->recipientPreAlert);
@@ -536,7 +536,7 @@ class ShippingService
             $country->getCode(),
             $country->getDisplayableName(),
             $customerValue->email,
-            $mobilePhone->getInternationalPhoneNumber(),
+            $mobilePhone?->getInternationalPhoneNumber(),
             $customerValue->name,
             $customerValue->name2,
             $phone?->getInternationalPhoneNumber(),
@@ -576,7 +576,7 @@ class ShippingService
         $shipperValueV2->setShipperEmail($shipperValue->email);
         $shipperValueV2->setShipperName($shipperValue->name);
         $shipperValueV2->setShipperName2($shipperValue->name2);
-        $shipperValueV2->setShipperMobilePhone($mobilePhone->getInternationalPhoneNumber());
+        $shipperValueV2->setShipperMobilePhone($mobilePhone?->getInternationalPhoneNumber());
         $shipperValueV2->setShipperPhone($phone?->getInternationalPhoneNumber());
         $shipperValueV2->setShipperZipCode($postCode->getPostCode());
         $shipperValueV2->setShipperPreAlert($shipperValue->shipperPreAlert);

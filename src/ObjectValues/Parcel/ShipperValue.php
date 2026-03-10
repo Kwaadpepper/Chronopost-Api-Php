@@ -33,7 +33,7 @@ readonly class ShipperValue extends ParcelInfo
      * @param string                                                      $city
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode         $postCode
      * @param \Kwaadpepper\ChronopostApiPhp\Enums\ParcelInfoType          $shipperType
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber      $mobilePhone
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber|null $mobilePhone
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber|null $phone
      * @param boolean                                                     $preAlert    Indicates if the recipient should be pre-alerted.
      * @param string|null                                                 $contactName Mandatory for an ESD operation.
@@ -50,16 +50,11 @@ readonly class ShipperValue extends ParcelInfo
         string $city,
         PostCode $postCode,
         public ParcelInfoType $shipperType,
-        PhoneNumber $mobilePhone,
-        PhoneNumber|null $phone = null,
+        ?PhoneNumber $mobilePhone,
+        ?PhoneNumber $phone = null,
         bool $preAlert = false,
         string|null $contactName = null,
     ) {
-        if ($phone?->isMobile()) {
-            throw new \InvalidArgumentException(
-                'Phone number must not be a mobile number for ShipperValue.'
-            );
-        }
 
         StringHelper::validateValue($name, 'name', '/^[a-zA-Z0-9]{0,100}$/');
         $shipperName  = $name;

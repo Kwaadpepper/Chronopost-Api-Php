@@ -29,7 +29,7 @@ readonly abstract class ParcelInfo
      * @param string                                                      $email
      * @param string                                                      $name
      * @param string|null                                                 $name2
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber      $mobilePhone
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber|null $mobilePhone
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber|null $phone
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode         $postCode
      *
@@ -44,16 +44,16 @@ readonly abstract class ParcelInfo
         public string $email,
         public string $name,
         public string|null $name2,
-        public PhoneNumber $mobilePhone,
-        public PhoneNumber|null $phone,
+        public ?PhoneNumber $mobilePhone,
+        public ?PhoneNumber $phone,
         public PostCode $postCode,
     ) {
-        if (!$mobilePhone->isMobile()) {
+        if ($mobilePhone !== null && !$mobilePhone->isMobile()) {
             throw new \InvalidArgumentException(
                 'Mobile phone number must be a mobile number for ParcelInfo.'
             );
         }
-        if (is_null($phone)) {
+        if (is_null($phone) && $mobilePhone !== null) {
             $phone = clone $mobilePhone;
         }
         $this->countryName = $country->getDisplayableName();
