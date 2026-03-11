@@ -31,13 +31,13 @@ enum ChronopostProductCode: string
     // --- RETRAIT ---
     case CHRONO_RETRAIT_BUREAU = '00';
 
-    // --- ANCIENS CODES / COMPATIBILITÉ ---
-    case CHRONO_10_OLD      = '9B';
-    case CHRONO_13_OLD      = '9A';
-    case CHRONO_18_OLD      = '9C';
-    case CHRONO_CLASSIC_OLD = '9F';
-    case CHRONO_EXPRESS_OLD = '9D';
-    case CHRONO_SHOP_2_SHOP = '5E';
+    // --- CODES PETITS PROS ---
+    case CHRONO_10_PETITPROS           = '9B';
+    case CHRONO_13_PETITPROS           = '9A';
+    case CHRONO_18_PETITPROS           = '9C';
+    case CHRONO_CLASSIC_PETITPROS      = '9F';
+    case CHRONO_EXPRESS_PETITPROS      = '9D';
+    case CHRONO_TO_SHOP_DIRECT_PETITPROS = '5E';
 
     // --- INTERNATIONAL SPÉCIFIQUE ---
     case CHRONO_EXPRESS_INTERNATIONAL = '17';
@@ -47,8 +47,11 @@ enum ChronopostProductCode: string
     // --- SERVICES SPÉCIFIQUES & OPTIONS ---
     case CHRONO_REP                                                = '09'; // Reverse
     case CHRONO_AGENDA                                             = '20'; // Sur RDV
-    case CHRONO_RELAIS_EUROPE                                      = '49'; // Souvent Import ou Spécifique
-    case CHRONO_RELAIS_EUROPE_STAND                                = '86'; // Code standard relais Europe
+    case CHRONO_RELAIS_EUROPE                                      = '49'; // Relais Europe
+    case CHRONO_RELAIS                                             = '86'; // Relais national
+    case CHRONO_RELAIS_AMBIENT                                     = '5Q'; // Relais Ambient
+    case CHRONO_TO_SHOP_DIRECT                                     = '5X'; // ToShopDirect national
+    case CHRONO_TO_SHOP_DIRECT_EUROPE                              = '6B'; // ToShopDirect Europe
 
     // --- B2B & EXPRESS MATIN ---
     case CHRONO_8                                                  = '75';
@@ -149,21 +152,24 @@ enum ChronopostProductCode: string
             self::CHRONO_PREMIUM_INTERNATIONAL => 'Chrono Premium International',
             self::CHRONO_CLASSIC_INTERNATIONAL => 'Chrono Classic International',
             self::CHRONO_RELAIS_EUROPE         => 'Chrono Relais Europe',
-            self::CHRONO_RELAIS_EUROPE_STAND   => 'Chrono Relais Europe',
+            self::CHRONO_RELAIS                => 'Chrono Relais',
+            self::CHRONO_RELAIS_AMBIENT        => 'Chrono Relais Ambient',
+            self::CHRONO_TO_SHOP_DIRECT        => 'Chrono ToShop Direct',
+            self::CHRONO_TO_SHOP_DIRECT_EUROPE => 'Chrono ToShop Direct Europe',
             self::CHRONO_RETOUR_EUROPE         => 'Chrono Retour Europe',
 
             // Retrait / Point
-            self::CHRONO_RETRAIT_BUREAU => 'Retrait en Bureau de Poste',
-            self::CHRONO_SHOP_2_SHOP    => 'Chrono Shop2Shop',
-            self::CHRONO_RELAIS_DOM     => 'Chrono Relais DOM',
-            self::CHRONO_9_RELAIS       => 'Chrono 9 Relais',
+            self::CHRONO_RETRAIT_BUREAU             => 'Retrait en Bureau de Poste',
+            self::CHRONO_TO_SHOP_DIRECT_PETITPROS   => 'Chrono ToShop Direct Petit Pros',
+            self::CHRONO_RELAIS_DOM                 => 'Chrono Relais DOM',
+            self::CHRONO_9_RELAIS                   => 'Chrono 9 Relais',
 
             // Anciens codes / Compat
-            self::CHRONO_10_OLD      => 'Chrono 10 (Legacy)',
-            self::CHRONO_13_OLD      => 'Chrono 13 (Legacy)',
-            self::CHRONO_18_OLD      => 'Chrono 18 (Legacy)',
-            self::CHRONO_CLASSIC_OLD => 'Chrono Classic (Legacy)',
-            self::CHRONO_EXPRESS_OLD => 'Chrono Express (Legacy)',
+            self::CHRONO_10_PETITPROS      => 'Chrono 10 Petit Pros',
+            self::CHRONO_13_PETITPROS      => 'Chrono 13 Petit Pros',
+            self::CHRONO_18_PETITPROS      => 'Chrono 18 Petit Pros',
+            self::CHRONO_CLASSIC_PETITPROS => 'Chrono Classic Petit Pros',
+            self::CHRONO_EXPRESS_PETITPROS => 'Chrono Express Petit Pros',
 
             // Services Spéciaux / Horaire
             self::CHRONO_REP         => 'Chrono Reverse (REP)',
@@ -250,16 +256,23 @@ enum ChronopostProductCode: string
             self::CHRONO_RELAIS_13,
             self::CHRONO_RELAIS_13_SPECIAL,
             self::CHRONO_RELAIS_EUROPE,
-            self::CHRONO_RELAIS_EUROPE_STAND,
+            self::CHRONO_RELAIS,
+            self::CHRONO_RELAIS_AMBIENT,
             self::CHRONO_9_RELAIS,
             self::CHRONO_RELAIS_DOM,
-            self::CHRONO_SHOP_2_SHOP,
+            self::CHRONO_TO_SHOP_DIRECT_PETITPROS,
+            self::CHRONO_TO_SHOP_DIRECT,
+            self::CHRONO_TO_SHOP_DIRECT_EUROPE,
         ], true);
     }
 
     public function isShop2Shop(): bool
     {
-        return $this === self::CHRONO_SHOP_2_SHOP;
+        return in_array($this, [
+            self::CHRONO_TO_SHOP_DIRECT_PETITPROS,
+            self::CHRONO_TO_SHOP_DIRECT,
+            self::CHRONO_TO_SHOP_DIRECT_EUROPE,
+        ], true);
     }
 
     public function isHomeDelivery(): bool
