@@ -81,7 +81,7 @@ class QuickCostServiceTest extends TestCase
         $chronopostApi = new ChronopostApi($accountNumber, $password);
 
         // WHEN.
-        $chronopostApi->calculateShippingCost(
+        $chronopostApi->calculate->calculateShippingCost(
             $from,
             $to,
             $weight,

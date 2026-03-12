@@ -52,7 +52,7 @@ class TrackSearchServiceTest extends TestCase
         $trackingNumber = new TrackingNumber('XY710284045JB');
 
         // WHEN.
-        $chronopostApi->trackShipment($trackingNumber);
+        $chronopostApi->tracking->trackShipment($trackingNumber);
 
         // THEN.
         $this->expectNotToPerformAssertions();
