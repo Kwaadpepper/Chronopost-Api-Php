@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kwaadpepper\ChronopostApiPhp\Facade;
+namespace Kwaadpepper\ChronopostApiPhp\Contracts;
 
 use Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotConfirmation;
 use Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotSearchResult;
@@ -10,16 +10,9 @@ use Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\GeocodingResult;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\GeocodingAddress;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\SlotConfirmRequest;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\SlotSearchCriteria;
-use Kwaadpepper\ChronopostApiPhp\Contracts\DeliverySlot;
-use Kwaadpepper\ChronopostApiPhp\Services\DeliverySlot\DeliverySlotService;
 
-class DeliverySlotFacade implements DeliverySlot
+interface DeliverySlot
 {
-    public function __construct(
-        private DeliverySlotService $deliverySlotService,
-    ) {
-    }
-
     /**
      * Search for available delivery time slots.
      *
@@ -28,9 +21,7 @@ class DeliverySlotFacade implements DeliverySlot
      */
     public function searchDeliverySlots(
         SlotSearchCriteria $criteria,
-    ): DeliverySlotSearchResult {
-        return $this->deliverySlotService->searchDeliverySlots($criteria);
-    }
+    ): DeliverySlotSearchResult;
 
     /**
      * Confirm a delivery time slot.
@@ -40,9 +31,7 @@ class DeliverySlotFacade implements DeliverySlot
      */
     public function confirmDeliverySlot(
         SlotConfirmRequest $request,
-    ): DeliverySlotConfirmation {
-        return $this->deliverySlotService->confirmDeliverySlot($request);
-    }
+    ): DeliverySlotConfirmation;
 
     /**
      * Geocode an address to get coordinates.
@@ -52,7 +41,5 @@ class DeliverySlotFacade implements DeliverySlot
      */
     public function geocodeAddress(
         GeocodingAddress $address,
-    ): GeocodingResult {
-        return $this->deliverySlotService->geocodeAddress($address);
-    }
+    ): GeocodingResult;
 }

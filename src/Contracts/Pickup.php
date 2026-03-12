@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kwaadpepper\ChronopostApiPhp\Facade;
+namespace Kwaadpepper\ChronopostApiPhp\Contracts;
 
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\CancelPickupResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupConstraints;
@@ -16,16 +16,9 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupHeader;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupOptions;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupShipper;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PickupSearchCriteria;
-use Kwaadpepper\ChronopostApiPhp\Contracts\Pickup;
-use Kwaadpepper\ChronopostApiPhp\Services\Shipping\PickupService;
 
-class PickupFacade implements Pickup
+interface Pickup
 {
-    public function __construct(
-        private PickupService $pickupService,
-    ) {
-    }
-
     /**
      * Check if a pickup (ESD) is feasible.
      *
@@ -36,13 +29,7 @@ class PickupFacade implements Pickup
         PickupShipper $shipper,
         string $retrievalDateTime,
         string $closingDateTime,
-    ): PickupFeasibility {
-        return $this->pickupService->checkFeasibility(
-            $shipper,
-            $retrievalDateTime,
-            $closingDateTime,
-        );
-    }
+    ): PickupFeasibility;
 
     /**
      * Search pickup constraints for a location.
@@ -52,17 +39,13 @@ class PickupFacade implements Pickup
      */
     public function searchConstraints(
         PickupSearchCriteria $criteria,
-    ): PickupConstraints {
-        return $this->pickupService->searchConstraints($criteria);
-    }
+    ): PickupConstraints;
 
     /**
      * Create a national pickup (ESD).
      *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\PickupException
-     *
-     * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function createNationalPickup(
         PickupHeader $header,
@@ -75,29 +58,13 @@ class PickupFacade implements Pickup
         ?string $contenu = null,
         ?PickupOptions $options = null,
         ?string $locale = null,
-    ): PickupCreationResult {
-        // phpcs:enable
-        return $this->pickupService->createNationalPickup(
-            $header,
-            $datePassage,
-            $datePassageFermeture,
-            $orderGiver,
-            $pickupAddress,
-            $esdParticularities,
-            $referenceEsdClient,
-            $contenu,
-            $options,
-            $locale,
-        );
-    }
+    ): PickupCreationResult;
 
     /**
      * Create a European pickup (ESD).
      *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\PickupException
-     *
-     * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function createEuropeanPickup(
         PickupHeader $header,
@@ -106,17 +73,7 @@ class PickupFacade implements Pickup
         PickupAddress $pickupAddress,
         ?DpdRecipients $dpdRecipients = null,
         ?string $locale = null,
-    ): PickupCreationResult {
-        // phpcs:enable
-        return $this->pickupService->createEuropeanPickup(
-            $header,
-            $datePassage,
-            $orderGiver,
-            $pickupAddress,
-            $dpdRecipients,
-            $locale,
-        );
-    }
+    ): PickupCreationResult;
 
     /**
      * Cancel one or more pickups (ESD).
@@ -129,7 +86,5 @@ class PickupFacade implements Pickup
     public function cancelPickups(
         array $esdNumbers,
         ?string $locale = null,
-    ): CancelPickupResult {
-        return $this->pickupService->cancelPickups($esdNumbers, $locale);
-    }
+    ): CancelPickupResult;
 }

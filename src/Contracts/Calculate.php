@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kwaadpepper\ChronopostApiPhp\Facade;
+namespace Kwaadpepper\ChronopostApiPhp\Contracts;
 
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\DeliveryTime;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductCatalog;
@@ -13,18 +13,9 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ShippingEstimateRequest;
-use Kwaadpepper\ChronopostApiPhp\Contracts\Calculate;
-use Kwaadpepper\ChronopostApiPhp\Services\Calculate\CalculateService;
-use Kwaadpepper\ChronopostApiPhp\Services\Cost\QuickCostService;
 
-class CalculateFacade implements Calculate
+interface Calculate
 {
-    public function __construct(
-        private CalculateService $calculateService,
-        private QuickCostService $quickCostService,
-    ) {
-    }
-
     /**
      * Calculate the delivery time for a shipment.
      *
@@ -38,16 +29,7 @@ class CalculateFacade implements Calculate
         ProductCode $productCode,
         ShippingType $shippingType,
         ServiceCode $serviceCode,
-    ): DeliveryTime {
-        return $this->calculateService->calculateDeliveryTime(
-            $from,
-            $to,
-            $toCityName,
-            $productCode,
-            $shippingType,
-            $serviceCode,
-        );
-    }
+    ): DeliveryTime;
 
     /**
      * Calculate possible products for a shipment.
@@ -57,9 +39,7 @@ class CalculateFacade implements Calculate
      */
     public function calculatePossibleProductsForShipping(
         ShippingEstimateRequest $request,
-    ): ProductList {
-        return $this->calculateService->calculateProducts($request);
-    }
+    ): ProductList;
 
     /**
      * Calculate possible products for a shipment (V2, with caller token).
@@ -72,14 +52,7 @@ class CalculateFacade implements Calculate
         ShippingEstimateRequest $request,
         ?string $nationalite = null,
         ?string $isPart = null,
-    ): ProductList {
-        return $this->calculateService->calculateProductsV2(
-            $caller,
-            $request,
-            $nationalite,
-            $isPart,
-        );
-    }
+    ): ProductList;
 
     /**
      * Estimate the shipping cost for a shipment.
@@ -93,15 +66,7 @@ class CalculateFacade implements Calculate
         int $weightInGrams,
         ProductCode $productCode,
         ShippingType $shippingType,
-    ): QuickCostV3 {
-        return $this->quickCostService->quickCostV3(
-            $from,
-            $to,
-            $weightInGrams / 1000,
-            $productCode,
-            $shippingType,
-        );
-    }
+    ): QuickCostV3;
 
     /**
      * Get available products for a route (without pricing).
@@ -111,7 +76,5 @@ class CalculateFacade implements Calculate
      */
     public function getAvailableProducts(
         ShippingEstimateRequest $request,
-    ): ProductCatalog {
-        return $this->quickCostService->getProducts($request);
-    }
+    ): ProductCatalog;
 }

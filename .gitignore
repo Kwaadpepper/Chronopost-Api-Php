@@ -3,7 +3,6 @@ phpstan-report.xml
 .phpunit.result.cache
 .php-cs-fixer.cache
 tests.md
-src/Contracts/
 documentation/Chrono Shopper Max.txt
 documentation/Documentation Web Services VL3.24.10.14-FR.txt
 documentation/Etiquette Chrono 13H.txt

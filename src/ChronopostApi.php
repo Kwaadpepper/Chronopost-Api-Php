@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp;
 
+use Kwaadpepper\ChronopostApiPhp\Contracts\Calculate;
+use Kwaadpepper\ChronopostApiPhp\Contracts\DeliverySlot;
+use Kwaadpepper\ChronopostApiPhp\Contracts\Pickup;
+use Kwaadpepper\ChronopostApiPhp\Contracts\Relay;
+use Kwaadpepper\ChronopostApiPhp\Contracts\Shipping;
+use Kwaadpepper\ChronopostApiPhp\Contracts\Tracking;
 use Kwaadpepper\ChronopostApiPhp\Facade\CalculateFacade;
 use Kwaadpepper\ChronopostApiPhp\Facade\DeliverySlotFacade;
 use Kwaadpepper\ChronopostApiPhp\Facade\PickupFacade;
@@ -26,17 +32,17 @@ use WsdlToPhp\PackageBase\SoapClientInterface;
 
 class ChronopostApi
 {
-    public readonly TrackingFacade $tracking;
+    public readonly Tracking $tracking;
 
-    public readonly ShippingFacade $shipping;
+    public readonly Shipping $shipping;
 
-    public readonly PickupFacade $pickup;
+    public readonly Pickup $pickup;
 
-    public readonly RelayFacade $relay;
+    public readonly Relay $relay;
 
-    public readonly DeliverySlotFacade $deliverySlot;
+    public readonly DeliverySlot $deliverySlot;
 
-    public readonly CalculateFacade $calculate;
+    public readonly Calculate $calculate;
 
     /**
      * Constructor

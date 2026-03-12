@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kwaadpepper\ChronopostApiPhp\Facade;
+namespace Kwaadpepper\ChronopostApiPhp\Contracts;
 
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\CancelListResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\CancelResult;
@@ -13,33 +13,18 @@ use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SearchTrackResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SenderRefTrackResult;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingSearchCriteria;
-use Kwaadpepper\ChronopostApiPhp\Services\Tracking\ProofOfDeliveryService;
-use Kwaadpepper\ChronopostApiPhp\Services\Tracking\TrackCancelService;
-use Kwaadpepper\ChronopostApiPhp\Contracts\Tracking;
-use Kwaadpepper\ChronopostApiPhp\Services\Tracking\TrackSearchService;
 
-class TrackingFacade implements Tracking
+interface Tracking
 {
-    public function __construct(
-        private TrackSearchService $trackSearchService,
-        private TrackCancelService $trackCancelService,
-        private ProofOfDeliveryService $proofOfDeliveryService,
-    ) {
-    }
-
     /**
      * Track a single shipment using the tracking number.
      *
-     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber $trackingNumber The tracking number to search.
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SkybillV2\EventInfo[] The tracking information.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SkybillV2\EventInfo[]
      *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Tracking\TrackingException
      */
-    public function trackShipment(TrackingNumber $trackingNumber): array
-    {
-        return $this->trackSearchService->findUsingTrackingNumber($trackingNumber);
-    }
+    public function trackShipment(TrackingNumber $trackingNumber): array;
 
     /**
      * Search tracking with multiple criteria.
@@ -49,9 +34,7 @@ class TrackingFacade implements Tracking
      */
     public function trackBySearchQuery(
         TrackingSearchCriteria $criteria,
-    ): SearchTrackResult {
-        return $this->trackSearchService->trackSearch($criteria);
-    }
+    ): SearchTrackResult;
 
     /**
      * Track parcels using sender reference.
@@ -59,10 +42,7 @@ class TrackingFacade implements Tracking
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Tracking\TrackingException
      */
-    public function trackBySenderReference(string $senderRef): SenderRefTrackResult
-    {
-        return $this->trackSearchService->trackWithSenderRef($senderRef);
-    }
+    public function trackBySenderReference(string $senderRef): SenderRefTrackResult;
 
     /**
      * Track using an ESD number.
@@ -70,10 +50,7 @@ class TrackingFacade implements Tracking
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Tracking\TrackingException
      */
-    public function trackEsd(string $esdNumber): EsdTrackResult
-    {
-        return $this->trackSearchService->trackEsd($esdNumber);
-    }
+    public function trackEsd(string $esdNumber): EsdTrackResult;
 
     /**
      * Cancel a single shipment.
@@ -81,10 +58,7 @@ class TrackingFacade implements Tracking
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Tracking\TrackingException
      */
-    public function cancelShipment(TrackingNumber $trackingNumber): CancelResult
-    {
-        return $this->trackCancelService->cancelSkybill($trackingNumber);
-    }
+    public function cancelShipment(TrackingNumber $trackingNumber): CancelResult;
 
     /**
      * Cancel multiple shipments.
@@ -94,10 +68,7 @@ class TrackingFacade implements Tracking
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Tracking\TrackingException
      */
-    public function cancelMultipleShipments(array $trackingNumbers): CancelListResult
-    {
-        return $this->trackCancelService->cancelListSkybill($trackingNumbers);
-    }
+    public function cancelMultipleShipments(array $trackingNumbers): CancelListResult;
 
     /**
      * Search for proof of delivery by tracking number.
@@ -108,9 +79,7 @@ class TrackingFacade implements Tracking
     public function getProofOfDelivery(
         TrackingNumber $trackingNumber,
         bool $pdf = true,
-    ): ProofOfDelivery {
-        return $this->proofOfDeliveryService->searchPod($trackingNumber, $pdf);
-    }
+    ): ProofOfDelivery;
 
     /**
      * Search for proof of delivery by sender reference.
@@ -121,7 +90,5 @@ class TrackingFacade implements Tracking
     public function getProofOfDeliveryByReference(
         string $senderRef,
         bool $pdf = true,
-    ): ProofOfDeliveryByRef {
-        return $this->proofOfDeliveryService->searchPodWithSenderRef($senderRef, $pdf);
-    }
+    ): ProofOfDeliveryByRef;
 }

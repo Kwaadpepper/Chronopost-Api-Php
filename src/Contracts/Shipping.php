@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kwaadpepper\ChronopostApiPhp\Facade;
+namespace Kwaadpepper\ChronopostApiPhp\Contracts;
 
 use ChronopostShipping\StructType\RecipientValue as RecipientValueChronopost;
 use ChronopostShipping\StructType\ShipperValue as ShipperValueChronopost;
@@ -24,18 +24,9 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillParameters;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\RoutingQuery;
-use Kwaadpepper\ChronopostApiPhp\Contracts\Shipping;
-use Kwaadpepper\ChronopostApiPhp\Services\Shipping\ShippingLabelService;
-use Kwaadpepper\ChronopostApiPhp\Services\Shipping\ShippingService;
 
-class ShippingFacade implements Shipping
+interface Shipping
 {
-    public function __construct(
-        private ShippingService $shippingService,
-        private ShippingLabelService $shippingLabelService,
-    ) {
-    }
-
     /**
      * Creates a single-parcel shipment with the provided values.
      *
@@ -54,21 +45,7 @@ class ShippingFacade implements Shipping
         ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
         ?SkyBillParameters $skyBillParameters = null,
-    ): MultiParcelV4 {
-        return $this->shippingService->multiParcelV4(
-            skybillValues: [$skybillValue],
-            customerValue: $customerValue,
-            shippersValues: [$shipperValue],
-            recipientsValues: [$recipientValue],
-            referenceValues: [$referenceValue],
-            scheduledValues: $scheduledValue ? [$scheduledValue] : [],
-            esdValue: $esdValue,
-            numberOfParcel: 1,
-            multiParcel: false,
-            skyBillOutputMode: $skyBillOutputMode,
-            skyBillParameters: $skyBillParameters,
-        );
-    }
+    ): MultiParcelV4;
 
     /**
      * Creates a multi-parcel shipment (one shipper to one recipient).
@@ -88,34 +65,7 @@ class ShippingFacade implements Shipping
         ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
         ?SkyBillParameters $skyBillParameters = null,
-    ): MultiParcelV4 {
-        $skybillValues   = [];
-        $referenceValues = [];
-        $scheduledValues = [];
-
-        // phpcs:ignore Generic.Files.LineLength.TooLong
-        array_map(function ($part) use (&$skybillValues, &$referenceValues, &$scheduledValues) {
-            $skybillValues[]   = $part->skybillValue;
-            $referenceValues[] = $part->referenceValue;
-            if ($part->scheduledValue !== null) {
-                $scheduledValues[] = $part->scheduledValue;
-            }
-        }, $multiParcelParts);
-
-        return $this->shippingService->multiParcelV4(
-            customerValue: $customerValue,
-            skybillValues: $skybillValues,
-            shippersValues: [$shipperValue],
-            recipientsValues: [$recipientValue],
-            referenceValues: $referenceValues,
-            scheduledValues: $scheduledValues,
-            esdValue: $esdValue,
-            numberOfParcel: count($multiParcelParts),
-            multiParcel: count($multiParcelParts) > 1,
-            skyBillOutputMode: $skyBillOutputMode,
-            skyBillParameters: $skyBillParameters,
-        );
-    }
+    ): MultiParcelV4;
 
     /**
      * Creates a single-parcel shipment using the V7 API.
@@ -134,19 +84,7 @@ class ShippingFacade implements Shipping
         ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
         ?SkyBillParameters $skyBillParameters = null,
-    ): MonoParcelV7 {
-        return $this->shippingService->singleParcelV7(
-            $skybillValue,
-            $customerValue,
-            $shipperValue,
-            $recipientValue,
-            $referenceValue,
-            $scheduledValue,
-            $esdValue,
-            $skyBillOutputMode,
-            $skyBillParameters,
-        );
-    }
+    ): MonoParcelV7;
 
     /**
      * Creates a multi-parcel shipment using the V7 API.
@@ -173,21 +111,7 @@ class ShippingFacade implements Shipping
         bool $multiParcel = false,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
         ?SkyBillParameters $skyBillParameters = null,
-    ): MultiParcelV4 {
-        return $this->shippingService->multiParcelV7(
-            $skybillValues,
-            $customerValue,
-            $shippersValues,
-            $recipientsValues,
-            $referenceValues,
-            $scheduledValues,
-            $esdValue,
-            $numberOfParcel,
-            $multiParcel,
-            $skyBillOutputMode,
-            $skyBillParameters,
-        );
-    }
+    ): MultiParcelV4;
 
     /**
      * Creates a single-parcel shipment with reservation.
@@ -206,19 +130,7 @@ class ShippingFacade implements Shipping
         ?ScheduledValue $scheduledValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
         ?SkyBillParameters $skyBillParameters = null,
-    ): ReservationResult {
-        return $this->shippingService->singleParcelWithReservation(
-            $skybillValue,
-            $customerValue,
-            $shipperValue,
-            $recipientValue,
-            $referenceValue,
-            $esdValue,
-            $scheduledValue,
-            $skyBillOutputMode,
-            $skyBillParameters,
-        );
-    }
+    ): ReservationResult;
 
     /**
      * Creates a multi-parcel shipment with reservation.
@@ -243,21 +155,7 @@ class ShippingFacade implements Shipping
         bool $multiParcel = false,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
         ?SkyBillParameters $skyBillParameters = null,
-    ): ReservationMultiParcelResult {
-        return $this->shippingService->multiParcelWithReservation(
-            $skybillValues,
-            $customerValue,
-            $shipperValue,
-            $recipientsValues,
-            $referenceValues,
-            $esdValue,
-            $scheduledValue,
-            $numberOfParcel,
-            $multiParcel,
-            $skyBillOutputMode,
-            $skyBillParameters,
-        );
-    }
+    ): ReservationMultiParcelResult;
 
     /**
      * Creates a shipment with ESD only (no transport ticket).
@@ -275,18 +173,7 @@ class ShippingFacade implements Shipping
         EsdValue $esdValue,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
         ?SkyBillParameters $skyBillParameters = null,
-    ): ReservationResult {
-        return $this->shippingService->shippingWithEsdOnly(
-            $skybillValue,
-            $customerValue,
-            $shipperValue,
-            $recipientValue,
-            $referenceValue,
-            $esdValue,
-            $skyBillOutputMode,
-            $skyBillParameters,
-        );
-    }
+    ): ReservationResult;
 
     /**
      * Creates a shipment with reservation and ESD with client reference.
@@ -303,17 +190,7 @@ class ShippingFacade implements Shipping
         ReferenceValue $referenceValue,
         EsdValue $esdValue,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-    ): ReservationResult {
-        return $this->shippingService->shippingWithReservationAndEsd(
-            $skybillValue,
-            $customerValue,
-            $shipperValue,
-            $recipientValue,
-            $referenceValue,
-            $esdValue,
-            $skyBillOutputMode,
-        );
-    }
+    ): ReservationResult;
 
     /**
      * Get a transport label from a skybill number.
@@ -325,9 +202,7 @@ class ShippingFacade implements Shipping
         string $numberSearch,
         string $mode = 'PDF',
         ?string $key = null,
-    ): SkybillLabel {
-        return $this->shippingLabelService->getSkybill($numberSearch, $mode, $key);
-    }
+    ): SkybillLabel;
 
     /**
      * Get a reserved transport label from reservation number.
@@ -338,12 +213,7 @@ class ShippingFacade implements Shipping
     public function getReservedShippingLabel(
         string $reservationNumber,
         string $mode = 'PDF',
-    ): SkybillLabel {
-        return $this->shippingLabelService->getReservedSkybillWithTypeAndModeByReservation(
-            $reservationNumber,
-            $mode,
-        );
-    }
+    ): SkybillLabel;
 
     /**
      * Get routing information for a destination.
@@ -351,10 +221,7 @@ class ShippingFacade implements Shipping
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
      */
-    public function getRouting(RoutingQuery $query): RoutingInfo
-    {
-        return $this->shippingLabelService->getRouting($query);
-    }
+    public function getRouting(RoutingQuery $query): RoutingInfo;
 
     /**
      * Get shipping information for a shipment context.
@@ -366,11 +233,5 @@ class ShippingFacade implements Shipping
         ShipperValueChronopost $shipperValue,
         RecipientValueChronopost $recipientValue,
         SkybillValueBase $skybillValueBase,
-    ): ShippingInformation {
-        return $this->shippingLabelService->getShippingInformation(
-            $shipperValue,
-            $recipientValue,
-            $skybillValueBase,
-        );
-    }
+    ): ShippingInformation;
 }
