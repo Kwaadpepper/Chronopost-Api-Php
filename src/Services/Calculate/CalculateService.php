@@ -22,6 +22,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ShippingEstimateRequest;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
 class CalculateService implements CalculateServiceInterface
@@ -66,30 +67,23 @@ class CalculateService implements CalculateServiceInterface
      * Calculate available products for a shipment.
      */
     public function calculateProducts(
-        PostCode $from,
-        PostCode $to,
-        string $toCityName,
-        ShippingType $shippingType,
-        float $weight,
-        ?float $height = null,
-        ?float $length = null,
-        ?float $width = null,
-        ?\DateTime $shippingDate = null,
+        ShippingEstimateRequest $request,
     ): ProductList {
+        $dimensions = $request->getDimensions();
         $parameters = new CalculateProducts(
             $this->accountNumber->getAccountNumber(),
             $this->password->getPassword(),
-            (string) $from->getCountryDelivery()->getCode(),
-            $from->getPostCode(),
-            (string) $to->getCountryDelivery()->getCode(),
-            $to->getPostCode(),
-            $toCityName,
-            $shippingType->oneLetterCode(),
-            (string) $weight,
-            $height !== null ? (string) $height : null,
-            $length !== null ? (string) $length : null,
-            $width !== null ? (string) $width : null,
-            $shippingDate !== null ? $shippingDate->format('d/m/Y') : null,
+            (string) $request->getFrom()->getCountryDelivery()->getCode(),
+            $request->getFrom()->getPostCode(),
+            (string) $request->getTo()->getCountryDelivery()->getCode(),
+            $request->getTo()->getPostCode(),
+            $request->getToCityName(),
+            $request->getShippingType()->oneLetterCode(),
+            (string) $request->getWeight()->getKg(),
+            $dimensions !== null ? (string) $dimensions->getHeight() : null,
+            $dimensions !== null ? (string) $dimensions->getLength() : null,
+            $dimensions !== null ? (string) $dimensions->getWidth() : null,
+            $request->getShippingDate() !== null ? $request->getShippingDate()->format('d/m/Y') : null,
         );
 
         $result = $this->calculateService->calculateProducts($parameters);
@@ -122,31 +116,24 @@ class CalculateService implements CalculateServiceInterface
      */
     public function calculateProductsV2(
         string $caller,
-        PostCode $from,
-        PostCode $to,
-        string $toCityName,
-        ShippingType $shippingType,
-        float $weight,
-        ?float $height = null,
-        ?float $length = null,
-        ?float $width = null,
-        ?\DateTime $shippingDate = null,
+        ShippingEstimateRequest $request,
         ?string $nationalite = null,
         ?string $isPart = null,
     ): ProductList {
+        $dimensions = $request->getDimensions();
         $parameters = new CalculateProductsV2Input(
             $caller,
-            (string) $from->getCountryDelivery()->getCode(),
-            $from->getPostCode(),
-            (string) $to->getCountryDelivery()->getCode(),
-            $to->getPostCode(),
-            $toCityName,
-            $shippingType->oneLetterCode(),
-            (string) $weight,
-            $height !== null ? (string) $height : null,
-            $length !== null ? (string) $length : null,
-            $width !== null ? (string) $width : null,
-            $shippingDate !== null ? $shippingDate->format('d/m/Y') : null,
+            (string) $request->getFrom()->getCountryDelivery()->getCode(),
+            $request->getFrom()->getPostCode(),
+            (string) $request->getTo()->getCountryDelivery()->getCode(),
+            $request->getTo()->getPostCode(),
+            $request->getToCityName(),
+            $request->getShippingType()->oneLetterCode(),
+            (string) $request->getWeight()->getKg(),
+            $dimensions !== null ? (string) $dimensions->getHeight() : null,
+            $dimensions !== null ? (string) $dimensions->getLength() : null,
+            $dimensions !== null ? (string) $dimensions->getWidth() : null,
+            $request->getShippingDate() !== null ? $request->getShippingDate()->format('d/m/Y') : null,
             $nationalite,
             $isPart,
         );

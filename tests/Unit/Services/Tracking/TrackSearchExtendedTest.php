@@ -24,6 +24,7 @@ use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\Tracking\TrackingException;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingSearchCriteria;
 use Kwaadpepper\ChronopostApiPhp\Services\Tracking\TrackSearchService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -92,6 +93,7 @@ class TrackSearchExtendedTest extends TestCase
 
         // WHEN.
         $result = $this->service->trackSearch(
+            new TrackingSearchCriteria(),
         );
 
         // THEN.
@@ -114,7 +116,7 @@ class TrackSearchExtendedTest extends TestCase
 
         // WHEN / THEN.
         $this->expectException(ApiError::class);
-        $this->service->trackSearch();
+        $this->service->trackSearch(new TrackingSearchCriteria());
     }
 
     public function testGivenErrorCodeWhenTrackSearchThenThrowsTrackingException(): void
@@ -133,7 +135,7 @@ class TrackSearchExtendedTest extends TestCase
         // WHEN / THEN.
         $this->expectException(TrackingException::class);
         $this->expectExceptionMessage('Invalid criteria');
-        $this->service->trackSearch();
+        $this->service->trackSearch(new TrackingSearchCriteria());
     }
 
     public function testGivenSenderReferenceWhenTrackThenReturnsSenderRefResult(): void

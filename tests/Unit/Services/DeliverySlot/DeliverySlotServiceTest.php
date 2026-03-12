@@ -15,10 +15,20 @@ use ChronopostTimeSlot\StructType\ProductServiceV2;
 use ChronopostTimeSlot\StructType\SearchDeliverySlotResponse;
 use ChronopostTimeSlot\StructType\ServiceResponseV2;
 use ChronopostTimeSlot\StructType\Slot;
+use Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost;
+use Kwaadpepper\ChronopostApiPhp\Enums\SlotProductType;
+use Kwaadpepper\ChronopostApiPhp\Enums\SlotType;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\DeliverySlot\DeliverySlotException;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Address;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\DateRange;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\GeocodingAddress;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\SlotConfirmRequest;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\SlotSearchCriteria;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Weight;
 use Kwaadpepper\ChronopostApiPhp\Services\DeliverySlot\DeliverySlotService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -136,6 +146,46 @@ class DeliverySlotServiceTest extends TestCase
 
     // ── searchDeliverySlots ────────────────────────────────────────────────
 
+    private function createDefaultSlotSearchCriteria(): SlotSearchCriteria
+    {
+        return new SlotSearchCriteria(
+            productType: SlotProductType::RDV,
+            recipientAddress: new Address(
+                '1 rue de la Paix',
+                null,
+                'Paris',
+                new PostCode('75001', CountryForChronopost::FRANCE),
+            ),
+            dateRange: new DateRange(
+                new \DateTimeImmutable('2025-01-15'),
+                new \DateTimeImmutable('2025-01-20'),
+            ),
+        );
+    }
+
+    private function createDefaultSlotConfirmRequest(): SlotConfirmRequest
+    {
+        return new SlotConfirmRequest(
+            productType: SlotProductType::RDV,
+            codeSlot: 'SLOT001',
+            meshCode: 'MESH001',
+            transactionId: 'TXN001',
+            rank: '1',
+            position: '1',
+            dateSelected: new \DateTimeImmutable('2025-01-15'),
+        );
+    }
+
+    private function createDefaultGeocodingAddress(?string $address2 = null): GeocodingAddress
+    {
+        return new GeocodingAddress(
+            address1: '1 rue de la Paix',
+            postCode: new PostCode('75001', CountryForChronopost::FRANCE),
+            city: 'Paris',
+            address2: $address2,
+        );
+    }
+
     public function testGivenAddressWhenSearchSlotsThenReturnsAvailableSlots(): void
     {
         $deliverySlotResponse = $this->createDeliverySlotResponse();
@@ -147,13 +197,7 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($searchResponse);
 
         $result = $this->service->searchDeliverySlots(
-            '2R',
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
-            'FR',
-            '2025-01-15',
-            '2025-01-20',
+            $this->createDefaultSlotSearchCriteria(),
         );
 
         $this->assertSame('MESH001', $result->meshCode);
@@ -177,13 +221,7 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($searchResponse);
 
         $result = $this->service->searchDeliverySlots(
-            '2R',
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
-            'FR',
-            '2025-01-15',
-            '2025-01-20',
+            $this->createDefaultSlotSearchCriteria(),
         );
 
         $this->assertCount(0, $result->slots);
@@ -202,13 +240,7 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($searchResponse);
 
         $result = $this->service->searchDeliverySlots(
-            '2R',
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
-            'FR',
-            '2025-01-15',
-            '2025-01-20',
+            $this->createDefaultSlotSearchCriteria(),
         );
 
         $this->assertCount(2, $result->slots);
@@ -228,13 +260,7 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->searchDeliverySlots(
-            '2R',
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
-            'FR',
-            '2025-01-15',
-            '2025-01-20',
+            $this->createDefaultSlotSearchCriteria(),
         );
     }
 
@@ -250,13 +276,7 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->searchDeliverySlots(
-            '2R',
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
-            'FR',
-            '2025-01-15',
-            '2025-01-20',
+            $this->createDefaultSlotSearchCriteria(),
         );
     }
 
@@ -275,13 +295,7 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectExceptionCode(1);
 
         $this->service->searchDeliverySlots(
-            '2R',
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
-            'FR',
-            '2025-01-15',
-            '2025-01-20',
+            $this->createDefaultSlotSearchCriteria(),
         );
     }
 
@@ -306,19 +320,27 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($searchResponse);
 
         $this->service->searchDeliverySlots(
-            '2R',
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
-            'FR',
-            '2025-01-15',
-            '2025-01-20',
-            '10 rue du Commerce',
-            '69001',
-            'Lyon',
-            'FR',
-            1500,
-            'P',
+            new SlotSearchCriteria(
+                productType: SlotProductType::RDV,
+                recipientAddress: new Address(
+                    '1 rue de la Paix',
+                    null,
+                    'Paris',
+                    new PostCode('75001', CountryForChronopost::FRANCE),
+                ),
+                dateRange: new DateRange(
+                    new \DateTimeImmutable('2025-01-15'),
+                    new \DateTimeImmutable('2025-01-20'),
+                ),
+                shipperAddress: new Address(
+                    '10 rue du Commerce',
+                    null,
+                    'Lyon',
+                    new PostCode('69001', CountryForChronopost::FRANCE),
+                ),
+                weight: new Weight(1.5),
+                slotType: SlotType::DAY,
+            ),
         );
     }
 
@@ -350,13 +372,7 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($searchResponse);
 
         $result = $this->service->searchDeliverySlots(
-            '2R',
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
-            'FR',
-            '2025-01-15',
-            '2025-01-20',
+            $this->createDefaultSlotSearchCriteria(),
         );
 
         $mapped = $result->slots[0];
@@ -389,13 +405,7 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($confirmResponse);
 
         $result = $this->service->confirmDeliverySlot(
-            '2R',
-            'SLOT001',
-            'MESH001',
-            'TXN001',
-            '1',
-            '1',
-            '2025-01-15',
+            $this->createDefaultSlotConfirmRequest(),
         );
 
         $this->assertSame(0, $result->code);
@@ -415,13 +425,7 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->confirmDeliverySlot(
-            '2R',
-            'SLOT001',
-            'MESH001',
-            'TXN001',
-            '1',
-            '1',
-            '2025-01-15',
+            $this->createDefaultSlotConfirmRequest(),
         );
     }
 
@@ -437,13 +441,7 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->confirmDeliverySlot(
-            '2R',
-            'SLOT001',
-            'MESH001',
-            'TXN001',
-            '1',
-            '1',
-            '2025-01-15',
+            $this->createDefaultSlotConfirmRequest(),
         );
     }
 
@@ -462,13 +460,7 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectExceptionCode(99);
 
         $this->service->confirmDeliverySlot(
-            '2R',
-            'SLOT001',
-            'MESH001',
-            'TXN001',
-            '1',
-            '1',
-            '2025-01-15',
+            $this->createDefaultSlotConfirmRequest(),
         );
     }
 
@@ -493,13 +485,7 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($confirmResponse);
 
         $this->service->confirmDeliverySlot(
-            '2R',
-            'SLOT001',
-            'MESH001',
-            'TXN001',
-            '1',
-            '1',
-            '2025-01-15',
+            $this->createDefaultSlotConfirmRequest(),
         );
     }
 
@@ -516,9 +502,7 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($getResponse);
 
         $result = $this->service->geocodeAddress(
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
+            $this->createDefaultGeocodingAddress(),
         );
 
         $this->assertSame(48.8566, $result->latitude);
@@ -536,9 +520,7 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->geocodeAddress(
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
+            $this->createDefaultGeocodingAddress(),
         );
     }
 
@@ -554,9 +536,7 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->geocodeAddress(
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
+            $this->createDefaultGeocodingAddress(),
         );
     }
 
@@ -575,9 +555,7 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectExceptionCode(5);
 
         $this->service->geocodeAddress(
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
+            $this->createDefaultGeocodingAddress(),
         );
     }
 
@@ -602,10 +580,7 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($getResponse);
 
         $this->service->geocodeAddress(
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
-            '2ème étage',
+            $this->createDefaultGeocodingAddress('2ème étage'),
         );
     }
 
@@ -620,10 +595,7 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($getResponse);
 
         $result = $this->service->geocodeAddress(
-            '1 rue de la Paix',
-            '75001',
-            'Paris',
-            'Apt 3B',
+            $this->createDefaultGeocodingAddress('Apt 3B'),
         );
 
         $this->assertSame(48.8566, $result->latitude);

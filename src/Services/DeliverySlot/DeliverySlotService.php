@@ -21,7 +21,10 @@ use Kwaadpepper\ChronopostApiPhp\Factory\DeliverySlotConfirmationFactory;
 use Kwaadpepper\ChronopostApiPhp\Factory\DeliverySlotSearchResultFactory;
 use Kwaadpepper\ChronopostApiPhp\Factory\GeocodingResultFactory;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\GeocodingAddress;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\SlotConfirmRequest;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\SlotSearchCriteria;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
 /**
@@ -86,64 +89,41 @@ class DeliverySlotService implements DeliverySlotServiceInterface
     /**
      * Search for available delivery time slots.
      *
-     * @param string                                                    $productType     The product type code.
-     * @param string                                                    $recipientAddr1  Recipient address line 1.
-     * @param string                                                    $recipientZip    Recipient postal code.
-     * @param string                                                    $recipientCity   Recipient city.
-     * @param string                                                    $recipientCountry Recipient country code.
-     * @param string                                                    $dateBegin       Start date (YYYY-MM-DD).
-     * @param string                                                    $dateEnd         End date (YYYY-MM-DD).
-     * @param string|null                                               $shipperAddr1    Shipper address line 1.
-     * @param string|null                                               $shipperZip      Shipper postal code.
-     * @param string|null                                               $shipperCity     Shipper city.
-     * @param string|null                                               $shipperCountry  Shipper country code.
-     * @param integer|null                                              $weight          Weight in grams.
-     * @param string|null                                               $slotType        Slot type filter.
-     *
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotSearchResult
      *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\DeliverySlot\DeliverySlotException
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function searchDeliverySlots(
-        string $productType,
-        string $recipientAddr1,
-        string $recipientZip,
-        string $recipientCity,
-        string $recipientCountry,
-        string $dateBegin,
-        string $dateEnd,
-        ?string $shipperAddr1 = null,
-        ?string $shipperZip = null,
-        ?string $shipperCity = null,
-        ?string $shipperCountry = null,
-        ?int $weight = null,
-        ?string $slotType = null,
+        SlotSearchCriteria $criteria,
     ): DeliverySlotSearchResult {
         $this->searchService->setSoapHeaderAccountNumber($this->accountNumber->getAccountNumber());
         $this->searchService->setSoapHeaderPassword($this->password->getPassword());
 
+        $recipient = $criteria->getRecipientAddress();
+        $shipper   = $criteria->getShipperAddress();
+
         $parameter = new SearchDeliverySlot(
             null,
-            $productType,
-            $shipperAddr1,
+            $criteria->getProductType()->value,
+            $shipper?->getAddress1(),
             null,
-            $shipperZip,
-            $shipperCity,
-            $shipperCountry,
-            $recipientAddr1,
+            $shipper?->getPostCode()->getPostCode(),
+            $shipper?->getCity(),
+            $shipper?->getPostCode()->getCountryDelivery()->getCode(),
+            $recipient->getAddress1(),
             null,
-            $recipientZip,
-            $recipientCity,
-            $recipientCountry,
+            $recipient->getPostCode()->getPostCode(),
+            $recipient->getCity(),
+            (string) $recipient->getPostCode()->getCountryDelivery()->getCode(),
             null,
-            $weight,
-            $dateBegin,
-            $dateEnd,
+            $criteria->getWeight() !== null ? (int) ($criteria->getWeight()->getKg() * 1000) : null,
+            $criteria->getDateRange()->getBegin()->format('Y-m-d'),
+            $criteria->getDateRange()->getEnd()->format('Y-m-d'),
         );
 
-        if ($slotType !== null) {
-            $parameter->setSlotType($slotType);
+        if ($criteria->getSlotType() !== null) {
+            $parameter->setSlotType($criteria->getSlotType()->value);
         }
 
         $result = $this->searchService->searchDeliverySlot($parameter);
@@ -176,40 +156,26 @@ class DeliverySlotService implements DeliverySlotServiceInterface
     /**
      * Confirm a delivery time slot.
      *
-     * @param string                                                    $productType   The product type code.
-     * @param string                                                    $codeSlot      The delivery slot code.
-     * @param string                                                    $meshCode      The mesh code from search result.
-     * @param string                                                    $transactionId The transaction ID from search result.
-     * @param string                                                    $rank          The rank of the slot.
-     * @param string                                                    $position      The position of the slot.
-     * @param string                                                    $dateSelected  The selected date.
-     *
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotConfirmation
      *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\DeliverySlot\DeliverySlotException
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function confirmDeliverySlot(
-        string $productType,
-        string $codeSlot,
-        string $meshCode,
-        string $transactionId,
-        string $rank,
-        string $position,
-        string $dateSelected,
+        SlotConfirmRequest $request,
     ): DeliverySlotConfirmation {
         $this->confirmService->setSoapHeaderAccountNumber($this->accountNumber->getAccountNumber());
         $this->confirmService->setSoapHeaderPassword($this->password->getPassword());
 
         $parameter = new ConfirmDeliverySlotV2(
             null,
-            $productType,
-            $codeSlot,
-            $meshCode,
-            $transactionId,
-            $rank,
-            $position,
-            $dateSelected,
+            $request->getProductType()->value,
+            $request->getCodeSlot(),
+            $request->getMeshCode(),
+            $request->getTransactionId(),
+            $request->getRank(),
+            $request->getPosition(),
+            $request->getDateSelected()->format('Y-m-d'),
         );
 
         $result = $this->confirmService->confirmDeliverySlotV2($parameter);
@@ -242,30 +208,22 @@ class DeliverySlotService implements DeliverySlotServiceInterface
     /**
      * Geocode an address to get coordinates.
      *
-     * @param string                                                    $address1      Address line 1.
-     * @param string                                                    $zipCode       Postal code.
-     * @param string                                                    $city          City name.
-     * @param string|null                                               $address2      Address line 2.
-     *
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\GeocodingResult
      *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\DeliverySlot\DeliverySlotException
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function geocodeAddress(
-        string $address1,
-        string $zipCode,
-        string $city,
-        ?string $address2 = null,
+        GeocodingAddress $address,
     ): GeocodingResult {
         $this->getService->setSoapHeaderAccountNumber($this->accountNumber->getAccountNumber());
         $this->getService->setSoapHeaderPassword($this->password->getPassword());
 
         $parameter = new GetAdresseGeocodage(
-            $address1,
-            $address2,
-            $zipCode,
-            $city,
+            $address->getAddress1(),
+            $address->getAddress2(),
+            $address->getPostCode()->getPostCode(),
+            $address->getCity(),
         );
 
         $result = $this->getService->getAdresseGeocodage($parameter);

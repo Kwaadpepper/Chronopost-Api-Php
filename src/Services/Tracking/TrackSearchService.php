@@ -24,6 +24,7 @@ use Kwaadpepper\ChronopostApiPhp\Factory\TrackWithSenderRefFactory;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingSearchCriteria;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
@@ -127,50 +128,33 @@ class TrackSearchService implements TrackingServiceInterface
     }
 
     /**
-     * Search tracking using multiple criteria.
+     * Search tracking using composite criteria.
      *
-     * @param string|null                                                      $consigneesCountry
-     * @param string|null                                                      $consigneesRef
-     * @param string|null                                                      $consigneesZipCode
-     * @param string|null                                                      $dateDeposit
-     * @param string|null                                                      $dateEndDeposit
-     * @param string|null                                                      $parcelState
-     * @param string|null                                                      $sendersRef
-     * @param string|null                                                      $serviceCode
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale|null $locale
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingSearchCriteria $criteria
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale|null  $locale
      *
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SearchTrackResult
      *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails or returns an invalid response.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Tracking\TrackingException If the API returns an error response.
-     *
-     * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function trackSearch(
-        ?string $consigneesCountry = null,
-        ?string $consigneesRef = null,
-        ?string $consigneesZipCode = null,
-        ?string $dateDeposit = null,
-        ?string $dateEndDeposit = null,
-        ?string $parcelState = null,
-        ?string $sendersRef = null,
-        ?string $serviceCode = null,
+        TrackingSearchCriteria $criteria,
         ?TrackingV2Locale $locale = null,
     ): SearchTrackResult {
-        // phpcs:enable
         $locale     = $locale ?? TrackingV2Locale::create(Locale::FR);
         $parameters = new TrackSearch(
             accountNumber: $this->accountNumber->getAccountNumber(),
             password: $this->password->getPassword(),
             language: (string) $locale,
-            consigneesCountry: $consigneesCountry,
-            consigneesRef: $consigneesRef,
-            consigneesZipCode: $consigneesZipCode,
-            dateDeposit: $dateDeposit,
-            dateEndDeposit: $dateEndDeposit,
-            parcelState: $parcelState,
-            sendersRef: $sendersRef,
-            serviceCode: $serviceCode,
+            consigneesCountry: $criteria->getConsigneesCountry()?->getCode(),
+            consigneesRef: $criteria->getConsigneesRef() !== null ? (string) $criteria->getConsigneesRef() : null,
+            consigneesZipCode: $criteria->getConsigneesPostCode()?->getPostCode(),
+            dateDeposit: $criteria->getDepositDateRange()?->getBegin()->format('Y-m-d'),
+            dateEndDeposit: $criteria->getDepositDateRange()?->getEnd()->format('Y-m-d'),
+            parcelState: $criteria->getParcelState()?->value,
+            sendersRef: $criteria->getSendersRef() !== null ? (string) $criteria->getSendersRef() : null,
+            serviceCode: $criteria->getServiceCode()?->getValue(),
         );
 
         $result = $this->trackService->trackSearch($parameters);

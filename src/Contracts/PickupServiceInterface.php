@@ -15,6 +15,7 @@ use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\CancelPickupResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupConstraints;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupCreationResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupFeasibility;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\PickupSearchCriteria;
 
 interface PickupServiceInterface
 {
@@ -25,9 +26,7 @@ interface PickupServiceInterface
     ): PickupFeasibility;
 
     public function searchConstraints(
-        string $country,
-        string $zipCode,
-        string $city,
+        PickupSearchCriteria $criteria,
     ): PickupConstraints;
 
     public function createNationalPickup(

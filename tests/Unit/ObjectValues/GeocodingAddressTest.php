@@ -20,11 +20,12 @@ class GeocodingAddressTest extends TestCase
         $postCode = new PostCode('75001', CountryForChronopost::FRANCE);
 
         // WHEN.
-        $address = new GeocodingAddress('10 Rue de Rivoli', $postCode);
+        $address = new GeocodingAddress('10 Rue de Rivoli', $postCode, 'Paris');
 
         // THEN.
         $this->assertSame('10 Rue de Rivoli', $address->getAddress1());
         $this->assertSame($postCode, $address->getPostCode());
+        $this->assertSame('Paris', $address->getCity());
         $this->assertNull($address->getAddress2());
     }
 
@@ -34,7 +35,7 @@ class GeocodingAddressTest extends TestCase
         $postCode = new PostCode('75001', CountryForChronopost::FRANCE);
 
         // WHEN.
-        $address = new GeocodingAddress('10 Rue de Rivoli', $postCode, 'Bat A');
+        $address = new GeocodingAddress('10 Rue de Rivoli', $postCode, 'Paris', 'Bat A');
 
         // THEN.
         $this->assertSame('Bat A', $address->getAddress2());
@@ -49,7 +50,19 @@ class GeocodingAddressTest extends TestCase
         $postCode = new PostCode('75001', CountryForChronopost::FRANCE);
 
         // WHEN.
-        new GeocodingAddress('', $postCode);
+        new GeocodingAddress('', $postCode, 'Paris');
+    }
+
+    public function testCannotInstantiateEmptyCity(): void
+    {
+        // THEN.
+        $this->expectException(\InvalidArgumentException::class);
+
+        // GIVEN.
+        $postCode = new PostCode('75001', CountryForChronopost::FRANCE);
+
+        // WHEN.
+        new GeocodingAddress('10 Rue de Rivoli', $postCode, '');
     }
 
     public function testCannotInstantiateEmptyStringAddress2(): void
@@ -61,6 +74,6 @@ class GeocodingAddressTest extends TestCase
         $postCode = new PostCode('75001', CountryForChronopost::FRANCE);
 
         // WHEN.
-        new GeocodingAddress('10 Rue de Rivoli', $postCode, '');
+        new GeocodingAddress('10 Rue de Rivoli', $postCode, 'Paris', '');
     }
 }

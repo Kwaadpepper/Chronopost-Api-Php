@@ -23,6 +23,8 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ShippingEstimateRequest;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Weight;
 use Kwaadpepper\ChronopostApiPhp\Services\Cost\QuickCostService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -150,11 +152,7 @@ class QuickCostServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         $result = $this->service->getProducts(
-            $this->from,
-            $this->to,
-            'Lyon',
-            ShippingType::MERCHANDISE,
-            2.5,
+            new ShippingEstimateRequest($this->from, $this->to, 'Lyon', ShippingType::MERCHANDISE, new Weight(2.5)),
         );
 
         self::assertInstanceOf(ProductCatalog::class, $result);
@@ -175,11 +173,7 @@ class QuickCostServiceTest extends TestCase
 
         $this->expectException(ApiError::class);
         $this->service->getProducts(
-            $this->from,
-            $this->to,
-            'Lyon',
-            ShippingType::MERCHANDISE,
-            2.5,
+            new ShippingEstimateRequest($this->from, $this->to, 'Lyon', ShippingType::MERCHANDISE, new Weight(2.5)),
         );
     }
 
@@ -194,11 +188,7 @@ class QuickCostServiceTest extends TestCase
 
         $this->expectException(QuickCostException::class);
         $this->service->getProducts(
-            $this->from,
-            $this->to,
-            'Lyon',
-            ShippingType::MERCHANDISE,
-            2.5,
+            new ShippingEstimateRequest($this->from, $this->to, 'Lyon', ShippingType::MERCHANDISE, new Weight(2.5)),
         );
     }
 
@@ -212,11 +202,7 @@ class QuickCostServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         $result = $this->service->getProducts(
-            $this->from,
-            $this->to,
-            'Lyon',
-            ShippingType::MERCHANDISE,
-            2.5,
+            new ShippingEstimateRequest($this->from, $this->to, 'Lyon', ShippingType::MERCHANDISE, new Weight(2.5)),
         );
 
         self::assertInstanceOf(ProductCatalog::class, $result);

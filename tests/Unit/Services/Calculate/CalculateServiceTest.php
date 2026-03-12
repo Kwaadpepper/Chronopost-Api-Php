@@ -15,8 +15,11 @@ use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\Calculate\CalculateException;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ParcelDimensions;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ShippingEstimateRequest;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Weight;
 use Kwaadpepper\ChronopostApiPhp\Services\Calculate\CalculateService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -93,11 +96,7 @@ class CalculateServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         $result = $this->service->calculateProducts(
-            $this->from,
-            $this->to,
-            'Lyon',
-            ShippingType::MERCHANDISE,
-            2.5,
+            new ShippingEstimateRequest($this->from, $this->to, 'Lyon', ShippingType::MERCHANDISE, new Weight(2.5)),
         );
 
         self::assertInstanceOf(ProductList::class, $result);
@@ -117,11 +116,7 @@ class CalculateServiceTest extends TestCase
 
         $this->expectException(ApiError::class);
         $this->service->calculateProducts(
-            $this->from,
-            $this->to,
-            'Lyon',
-            ShippingType::MERCHANDISE,
-            2.5,
+            new ShippingEstimateRequest($this->from, $this->to, 'Lyon', ShippingType::MERCHANDISE, new Weight(2.5)),
         );
     }
 
@@ -136,11 +131,7 @@ class CalculateServiceTest extends TestCase
 
         $this->expectException(CalculateException::class);
         $this->service->calculateProducts(
-            $this->from,
-            $this->to,
-            'Lyon',
-            ShippingType::MERCHANDISE,
-            2.5,
+            new ShippingEstimateRequest($this->from, $this->to, 'Lyon', ShippingType::MERCHANDISE, new Weight(2.5)),
         );
     }
 
@@ -156,11 +147,7 @@ class CalculateServiceTest extends TestCase
 
         $result = $this->service->calculateProductsV2(
             'MY_CALLER_TOKEN',
-            $this->from,
-            $this->to,
-            'Lyon',
-            ShippingType::MERCHANDISE,
-            2.5,
+            new ShippingEstimateRequest($this->from, $this->to, 'Lyon', ShippingType::MERCHANDISE, new Weight(2.5)),
         );
 
         self::assertInstanceOf(ProductList::class, $result);
@@ -181,11 +168,7 @@ class CalculateServiceTest extends TestCase
         $this->expectException(ApiError::class);
         $this->service->calculateProductsV2(
             'MY_CALLER_TOKEN',
-            $this->from,
-            $this->to,
-            'Lyon',
-            ShippingType::MERCHANDISE,
-            2.5,
+            new ShippingEstimateRequest($this->from, $this->to, 'Lyon', ShippingType::MERCHANDISE, new Weight(2.5)),
         );
     }
 
@@ -201,11 +184,7 @@ class CalculateServiceTest extends TestCase
         $this->expectException(CalculateException::class);
         $this->service->calculateProductsV2(
             'MY_CALLER_TOKEN',
-            $this->from,
-            $this->to,
-            'Lyon',
-            ShippingType::MERCHANDISE,
-            2.5,
+            new ShippingEstimateRequest($this->from, $this->to, 'Lyon', ShippingType::MERCHANDISE, new Weight(2.5)),
         );
     }
 
@@ -221,15 +200,15 @@ class CalculateServiceTest extends TestCase
 
         $result = $this->service->calculateProductsV2(
             'MY_CALLER_TOKEN',
-            $this->from,
-            $this->to,
-            'Lyon',
-            ShippingType::MERCHANDISE,
-            5.0,
-            height: 30.0,
-            length: 40.0,
-            width: 20.0,
-            shippingDate: new \DateTime('2026-03-15'),
+            new ShippingEstimateRequest(
+                $this->from,
+                $this->to,
+                'Lyon',
+                ShippingType::MERCHANDISE,
+                new Weight(5.0),
+                new ParcelDimensions(30.0, 40.0, 20.0),
+                new \DateTime('2026-03-15'),
+            ),
             nationalite: 'FR',
             isPart: '1',
         );

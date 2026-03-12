@@ -31,10 +31,13 @@ use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\CancelPickupResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupConstraints;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupCreationResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupFeasibility;
+use Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\PickupException;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\PickupSearchCriteria;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\Services\Shipping\PickupService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -162,9 +165,7 @@ class PickupServiceTest extends TestCase
 
         // When
         $constraints = $this->service->searchConstraints(
-            'FR',
-            '75018',
-            'Paris',
+            new PickupSearchCriteria(new PostCode('75018', CountryForChronopost::FRANCE), 'Paris'),
         );
 
         // Then
@@ -193,9 +194,7 @@ class PickupServiceTest extends TestCase
 
         // When
         $this->service->searchConstraints(
-            'FR',
-            '99999',
-            'Inconnu',
+            new PickupSearchCriteria(new PostCode('99999', CountryForChronopost::FRANCE), 'Inconnu'),
         );
     }
 

@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\Contracts;
 
+use Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotConfirmation;
+use Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotSearchResult;
+use Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\GeocodingResult;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\GeocodingAddress;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\SlotConfirmRequest;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\SlotSearchCriteria;
+
 interface DeliverySlotServiceInterface
 {
     /**
@@ -15,20 +22,8 @@ interface DeliverySlotServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function searchDeliverySlots(
-        string $productType,
-        string $recipientAddr1,
-        string $recipientZip,
-        string $recipientCity,
-        string $recipientCountry,
-        string $dateBegin,
-        string $dateEnd,
-        ?string $shipperAddr1 = null,
-        ?string $shipperZip = null,
-        ?string $shipperCity = null,
-        ?string $shipperCountry = null,
-        ?int $weight = null,
-        ?string $slotType = null,
-    ): \Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotSearchResult;
+        SlotSearchCriteria $criteria,
+    ): DeliverySlotSearchResult;
 
     /**
      * Confirm a delivery time slot.
@@ -39,14 +34,8 @@ interface DeliverySlotServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function confirmDeliverySlot(
-        string $productType,
-        string $codeSlot,
-        string $meshCode,
-        string $transactionId,
-        string $rank,
-        string $position,
-        string $dateSelected,
-    ): \Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotConfirmation;
+        SlotConfirmRequest $request,
+    ): DeliverySlotConfirmation;
 
     /**
      * Geocode an address to get coordinates.
@@ -57,9 +46,6 @@ interface DeliverySlotServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function geocodeAddress(
-        string $address1,
-        string $zipCode,
-        string $city,
-        ?string $address2 = null,
-    ): \Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\GeocodingResult;
+        GeocodingAddress $address,
+    ): GeocodingResult;
 }

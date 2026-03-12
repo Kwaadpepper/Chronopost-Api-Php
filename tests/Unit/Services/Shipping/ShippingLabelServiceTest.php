@@ -22,8 +22,11 @@ use ChronopostShipping\StructType\SkybillValueBase;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\RoutingInfo;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ShippingInformation;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel;
+use Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\RoutingQuery;
 use Kwaadpepper\ChronopostApiPhp\Services\Shipping\ShippingLabelService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -117,9 +120,7 @@ class ShippingLabelServiceTest extends TestCase
 
         // WHEN.
         $routing = $this->service->getRouting(
-            'DEP01',
-            'FR',
-            '75001',
+            new RoutingQuery('DEP01', new PostCode('75001', CountryForChronopost::FRANCE)),
         );
 
         // THEN.

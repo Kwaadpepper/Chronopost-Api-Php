@@ -19,6 +19,7 @@ use ChronopostShipping\StructType\RecipientValue;
 use ChronopostShipping\StructType\ShipperValue;
 use ChronopostShipping\StructType\SkybillValueBase;
 use Kwaadpepper\ChronopostApiPhp\Contracts\ShippingLabelServiceInterface;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\RoutingQuery;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\RoutingInfo;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ShippingInformation;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel;
@@ -239,30 +240,21 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @param string                                                   $shipperDepot  Shipper depot code.
-     * @param string                                                   $countryCode   Destination country code.
-     * @param string                                                   $zipCode       Destination zip code.
-     * @param string|null                                              $socode        Optional SO code.
-     * @param string|null                                              $ascode        Optional AS code.
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\RoutingInfo
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the SOAP call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getRouting(
-        string $shipperDepot,
-        string $countryCode,
-        string $zipCode,
-        ?string $socode = null,
-        ?string $ascode = null,
+        RoutingQuery $query,
     ): RoutingInfo {
         $result = $this->getService->getRouting(new GetRouting(
             accountNumber: $this->accountNumber->getAccountNumber(),
             password: $this->password->getPassword(),
-            shipperDepot: $shipperDepot,
-            countryCode: $countryCode,
-            zipCode: $zipCode,
-            socode: $socode,
-            ascode: $ascode,
+            shipperDepot: $query->getShipperDepot(),
+            countryCode: $query->getDestination()->getCountryDelivery()->getCode(),
+            zipCode: $query->getDestination()->getPostCode(),
+            socode: $query->getSocode(),
+            ascode: $query->getAscode(),
         ));
 
         $return = $this->extractReturnOrThrow(

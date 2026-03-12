@@ -10,19 +10,12 @@ use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ShippingEstimateRequest;
 
 interface CalculateServiceInterface
 {
     public function calculateProducts(
-        PostCode $from,
-        PostCode $to,
-        string $toCityName,
-        ShippingType $shippingType,
-        float $weight,
-        ?float $height = null,
-        ?float $length = null,
-        ?float $width = null,
-        ?\DateTime $shippingDate = null,
+        ShippingEstimateRequest $request,
     ): ProductList;
 
     public function calculateDeliveryTime(
@@ -36,15 +29,7 @@ interface CalculateServiceInterface
 
     public function calculateProductsV2(
         string $caller,
-        PostCode $from,
-        PostCode $to,
-        string $toCityName,
-        ShippingType $shippingType,
-        float $weight,
-        ?float $height = null,
-        ?float $length = null,
-        ?float $width = null,
-        ?\DateTime $shippingDate = null,
+        ShippingEstimateRequest $request,
         ?string $nationalite = null,
         ?string $isPart = null,
     ): ProductList;

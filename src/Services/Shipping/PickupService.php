@@ -22,6 +22,7 @@ use ChronopostShipping\StructType\ParticularitesEsd;
 use ChronopostShipping\StructType\RechercherContraintesEnlevementV2;
 use ChronopostShipping\StructType\ShipperValue;
 use Kwaadpepper\ChronopostApiPhp\Contracts\PickupServiceInterface;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\PickupSearchCriteria;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\CancelPickupResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupConstraints;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupCreationResult;
@@ -108,15 +109,13 @@ class PickupService implements PickupServiceInterface
     }
 
     public function searchConstraints(
-        string $country,
-        string $zipCode,
-        string $city,
+        PickupSearchCriteria $criteria,
     ): PickupConstraints {
         $result = $this->rechercherService->rechercherContraintesEnlevementV2(
             new RechercherContraintesEnlevementV2(
-                country: $country,
-                zipCode: $zipCode,
-                city: $city,
+                country: $criteria->getPostCode()->getCountryDelivery()->getCode(),
+                zipCode: $criteria->getPostCode()->getPostCode(),
+                city: $criteria->getCity(),
                 account: $this->accountNumber->getAccountNumber(),
                 password: $this->password->getPassword(),
             ),

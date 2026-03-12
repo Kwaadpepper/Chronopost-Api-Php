@@ -10,6 +10,7 @@ use ChronopostShipping\StructType\SkybillValueBase;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\RoutingInfo;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ShippingInformation;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\RoutingQuery;
 
 interface ShippingLabelServiceInterface
 {
@@ -43,11 +44,7 @@ interface ShippingLabelServiceInterface
     ): SkybillLabel;
 
     public function getRouting(
-        string $shipperDepot,
-        string $countryCode,
-        string $zipCode,
-        ?string $socode = null,
-        ?string $ascode = null,
+        RoutingQuery $query,
     ): RoutingInfo;
 
     public function getShippingInformation(

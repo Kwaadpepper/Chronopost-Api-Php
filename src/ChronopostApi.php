@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp;
 
-use DateTime;
 use ChronopostShipping\StructType\AdresseEnlevementV3;
 use ChronopostShipping\StructType\DestinatairesDpd;
 use ChronopostShipping\StructType\DonneurDOrdre;
@@ -45,6 +44,7 @@ use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\Enums\SkyBillOutputMode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AddressSearch;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\GeocodingAddress;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\EsdValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\RecipientValue;
@@ -55,14 +55,20 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillParameters;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Coordinates;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\PickupSearchCriteria;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayId;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayPointType;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayServiceType;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\WantedShippingDate;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\RoutingQuery;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ShippingEstimateRequest;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\SlotConfirmRequest;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\SlotSearchCriteria;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingSearchCriteria;
 use Kwaadpepper\ChronopostApiPhp\Services\Calculate\CalculateService;
 use Kwaadpepper\ChronopostApiPhp\Services\Cost\QuickCostService;
 use Kwaadpepper\ChronopostApiPhp\Services\DeliverySlot\DeliverySlotService;
@@ -134,7 +140,7 @@ class ChronopostApi
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Tracking\TrackingException If the tracking number is invalid
      *                                                                    or if there are no events found.
      */
-    public function trackSingleShipment(TrackingNumber $trackingNumber): array
+    public function trackShipment(TrackingNumber $trackingNumber): array
     {
         return $this->trackSearchService->findUsingTrackingNumber($trackingNumber);
     }
@@ -174,40 +180,14 @@ class ChronopostApi
     /**
      * Calculate possible products for a shipment.
      *
-     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode $from         The sender's postal code.
-     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode $to           The recipient's postal code.
-     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType    $shippingType The shipping type.
-     * @param  float                                               $weight       The weight of the shipment in kilograms.
-     * @param  float|null                                          $height       The height of the shipment in centimeters.
-     * @param  float|null                                          $length       The length of the shipment in centimeters.
-     * @param  float|null                                          $width        The width of the shipment in centimeters.
-     * @param  \DateTime|null                                      $shippingDate The desired shipping date.
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList The list of possible products.
-     *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Calculate\CalculateException If the API returns an error.
      */
     public function calculatePossibleProductsForShipping(
-        PostCode $from,
-        PostCode $to,
-        string $toCityName,
-        ShippingType $shippingType,
-        float $weight,
-        ?float $height = null,
-        ?float $length = null,
-        ?float $width = null,
-        ?DateTime $shippingDate = null,
+        ShippingEstimateRequest $request,
     ): ProductList {
         return $this->calculateService->calculateProducts(
-            $from,
-            $to,
-            $toCityName,
-            $shippingType,
-            $weight,
-            $height,
-            $length,
-            $width,
-            $shippingDate,
+            $request,
         );
     }
 
@@ -224,7 +204,7 @@ class ChronopostApi
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException If the API returns an error.
      */
-    public function estimateShippingCost(
+    public function calculateShippingCost(
         PostCode $from,
         PostCode $to,
         int $weightInGrams,
@@ -500,42 +480,14 @@ class ChronopostApi
     /**
      * Search tracking with multiple criteria.
      *
-     * @param string|null $consigneesCountry
-     * @param string|null $consigneesRef
-     * @param string|null $consigneesZipCode
-     * @param string|null $dateDeposit
-     * @param string|null $dateEndDeposit
-     * @param string|null $parcelState
-     * @param string|null $sendersRef
-     * @param string|null $serviceCode
-     *
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SearchTrackResult
-     *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Tracking\TrackingException
-     *
-     * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function trackBySearchQuery(
-        ?string $consigneesCountry = null,
-        ?string $consigneesRef = null,
-        ?string $consigneesZipCode = null,
-        ?string $dateDeposit = null,
-        ?string $dateEndDeposit = null,
-        ?string $parcelState = null,
-        ?string $sendersRef = null,
-        ?string $serviceCode = null,
+        TrackingSearchCriteria $criteria,
     ): SearchTrackResult {
-        // phpcs:enable
         return $this->trackSearchService->trackSearch(
-            $consigneesCountry,
-            $consigneesRef,
-            $consigneesZipCode,
-            $dateDeposit,
-            $dateEndDeposit,
-            $parcelState,
-            $sendersRef,
-            $serviceCode,
+            $criteria,
         );
     }
 
@@ -590,7 +542,7 @@ class ChronopostApi
      *
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
-    public function searchProofOfDelivery(
+    public function getProofOfDelivery(
         TrackingNumber $trackingNumber,
         bool $pdf = true,
     ): ProofOfDelivery {
@@ -614,7 +566,7 @@ class ChronopostApi
      *
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
-    public function searchProofOfDeliveryBySenderRef(
+    public function getProofOfDeliveryByReference(
         string $senderRef,
         bool $pdf = true,
     ): ProofOfDeliveryByRef {
@@ -864,18 +816,10 @@ class ChronopostApi
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
      */
     public function getRouting(
-        string $shipperDepot,
-        string $countryCode,
-        string $zipCode,
-        ?string $socode = null,
-        ?string $ascode = null,
+        RoutingQuery $query,
     ): RoutingInfo {
         return $this->shippingLabelService->getRouting(
-            $shipperDepot,
-            $countryCode,
-            $zipCode,
-            $socode,
-            $ascode,
+            $query,
         );
     }
 
@@ -922,14 +866,10 @@ class ChronopostApi
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\PickupException
      */
     public function searchPickupConstraints(
-        string $country,
-        string $zipCode,
-        string $city,
+        PickupSearchCriteria $criteria,
     ): PickupConstraints {
         return $this->pickupService->searchConstraints(
-            $country,
-            $zipCode,
-            $city,
+            $criteria,
         );
     }
 
@@ -1016,48 +956,18 @@ class ChronopostApi
     /**
      * Calculate possible products for a shipment (V2, with caller token).
      *
-     * @param  string                                                   $caller       The caller token.
-     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode      $from         The sender's postal code.
-     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode      $to           The recipient's postal code.
-     * @param  string                                                   $toCityName   The recipient's city name.
-     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType         $shippingType The shipping type.
-     * @param  float                                                    $weight       The weight in kilograms.
-     * @param  float|null                                               $height       The height in centimeters.
-     * @param  float|null                                               $length       The length in centimeters.
-     * @param  float|null                                               $width        The width in centimeters.
-     * @param  \DateTime|null                                           $shippingDate The desired shipping date.
-     * @param  string|null                                              $nationalite  The nationality code.
-     * @param  string|null                                              $isPart       Whether the sender is a private individual.
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList  The list of possible products.
-     *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Calculate\CalculateException If the API returns an error.
      */
     public function calculatePossibleProductsForShippingV2(
         string $caller,
-        PostCode $from,
-        PostCode $to,
-        string $toCityName,
-        ShippingType $shippingType,
-        float $weight,
-        ?float $height = null,
-        ?float $length = null,
-        ?float $width = null,
-        ?DateTime $shippingDate = null,
+        ShippingEstimateRequest $request,
         ?string $nationalite = null,
         ?string $isPart = null,
     ): ProductList {
         return $this->calculateService->calculateProductsV2(
             $caller,
-            $from,
-            $to,
-            $toCityName,
-            $shippingType,
-            $weight,
-            $height,
-            $length,
-            $width,
-            $shippingDate,
+            $request,
             $nationalite,
             $isPart,
         );
@@ -1066,158 +976,56 @@ class ChronopostApi
     /**
      * Get available products for a route (without pricing).
      *
-     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode         $from         The sender's postal code.
-     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode         $to           The recipient's postal code.
-     * @param  string                                                      $toCityName   The recipient's city name.
-     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType            $shippingType The shipping type.
-     * @param  float                                                       $weight       The weight in kilograms.
-     * @param  float|null                                                  $height       The height in centimeters.
-     * @param  float|null                                                  $length       The length in centimeters.
-     * @param  float|null                                                  $width        The width in centimeters.
-     * @param  \DateTime|null                                              $shippingDate The desired shipping date.
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductCatalog  The available products catalog.
-     *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException If the API returns an error.
      */
     public function getAvailableProducts(
-        PostCode $from,
-        PostCode $to,
-        string $toCityName,
-        ShippingType $shippingType,
-        float $weight,
-        ?float $height = null,
-        ?float $length = null,
-        ?float $width = null,
-        ?DateTime $shippingDate = null,
+        ShippingEstimateRequest $request,
     ): ProductCatalog {
         return $this->quickCostService->getProducts(
-            $from,
-            $to,
-            $toCityName,
-            $shippingType,
-            $weight,
-            $height,
-            $length,
-            $width,
-            $shippingDate,
+            $request,
         );
     }
 
     /**
      * Search for available delivery time slots.
      *
-     * @param string      $productType     The product type code.
-     * @param string      $recipientAddr1  Recipient address line 1.
-     * @param string      $recipientZip    Recipient postal code.
-     * @param string      $recipientCity   Recipient city.
-     * @param string      $recipientCountry Recipient country code.
-     * @param string      $dateBegin       Start date (YYYY-MM-DD).
-     * @param string      $dateEnd         End date (YYYY-MM-DD).
-     * @param string|null $shipperAddr1    Shipper address line 1.
-     * @param string|null $shipperZip      Shipper postal code.
-     * @param string|null $shipperCity     Shipper city.
-     * @param string|null $shipperCountry  Shipper country code.
-     * @param integer|null $weight         Weight in grams.
-     * @param string|null $slotType        Slot type filter.
-     *
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotSearchResult
-     *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\DeliverySlot\DeliverySlotException
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function searchDeliverySlots(
-        string $productType,
-        string $recipientAddr1,
-        string $recipientZip,
-        string $recipientCity,
-        string $recipientCountry,
-        string $dateBegin,
-        string $dateEnd,
-        ?string $shipperAddr1 = null,
-        ?string $shipperZip = null,
-        ?string $shipperCity = null,
-        ?string $shipperCountry = null,
-        ?int $weight = null,
-        ?string $slotType = null,
+        SlotSearchCriteria $criteria,
     ): DeliverySlotSearchResult {
         return $this->deliverySlotService->searchDeliverySlots(
-            $productType,
-            $recipientAddr1,
-            $recipientZip,
-            $recipientCity,
-            $recipientCountry,
-            $dateBegin,
-            $dateEnd,
-            $shipperAddr1,
-            $shipperZip,
-            $shipperCity,
-            $shipperCountry,
-            $weight,
-            $slotType,
+            $criteria,
         );
     }
 
     /**
      * Confirm a delivery time slot.
      *
-     * @param string $productType   The product type code.
-     * @param string $codeSlot      The delivery slot code.
-     * @param string $meshCode      The mesh code from search result.
-     * @param string $transactionId The transaction ID from search result.
-     * @param string $rank          The rank of the slot.
-     * @param string $position      The position of the slot.
-     * @param string $dateSelected  The selected date.
-     *
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotConfirmation
-     *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\DeliverySlot\DeliverySlotException
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function confirmDeliverySlot(
-        string $productType,
-        string $codeSlot,
-        string $meshCode,
-        string $transactionId,
-        string $rank,
-        string $position,
-        string $dateSelected,
+        SlotConfirmRequest $request,
     ): DeliverySlotConfirmation {
         return $this->deliverySlotService->confirmDeliverySlot(
-            $productType,
-            $codeSlot,
-            $meshCode,
-            $transactionId,
-            $rank,
-            $position,
-            $dateSelected,
+            $request,
         );
     }
 
     /**
      * Geocode an address to get coordinates.
      *
-     * @param string      $address1 Address line 1.
-     * @param string      $zipCode  Postal code.
-     * @param string      $city     City name.
-     * @param string|null $address2 Address line 2.
-     *
-     * @return \Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\GeocodingResult
-     *
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\DeliverySlot\DeliverySlotException
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function geocodeAddress(
-        string $address1,
-        string $zipCode,
-        string $city,
-        ?string $address2 = null,
+        GeocodingAddress $address,
     ): GeocodingResult {
         return $this->deliverySlotService->geocodeAddress(
-            $address1,
-            $zipCode,
-            $city,
-            $address2,
+            $address,
         );
     }
 }

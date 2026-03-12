@@ -8,6 +8,7 @@ use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\EsdTrackResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SearchTrackResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SenderRefTrackResult;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingSearchCriteria;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale;
 
 interface TrackingServiceInterface
@@ -25,29 +26,13 @@ interface TrackingServiceInterface
     /**
      * Search tracking information using various criteria.
      *
-     * @phpcs:disable Generic.Files.LineLength.TooLong
-     *
-     * @param string|null                                                      $consigneesCountry
-     * @param string|null                                                      $consigneesRef
-     * @param string|null                                                      $consigneesZipCode
-     * @param string|null                                                      $dateDeposit
-     * @param string|null                                                      $dateEndDeposit
-     * @param string|null                                                      $parcelState
-     * @param string|null                                                      $sendersRef
-     * @param string|null                                                      $serviceCode
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale|null $locale
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingSearchCriteria $criteria
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale|null  $locale
      *
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SearchTrackResult
      */
     public function trackSearch(
-        ?string $consigneesCountry = null,
-        ?string $consigneesRef = null,
-        ?string $consigneesZipCode = null,
-        ?string $dateDeposit = null,
-        ?string $dateEndDeposit = null,
-        ?string $parcelState = null,
-        ?string $sendersRef = null,
-        ?string $serviceCode = null,
+        TrackingSearchCriteria $criteria,
         ?TrackingV2Locale $locale = null,
     ): SearchTrackResult;
 

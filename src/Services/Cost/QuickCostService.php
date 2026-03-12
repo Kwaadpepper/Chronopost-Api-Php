@@ -21,6 +21,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\ShippingEstimateRequest;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
 class QuickCostService implements QuickCostServiceInterface
@@ -130,30 +131,23 @@ class QuickCostService implements QuickCostServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException If the API returns an error.
      */
     public function getProducts(
-        PostCode $from,
-        PostCode $to,
-        string $toCityName,
-        ShippingType $shippingType,
-        float $weight,
-        ?float $height = null,
-        ?float $length = null,
-        ?float $width = null,
-        ?\DateTime $shippingDate = null,
+        ShippingEstimateRequest $request,
     ): ProductCatalog {
+        $dimensions = $request->getDimensions();
         $parameters = new GetProductsInput(
             $this->accountNumber->getAccountNumber(),
             $this->password->getPassword(),
-            (string) $from->getCountryDelivery()->getCode(),
-            $from->getPostCode(),
-            (string) $to->getCountryDelivery()->getCode(),
-            $to->getPostCode(),
-            $toCityName,
-            $shippingType->oneLetterCode(),
-            (string) $weight,
-            $height !== null ? (string) $height : null,
-            $length !== null ? (string) $length : null,
-            $width !== null ? (string) $width : null,
-            $shippingDate !== null ? $shippingDate->format('d/m/Y') : null,
+            (string) $request->getFrom()->getCountryDelivery()->getCode(),
+            $request->getFrom()->getPostCode(),
+            (string) $request->getTo()->getCountryDelivery()->getCode(),
+            $request->getTo()->getPostCode(),
+            $request->getToCityName(),
+            $request->getShippingType()->oneLetterCode(),
+            (string) $request->getWeight()->getKg(),
+            $dimensions !== null ? (string) $dimensions->getHeight() : null,
+            $dimensions !== null ? (string) $dimensions->getLength() : null,
+            $dimensions !== null ? (string) $dimensions->getWidth() : null,
+            $request->getShippingDate() !== null ? $request->getShippingDate()->format('d/m/Y') : null,
         );
 
         $result = $this->getService->getProducts($parameters);
