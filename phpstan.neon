@@ -1,3 +1,6 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+
 parameters:
 
     paths:
@@ -6,3 +9,17 @@ parameters:
 
     # Level 9 is the highest level
     level: 5
+
+    ignoreErrors:
+        # assertInstanceOf is intentional in tests even when PHPStan can infer the type
+        -
+            identifier: staticMethod.alreadyNarrowedType
+            path: tests/*
+        # method_exists checks are intentional architectural assertions
+        -
+            identifier: function.alreadyNarrowedType
+            path: tests/*
+        # class_implements returns array<string, class-string>, docblock narrowing is acceptable
+        -
+            identifier: varTag.nativeType
+            path: tests/*
