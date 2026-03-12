@@ -9,20 +9,24 @@ use ChronopostShipping\ServiceType\Annuler;
 use ChronopostShipping\ServiceType\Creer;
 use ChronopostShipping\ServiceType\Faisabilite;
 use ChronopostShipping\ServiceType\Rechercher;
+use ChronopostShipping\StructType\AdresseDestinataire;
 use ChronopostShipping\StructType\AdresseEnlevementV3;
 use ChronopostShipping\StructType\AnnulerEnlevements;
 use ChronopostShipping\StructType\CreerEnlevementEurope;
 use ChronopostShipping\StructType\CreerEnlevementNational;
+use ChronopostShipping\StructType\DestinataireDpd;
 use ChronopostShipping\StructType\DestinatairesDpd;
 use ChronopostShipping\StructType\DonneurDOrdre;
 use ChronopostShipping\StructType\FaisabiliteESD as FaisabiliteESDRequest;
 use ChronopostShipping\StructType\HeaderValue;
+use ChronopostShipping\StructType\InfoClient;
 use ChronopostShipping\StructType\Options;
+use ChronopostShipping\StructType\Particularites;
+use ChronopostShipping\StructType\ParticularitesColisDpd;
 use ChronopostShipping\StructType\ParticularitesEsd;
 use ChronopostShipping\StructType\RechercherContraintesEnlevementV2;
 use ChronopostShipping\StructType\ShipperValue;
 use Kwaadpepper\ChronopostApiPhp\Contracts\PickupServiceInterface;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\PickupSearchCriteria;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\CancelPickupResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupConstraints;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupCreationResult;
@@ -35,6 +39,15 @@ use Kwaadpepper\ChronopostApiPhp\Factory\PickupCreationResultFactory;
 use Kwaadpepper\ChronopostApiPhp\Factory\PickupFeasibilityFactory;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\DpdRecipient;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\DpdRecipients;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\EsdParticularities;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\OrderGiver;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupAddress;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupHeader;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupOptions;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupShipper;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\PickupSearchCriteria;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
 class PickupService implements PickupServiceInterface
@@ -88,12 +101,12 @@ class PickupService implements PickupServiceInterface
     }
 
     public function checkFeasibility(
-        ShipperValue $shipperValue,
+        PickupShipper $shipper,
         string $retrievalDateTime,
         string $closingDateTime,
     ): PickupFeasibility {
         $result = $this->faisabiliteService->faisabiliteESD(new FaisabiliteESDRequest(
-            shipperValue: $shipperValue,
+            shipperValue: $this->mapShipper($shipper),
             retrievalDateTime: $retrievalDateTime,
             closingDateTime: $closingDateTime,
         ));
@@ -134,28 +147,28 @@ class PickupService implements PickupServiceInterface
     }
 
     public function createNationalPickup(
-        HeaderValue $headerValue,
+        PickupHeader $header,
         string $datePassage,
         string $datePassageFermeture,
-        DonneurDOrdre $donneurDOrdre,
-        AdresseEnlevementV3 $adresseEnlevement,
-        ?ParticularitesEsd $particularitesEsd = null,
+        OrderGiver $orderGiver,
+        PickupAddress $pickupAddress,
+        ?EsdParticularities $esdParticularities = null,
         ?string $referenceEsdClient = null,
         ?string $contenu = null,
-        ?Options $options = null,
+        ?PickupOptions $options = null,
         ?string $locale = null,
     ): PickupCreationResult {
         $result = $this->creerService->creerEnlevementNational(new CreerEnlevementNational(
-            headerValue: $headerValue,
+            headerValue: $this->mapHeader($header),
             password: $this->password->getPassword(),
             datePassage: $datePassage,
             datePassageFermeture: $datePassageFermeture,
-            donneurDOrdre: $donneurDOrdre,
-            adresseEnlevement: $adresseEnlevement,
-            particulartiesEsd: $particularitesEsd,
+            donneurDOrdre: $this->mapOrderGiver($orderGiver),
+            adresseEnlevement: $this->mapPickupAddress($pickupAddress),
+            particulartiesEsd: $esdParticularities !== null ? $this->mapEsdParticularities($esdParticularities) : null,
             referenceEsdClient: $referenceEsdClient,
             contenu: $contenu,
-            options: $options,
+            options: $options !== null ? $this->mapOptions($options) : null,
             locale: $locale,
         ));
 
@@ -172,20 +185,20 @@ class PickupService implements PickupServiceInterface
     }
 
     public function createEuropeanPickup(
-        HeaderValue $headerValue,
+        PickupHeader $header,
         string $datePassage,
-        DonneurDOrdre $donneurDOrdre,
-        AdresseEnlevementV3 $adresseEnlevement,
-        ?DestinatairesDpd $destinatairesEsd = null,
+        OrderGiver $orderGiver,
+        PickupAddress $pickupAddress,
+        ?DpdRecipients $dpdRecipients = null,
         ?string $locale = null,
     ): PickupCreationResult {
         $result = $this->creerService->creerEnlevementEurope(new CreerEnlevementEurope(
-            headerValue: $headerValue,
+            headerValue: $this->mapHeader($header),
             password: $this->password->getPassword(),
             datePassage: $datePassage,
-            donneurDOrdre: $donneurDOrdre,
-            adresseEnlevement: $adresseEnlevement,
-            destinatairesEsd: $destinatairesEsd,
+            donneurDOrdre: $this->mapOrderGiver($orderGiver),
+            adresseEnlevement: $this->mapPickupAddress($pickupAddress),
+            destinatairesEsd: $dpdRecipients !== null ? $this->mapDpdRecipients($dpdRecipients) : null,
             locale: $locale,
         ));
 
@@ -225,6 +238,162 @@ class PickupService implements PickupServiceInterface
         $this->assertNoPickupError($return->getCodeErreur(), $return->getErrorMessage());
 
         return (new CancelPickupResultFactory())->create($return);
+    }
+
+    private function mapShipper(PickupShipper $shipper): ShipperValue
+    {
+        return new ShipperValue(
+            shipperAdress1: $shipper->getAddress1(),
+            shipperAdress2: $shipper->getAddress2(),
+            shipperCity: $shipper->getCity(),
+            shipperCivility: $shipper->getCivility()?->value,
+            shipperContactName: $shipper->getContactName()?->getValue(),
+            shipperCountry: $shipper->getCountry(),
+            shipperCountryName: $shipper->getCountryName(),
+            shipperEmail: $shipper->getEmail()?->getValue(),
+            shipperMobilePhone: $shipper->getMobilePhone(),
+            shipperName: $shipper->getName(),
+            shipperName2: $shipper->getName2(),
+            shipperPhone: $shipper->getPhone(),
+            shipperPreAlert: $shipper->getPreAlert(),
+            shipperZipCode: $shipper->getZipCode(),
+        );
+    }
+
+    private function mapHeader(PickupHeader $header): HeaderValue
+    {
+        return new HeaderValue(
+            accountNumber: $header->getAccountNumber(),
+            idEmit: $header->getIdEmit(),
+            identWebPro: $header->getIdentWebPro(),
+            subAccount: $header->getSubAccount(),
+        );
+    }
+
+    private function mapOrderGiver(OrderGiver $og): DonneurDOrdre
+    {
+        return new DonneurDOrdre(
+            autreTelephone: $og->getOtherPhone(),
+            batiment: $og->getBuilding(),
+            codeCivilite: $og->getCivility()?->value,
+            codeNaf: $og->getNafCode(),
+            codePays: $og->getCountryCode(),
+            codePostal: $og->getPostalCode(),
+            eMail: $og->getEmail()?->getValue(),
+            fax: $og->getFax(),
+            lieuDit: $og->getHamlet(),
+            nom: $og->getLastName()?->getValue(),
+            prenom: $og->getFirstName()?->getValue(),
+            raisonSociale: $og->getCompanyName(),
+            service: $og->getService(),
+            telephone: $og->getPhone(),
+            ville: $og->getCity(),
+            voie: $og->getAddress(),
+        );
+    }
+
+    private function mapPickupAddress(PickupAddress $addr): AdresseEnlevementV3
+    {
+        $v3 = new AdresseEnlevementV3(
+            refExpediteur: $addr->getSenderReference()?->getValue(),
+        );
+        // AdresseEnlevementV2 parent field
+        $v3->setEmail($addr->getEmail()?->getValue());
+        // AdresseEnlevement base fields
+        $v3->setCodeCivilite($addr->getCivility()?->value);
+        $v3->setCodePays($addr->getCountryCode());
+        $v3->setCodePorte($addr->getDoorCode());
+        $v3->setCodePostal($addr->getPostalCode());
+        $v3->setLieuDit($addr->getHamlet());
+        $v3->setNom($addr->getLastName()?->getValue());
+        $v3->setNomPersonneARencontrer($addr->getContactName()?->getValue());
+        $v3->setNumeroVoie($addr->getStreetNumber());
+        $v3->setPorteAPorte($addr->getDoorToDoor());
+        $v3->setPrenom($addr->getFirstName()?->getValue());
+        $v3->setRaisonSociale($addr->getCompanyName());
+        $v3->setResidenceBatimentEtage($addr->getBuildingFloor());
+        $v3->setServiceDirection($addr->getServiceDirection());
+        $v3->setTelephone($addr->getPhone());
+        $v3->setVille($addr->getCity());
+
+        return $v3;
+    }
+
+    private function mapEsdParticularities(EsdParticularities $esd): ParticularitesEsd
+    {
+        return new ParticularitesEsd(
+            etudeDeFaisabilite: $esd->getFeasibilityStudy(),
+            grosVolume: $esd->getBulkyVolume(),
+            hauteur: $esd->getHeight(),
+            instructionsParticulieres: $esd->getSpecialInstructions(),
+            largeur: $esd->getWidth(),
+            listeColisAnnonces: $esd->getAnnouncedParcels(),
+            longueur: $esd->getLength(),
+            nombreEnvois: $esd->getShipmentCount(),
+            poids: $esd->getWeight(),
+            volume: $esd->getVolume(),
+        );
+    }
+
+    private function mapOptions(PickupOptions $opts): Options
+    {
+        return new Options(
+            aviserSurRealisation: $opts->getNotifyOnCompletion(),
+            chezUnTiers: $opts->getAtThirdParty(),
+            envoyerLtParMail: $opts->getSendLtByEmail(),
+            lTaImprimerParChronopost: $opts->getLtPrintedByChronopost(),
+        );
+    }
+
+    private function mapDpdRecipients(DpdRecipients $recipients): DestinatairesDpd
+    {
+        $mapped = array_map($this->mapDpdRecipient(...), $recipients->getRecipients());
+
+        return new DestinatairesDpd(destinataireDpd: $mapped);
+    }
+
+    private function mapDpdRecipient(DpdRecipient $r): DestinataireDpd
+    {
+        $addr = $r->getAddress();
+        $info = $r->getClientInfo();
+        $part = $r->getParticularities();
+
+        return new DestinataireDpd(
+            adresseDestinataire: $addr !== null ? new AdresseDestinataire(
+                adresse: $addr->getAddress(),
+                adresseSuite: $addr->getAddressLine2(),
+                codePays: $addr->getCountryCode(),
+                codePostal: $addr->getPostalCode(),
+                digicode: $addr->getDigicode(),
+                etage: $addr->getFloor(),
+                mail: $addr->getEmail()?->getValue(),
+                nom: $addr->getLastName()?->getValue(),
+                poids: $addr->getWeight(),
+                prenom: $addr->getFirstName()?->getValue(),
+                raisonSociale: $addr->getCompanyName(),
+                referenceDestinataire: $addr->getRecipientReference(),
+                telephone: $addr->getPhone(),
+                ville: $addr->getCity(),
+            ) : null,
+            infoClient: $info !== null ? new InfoClient(
+                contenu: $info->getContent(),
+                devise: $info->getCurrency(),
+                montant: $info->getAmount(),
+                refEsdClient: $info->getClientEsdRef(),
+                service: $info->getService(),
+            ) : null,
+            particularites: $part !== null ? new Particularites(
+                hauteur: $part->getHeight(),
+                instructionsParticulieres: $part->getSpecialInstructions(),
+                largeur: $part->getWidth(),
+                longueur: $part->getLength(),
+                nombreEnvois: $part->getShipmentCount(),
+                poids: $part->getWeight(),
+            ) : null,
+            particularitesColisDpd: $r->getInsuredValue() !== null ? new ParticularitesColisDpd(
+                valeurAssuree: $r->getInsuredValue(),
+            ) : null,
+        );
     }
 
     private function extractReturnOrThrow(bool|object $result, string $method, string $nullMessage): object

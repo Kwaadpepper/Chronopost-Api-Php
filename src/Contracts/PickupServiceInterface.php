@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\Contracts;
 
-use ChronopostShipping\StructType\AdresseEnlevementV3;
-use ChronopostShipping\StructType\DestinatairesDpd;
-use ChronopostShipping\StructType\DonneurDOrdre;
-use ChronopostShipping\StructType\HeaderValue;
-use ChronopostShipping\StructType\Options;
-use ChronopostShipping\StructType\ParticularitesEsd;
-use ChronopostShipping\StructType\ShipperValue;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\CancelPickupResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupConstraints;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupCreationResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupFeasibility;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\DpdRecipients;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\EsdParticularities;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\OrderGiver;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupAddress;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupHeader;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupOptions;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupShipper;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PickupSearchCriteria;
 
 interface PickupServiceInterface
 {
     public function checkFeasibility(
-        ShipperValue $shipperValue,
+        PickupShipper $shipper,
         string $retrievalDateTime,
         string $closingDateTime,
     ): PickupFeasibility;
@@ -30,24 +30,24 @@ interface PickupServiceInterface
     ): PickupConstraints;
 
     public function createNationalPickup(
-        HeaderValue $headerValue,
+        PickupHeader $header,
         string $datePassage,
         string $datePassageFermeture,
-        DonneurDOrdre $donneurDOrdre,
-        AdresseEnlevementV3 $adresseEnlevement,
-        ?ParticularitesEsd $particularitesEsd = null,
+        OrderGiver $orderGiver,
+        PickupAddress $pickupAddress,
+        ?EsdParticularities $esdParticularities = null,
         ?string $referenceEsdClient = null,
         ?string $contenu = null,
-        ?Options $options = null,
+        ?PickupOptions $options = null,
         ?string $locale = null,
     ): PickupCreationResult;
 
     public function createEuropeanPickup(
-        HeaderValue $headerValue,
+        PickupHeader $header,
         string $datePassage,
-        DonneurDOrdre $donneurDOrdre,
-        AdresseEnlevementV3 $adresseEnlevement,
-        ?DestinatairesDpd $destinatairesEsd = null,
+        OrderGiver $orderGiver,
+        PickupAddress $pickupAddress,
+        ?DpdRecipients $dpdRecipients = null,
         ?string $locale = null,
     ): PickupCreationResult;
 

@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp;
 
-use ChronopostShipping\StructType\AdresseEnlevementV3;
-use ChronopostShipping\StructType\DestinatairesDpd;
-use ChronopostShipping\StructType\DonneurDOrdre;
-use ChronopostShipping\StructType\HeaderValue;
-use ChronopostShipping\StructType\Options;
-use ChronopostShipping\StructType\ParticularitesEsd;
 use ChronopostShipping\StructType\RecipientValue as RecipientValueChronopost;
 use ChronopostShipping\StructType\ShipperValue as ShipperValueChronopost;
 use ChronopostShipping\StructType\SkybillValueBase;
@@ -55,6 +49,13 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillParameters;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Coordinates;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\DpdRecipients;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\EsdParticularities;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\OrderGiver;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupAddress;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupHeader;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupOptions;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupShipper;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PickupSearchCriteria;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
@@ -848,12 +849,12 @@ class ChronopostApi
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\PickupException
      */
     public function checkPickupFeasibility(
-        ShipperValueChronopost $shipperValue,
+        PickupShipper $shipper,
         string $retrievalDateTime,
         string $closingDateTime,
     ): PickupFeasibility {
         return $this->pickupService->checkFeasibility(
-            $shipperValue,
+            $shipper,
             $retrievalDateTime,
             $closingDateTime,
         );
@@ -882,25 +883,25 @@ class ChronopostApi
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function createNationalPickup(
-        HeaderValue $headerValue,
+        PickupHeader $header,
         string $datePassage,
         string $datePassageFermeture,
-        DonneurDOrdre $donneurDOrdre,
-        AdresseEnlevementV3 $adresseEnlevement,
-        ?ParticularitesEsd $particularitesEsd = null,
+        OrderGiver $orderGiver,
+        PickupAddress $pickupAddress,
+        ?EsdParticularities $esdParticularities = null,
         ?string $referenceEsdClient = null,
         ?string $contenu = null,
-        ?Options $options = null,
+        ?PickupOptions $options = null,
         ?string $locale = null,
     ): PickupCreationResult {
         // phpcs:enable
         return $this->pickupService->createNationalPickup(
-            $headerValue,
+            $header,
             $datePassage,
             $datePassageFermeture,
-            $donneurDOrdre,
-            $adresseEnlevement,
-            $particularitesEsd,
+            $orderGiver,
+            $pickupAddress,
+            $esdParticularities,
             $referenceEsdClient,
             $contenu,
             $options,
@@ -917,20 +918,20 @@ class ChronopostApi
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function createEuropeanPickup(
-        HeaderValue $headerValue,
+        PickupHeader $header,
         string $datePassage,
-        DonneurDOrdre $donneurDOrdre,
-        AdresseEnlevementV3 $adresseEnlevement,
-        ?DestinatairesDpd $destinatairesEsd = null,
+        OrderGiver $orderGiver,
+        PickupAddress $pickupAddress,
+        ?DpdRecipients $dpdRecipients = null,
         ?string $locale = null,
     ): PickupCreationResult {
         // phpcs:enable
         return $this->pickupService->createEuropeanPickup(
-            $headerValue,
+            $header,
             $datePassage,
-            $donneurDOrdre,
-            $adresseEnlevement,
-            $destinatairesEsd,
+            $orderGiver,
+            $pickupAddress,
+            $dpdRecipients,
             $locale,
         );
     }

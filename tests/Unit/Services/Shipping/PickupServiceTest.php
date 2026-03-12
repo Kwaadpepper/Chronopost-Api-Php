@@ -8,24 +8,19 @@ use ChronopostShipping\ServiceType\Annuler;
 use ChronopostShipping\ServiceType\Creer;
 use ChronopostShipping\ServiceType\Faisabilite;
 use ChronopostShipping\ServiceType\Rechercher;
-use ChronopostShipping\StructType\AdresseEnlevementV3;
 use ChronopostShipping\StructType\AnnulerEnlevementsResponse;
 use ChronopostShipping\StructType\CreerEnlevementEuropeResponse;
 use ChronopostShipping\StructType\CreerEnlevementNationalResponse;
-use ChronopostShipping\StructType\DestinatairesDpd;
-use ChronopostShipping\StructType\DonneurDOrdre;
 use ChronopostShipping\StructType\Entry;
 use ChronopostShipping\StructType\EsdContraintesAgence;
 use ChronopostShipping\StructType\EsdResultContraintesAgenceValue;
 use ChronopostShipping\StructType\FaisabiliteESDResponse;
-use ChronopostShipping\StructType\HeaderValue;
 use ChronopostShipping\StructType\InfoEnlevement;
 use ChronopostShipping\StructType\RechercherContraintesEnlevementV2Response;
 use ChronopostShipping\StructType\ResultAnnulerEnlevement;
 use ChronopostShipping\StructType\ResultEnlevementNational;
 use ChronopostShipping\StructType\ResultFaisabiliteESD;
 use ChronopostShipping\StructType\ResultPickupOrCollectionRequest;
-use ChronopostShipping\StructType\ShipperValue;
 use ChronopostShipping\StructType\Statut;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\CancelPickupResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupConstraints;
@@ -36,6 +31,11 @@ use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\PickupException;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\DpdRecipients;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\OrderGiver;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupAddress;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupHeader;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupShipper;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PickupSearchCriteria;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\Services\Shipping\PickupService;
@@ -85,7 +85,7 @@ class PickupServiceTest extends TestCase
 
         // When
         $feasibility = $this->service->checkFeasibility(
-            new ShipperValue(),
+            new PickupShipper(),
             '2026-03-15T09:00:00',
             '2026-03-15T18:00:00',
         );
@@ -106,7 +106,7 @@ class PickupServiceTest extends TestCase
 
         // When
         $feasibility = $this->service->checkFeasibility(
-            new ShipperValue(),
+            new PickupShipper(),
             '2026-03-15T09:00:00',
             '2026-03-15T18:00:00',
         );
@@ -132,7 +132,7 @@ class PickupServiceTest extends TestCase
 
         // When
         $this->service->checkFeasibility(
-            new ShipperValue(),
+            new PickupShipper(),
             '2026-03-15T09:00:00',
             '2026-03-15T18:00:00',
         );
@@ -223,11 +223,11 @@ class PickupServiceTest extends TestCase
 
         // When
         $pickupResult = $this->service->createNationalPickup(
-            new HeaderValue(accountNumber: 19869502),
+            new PickupHeader(accountNumber: 19869502),
             '2026-03-15T09:00:00',
             '2026-03-15T18:00:00',
-            new DonneurDOrdre(),
-            new AdresseEnlevementV3(),
+            new OrderGiver(),
+            new PickupAddress(),
         );
 
         // Then
@@ -255,11 +255,11 @@ class PickupServiceTest extends TestCase
 
         // When
         $this->service->createNationalPickup(
-            new HeaderValue(accountNumber: 19869502),
+            new PickupHeader(accountNumber: 19869502),
             '2026-03-15T09:00:00',
             '2026-03-15T18:00:00',
-            new DonneurDOrdre(),
-            new AdresseEnlevementV3(),
+            new OrderGiver(),
+            new PickupAddress(),
         );
     }
 
@@ -285,11 +285,11 @@ class PickupServiceTest extends TestCase
 
         // When
         $pickupResult = $this->service->createEuropeanPickup(
-            new HeaderValue(accountNumber: 19869502),
+            new PickupHeader(accountNumber: 19869502),
             '2026-03-20T10:00:00',
-            new DonneurDOrdre(),
-            new AdresseEnlevementV3(),
-            new DestinatairesDpd(),
+            new OrderGiver(),
+            new PickupAddress(),
+            new DpdRecipients(),
         );
 
         // Then
