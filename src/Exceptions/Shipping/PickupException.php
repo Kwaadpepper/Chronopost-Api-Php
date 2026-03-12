@@ -6,7 +6,7 @@ namespace Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping;
 
 class PickupException extends \RuntimeException
 {
-    private EsdErrorCode $errorCode;
+    private ?EsdErrorCode $errorCode;
 
     public function __construct(
         string $message = '',
@@ -15,10 +15,10 @@ class PickupException extends \RuntimeException
     ) {
         parent::__construct($message, $code, $previous);
 
-        $this->errorCode = EsdErrorCode::from($code);
+        $this->errorCode = EsdErrorCode::tryFrom($code);
     }
 
-    public function getErrorCode(): EsdErrorCode
+    public function getErrorCode(): ?EsdErrorCode
     {
         return $this->errorCode;
     }
