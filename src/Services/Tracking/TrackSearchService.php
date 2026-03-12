@@ -11,7 +11,6 @@ use ChronopostTracking\StructType\TrackESD;
 use ChronopostTracking\StructType\TrackSearch;
 use ChronopostTracking\StructType\TrackSkybillV2;
 use ChronopostTracking\StructType\TrackWithSenderRef;
-use Kwaadpepper\ChronopostApiPhp\Contracts\TrackingServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\EsdTrackResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SearchTrackResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SenderRefTrackResult;
@@ -28,7 +27,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingSearchCriteria;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
-class TrackSearchService implements TrackingServiceInterface
+class TrackSearchService
 {
     /**
      * Soap tracking service

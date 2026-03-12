@@ -26,7 +26,6 @@ use ChronopostShipping\StructType\ParticularitesColisDpd;
 use ChronopostShipping\StructType\ParticularitesEsd;
 use ChronopostShipping\StructType\RechercherContraintesEnlevementV2;
 use ChronopostShipping\StructType\ShipperValue;
-use Kwaadpepper\ChronopostApiPhp\Contracts\PickupServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\CancelPickupResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupConstraints;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupCreationResult;
@@ -50,7 +49,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Pickup\PickupShipper;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PickupSearchCriteria;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
-class PickupService implements PickupServiceInterface
+class PickupService
 {
     private Faisabilite $faisabiliteService;
     private Rechercher $rechercherService;

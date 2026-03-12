@@ -11,7 +11,6 @@ use ChronopostTimeSlot\ServiceType\Search;
 use ChronopostTimeSlot\StructType\ConfirmDeliverySlotV2;
 use ChronopostTimeSlot\StructType\GetAdresseGeocodage;
 use ChronopostTimeSlot\StructType\SearchDeliverySlot;
-use Kwaadpepper\ChronopostApiPhp\Contracts\DeliverySlotServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotConfirmation;
 use Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotSearchResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\GeocodingResult;
@@ -31,7 +30,7 @@ use WsdlToPhp\PackageBase\SoapClientInterface;
  * Service for managing delivery time slots (créneaux de livraison).
  * Allows searching available slots, confirming a slot, and geocoding addresses.
  */
-class DeliverySlotService implements DeliverySlotServiceInterface
+class DeliverySlotService
 {
     /**
      * @var \ChronopostTimeSlot\ServiceType\Search

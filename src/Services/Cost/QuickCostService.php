@@ -9,7 +9,6 @@ use ChronopostQuickCost\ServiceType\Get;
 use ChronopostQuickCost\ServiceType\Quick;
 use ChronopostQuickCost\StructType\GetProducts as GetProductsInput;
 use ChronopostQuickCost\StructType\QuickCostV3 as QuickCostV3Input;
-use Kwaadpepper\ChronopostApiPhp\Contracts\QuickCostServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductCatalog;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
@@ -24,7 +23,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ShippingEstimateRequest;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
-class QuickCostService implements QuickCostServiceInterface
+class QuickCostService
 {
     /**
      * Soap tracking service

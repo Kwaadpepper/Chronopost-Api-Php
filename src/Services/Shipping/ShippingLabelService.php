@@ -18,7 +18,6 @@ use ChronopostShipping\StructType\HeaderValue;
 use ChronopostShipping\StructType\RecipientValue;
 use ChronopostShipping\StructType\ShipperValue;
 use ChronopostShipping\StructType\SkybillValueBase;
-use Kwaadpepper\ChronopostApiPhp\Contracts\ShippingLabelServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\RoutingQuery;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\RoutingInfo;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ShippingInformation;
@@ -32,7 +31,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
-class ShippingLabelService implements ShippingLabelServiceInterface
+class ShippingLabelService
 {
     private Get $getService;
 

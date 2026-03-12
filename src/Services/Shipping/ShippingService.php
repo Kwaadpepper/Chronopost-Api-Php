@@ -36,7 +36,6 @@ use ChronopostShipping\StructType\SkybillWithDimensionsValueV2 as SkybillDimV2;
 use ChronopostShipping\StructType\SkybillWithDimensionsValueV3 as SkybillDimV3;
 use ChronopostShipping\StructType\SkybillWithDimensionsValueV6;
 use ChronopostShipping\StructType\SkybillWithDimensionsValueV8 as SkybillDimV8;
-use Kwaadpepper\ChronopostApiPhp\Contracts\ShippingServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MonoParcelV7;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ReservationMultiParcelResult;
@@ -62,7 +61,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
-class ShippingService implements ShippingServiceInterface
+class ShippingService
 {
     /**
      * Soap tracking service

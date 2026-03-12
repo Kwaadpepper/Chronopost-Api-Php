@@ -9,7 +9,6 @@ use ChronopostQuickCost\ServiceType\Calculate;
 use ChronopostQuickCost\StructType\CalculateDeliveryTime;
 use ChronopostQuickCost\StructType\CalculateProducts;
 use ChronopostQuickCost\StructType\CalculateProductsV2 as CalculateProductsV2Input;
-use Kwaadpepper\ChronopostApiPhp\Contracts\CalculateServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\DeliveryTime;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
@@ -25,7 +24,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ShippingEstimateRequest;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
-class CalculateService implements CalculateServiceInterface
+class CalculateService
 {
     /**
      * Calculate service

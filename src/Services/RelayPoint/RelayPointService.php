@@ -11,7 +11,6 @@ use ChronopostRelay\StructType\RechercheDetailPointChronopostInter;
 use ChronopostRelay\StructType\RecherchePointChronopostInter;
 use ChronopostRelay\StructType\RecherchePointChronopostParCoordonneesGeographiques;
 use ChronopostRelay\StructType\RecherchePointChronopostParId;
-use Kwaadpepper\ChronopostApiPhp\Contracts\RelaySearchServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult;
 use Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
@@ -37,7 +36,7 @@ use WsdlToPhp\PackageBase\SoapClientInterface;
  * N'hésitez pas à solliciter votre commercial afin de vous assurer
  * des contraintes avant de proposer une livraison en consigne à vos clients.
  */
-class RelayPointService implements RelaySearchServiceInterface
+class RelayPointService
 {
     /**
      * Soap tracking service
