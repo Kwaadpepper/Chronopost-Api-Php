@@ -31,7 +31,7 @@ class TrackingSkybillV2EventFactory implements Factory
         $zipCode      = $result->getZipCode();
         $events       = array_map(
             fn (InfoComp $infoComp) => $this->infoCompToTrackingSkybillEventInfo($infoComp),
-            $result->getInfoCompList() ?? []
+            $result->getInfoCompList() ?? [],
         );
 
         return new EventInfo(
@@ -42,7 +42,7 @@ class TrackingSkybillV2EventFactory implements Factory
             npc: $npc,
             officeLabel: $officeLabel,
             zipCode: $zipCode,
-            events: $events
+            events: $events,
         );
     }
 
@@ -54,7 +54,7 @@ class TrackingSkybillV2EventFactory implements Factory
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SkybillV2\Event
      */
     private function infoCompToTrackingSkybillEventInfo(
-        InfoComp $infoComp
+        InfoComp $infoComp,
     ): Event {
         $name  = $infoComp->getName();
         $value = $infoComp->getValue();

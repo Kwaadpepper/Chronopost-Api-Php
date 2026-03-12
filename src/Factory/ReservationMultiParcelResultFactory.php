@@ -24,8 +24,8 @@ class ReservationMultiParcelResultFactory implements Factory
     {
         $resultParcels = $result->getResultParcelValue() ?? [];
         $parcelValues  = array_map(
-            fn(ResultParcelValue $parcelValue) => $this->mapToReservationParcelValue($parcelValue),
-            $resultParcels
+            fn (ResultParcelValue $parcelValue) => $this->mapToReservationParcelValue($parcelValue),
+            $resultParcels,
         );
 
         return new ReservationMultiParcelResult(
@@ -69,7 +69,7 @@ class ReservationMultiParcelResultFactory implements Factory
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\EsdInfo|null
      */
     private function mapToEsdInfo(
-        ResultReservationMultiParcelExpeditionValue $result
+        ResultReservationMultiParcelExpeditionValue $result,
     ): EsdInfo|null {
         $esdFullNumber = $result->getESDFullNumber();
         $esdNumber     = $result->getESDNumber();
@@ -78,7 +78,7 @@ class ReservationMultiParcelResultFactory implements Factory
         if ($esdFullNumber !== null && $esdNumber !== null && $pickupDate !== null) {
             $parsedDate = \DateTimeImmutable::createFromFormat(
                 'Y-m-d\TH:i:s',
-                $pickupDate
+                $pickupDate,
             );
 
             if ($parsedDate === false) {

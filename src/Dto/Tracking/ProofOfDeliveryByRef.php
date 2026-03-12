@@ -21,7 +21,7 @@ readonly class ProofOfDeliveryByRef implements Dto
             // @phpstan-ignore instanceof.alwaysTrue
             if (!$parcel instanceof ParcelProofOfDelivery) {
                 throw new \InvalidArgumentException(
-                    'Parcels must be an array of ' . ParcelProofOfDelivery::class
+                    'Parcels must be an array of ' . ParcelProofOfDelivery::class,
                 );
             }
         }

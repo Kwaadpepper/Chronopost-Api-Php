@@ -41,7 +41,7 @@ class CalculateService implements CalculateServiceInterface
      * @param  array<string, mixed> $soapOptions Additional options for the soap client.
      */
     public function __construct(
-        array $soapOptions = []
+        array $soapOptions = [],
     ) {
         $soapOptions            = array_merge(
             $soapOptions,
@@ -67,7 +67,7 @@ class CalculateService implements CalculateServiceInterface
         ?float $height = null,
         ?float $length = null,
         ?float $width = null,
-        ?\DateTime $shippingDate = null
+        ?\DateTime $shippingDate = null,
     ): ProductList {
         $parameters = new CalculateProducts(
             $accountNumber->getAccountNumber(),
@@ -82,7 +82,7 @@ class CalculateService implements CalculateServiceInterface
             $height !== null ? (string) $height : null,
             $length !== null ? (string) $length : null,
             $width !== null ? (string) $width : null,
-            $shippingDate !== null ? $shippingDate->format('d/m/Y') : null
+            $shippingDate !== null ? $shippingDate->format('d/m/Y') : null,
         );
 
         $result = $this->calculateService->calculateProducts($parameters);
@@ -129,7 +129,7 @@ class CalculateService implements CalculateServiceInterface
             $toCityName,
             $productCode->getValue(),
             $shippingType->oneLetterCode(),
-            $serviceCode->getValue()
+            $serviceCode->getValue(),
         );
 
         $result = $this->calculateService->calculateDeliveryTime($parameters);

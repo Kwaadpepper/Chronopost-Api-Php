@@ -86,7 +86,7 @@ class ShippingService implements ShippingServiceInterface
      */
     public function __construct(
         array $soapOptions = [],
-        ?Shipping $shippingService = null
+        ?Shipping $shippingService = null,
     ) {
         if ($shippingService !== null) {
             $this->shippingService = $shippingService;
@@ -137,7 +137,7 @@ class ShippingService implements ShippingServiceInterface
         ?ScheduledValue $scheduledValue = null,
         ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): MultiParcelV4 {
         return $this->multiParcelV4(
             accountNumber: $accountNumber,
@@ -152,7 +152,7 @@ class ShippingService implements ShippingServiceInterface
             numberOfParcel: 1,
             multiParcel: false,
             skyBillOutputMode: $skyBillOutputMode,
-            skyBillParameters: $skyBillParameters
+            skyBillParameters: $skyBillParameters,
         );
     }
 
@@ -193,50 +193,50 @@ class ShippingService implements ShippingServiceInterface
         int $numberOfParcel = 1,
         bool $multiParcel = false,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): MultiParcelV4 {
         // phpcs:enable
 
         if ($multiParcel && count($recipientsValues) > 1) {
             throw new \InvalidArgumentException(
-                'When using multi-parcel, you cannot provide more than one recipient.'
+                'When using multi-parcel, you cannot provide more than one recipient.',
             );
         }
 
         if (count($shippersValues) > $numberOfParcel) {
             throw new \InvalidArgumentException(
-                'Too many shippers values provided. It must not exceed the number of parcels.'
+                'Too many shippers values provided. It must not exceed the number of parcels.',
             );
         }
 
         if (count($recipientsValues) > $numberOfParcel) {
             throw new \InvalidArgumentException(
-                'Too many recipients values provided. It must not exceed the number of parcels.'
+                'Too many recipients values provided. It must not exceed the number of parcels.',
             );
         }
 
         if (count($referenceValues) !== $numberOfParcel) {
             throw new \InvalidArgumentException(
-                'The number of reference values must match the number of parcels.'
+                'The number of reference values must match the number of parcels.',
             );
         }
 
         if (count($skybillValues) !== $numberOfParcel) {
             throw new \InvalidArgumentException(
-                'The number of skybill values must match the number of parcels.'
+                'The number of skybill values must match the number of parcels.',
             );
         }
 
         if (count($scheduledValues) > $numberOfParcel) {
             throw new \InvalidArgumentException(
-                'Too many scheduled values provided. It must not exceed the number of parcels.'
+                'Too many scheduled values provided. It must not exceed the number of parcels.',
             );
         }
 
         $headerValue = new HeaderValue(
-            intval($accountNumber->getAccountNumber()),
+            (int) ($accountNumber->getAccountNumber()),
             'CHRFR',
-            ''
+            '',
         );
 
         $skyBillParameters = $skyBillParameters ?? new SkyBillParameters();
@@ -247,34 +247,34 @@ class ShippingService implements ShippingServiceInterface
             version: '2.0',
             numberOfParcel: $numberOfParcel,
             multiParcel: $multiParcel ? 'Y' : 'N',
-            modeRetour: strval($skyBillOutputMode->value),
+            modeRetour: (string) ($skyBillOutputMode->value),
             headerValue: $headerValue,
             esdValue: $esdValue ? $this->mapEsdValue($esdValue) : null,
             skybillValue: array_map(
-                fn(SkyBillValue $skybillValue) =>
+                fn (SkyBillValue $skybillValue) =>
                 $this->mapSkybillValue($skybillValue),
-                $skybillValues
+                $skybillValues,
             ),
             customerValue: $this->mapCustomerValue($customerValue),
             refValue: array_map(
-                fn(ReferenceValue $referenceValue) =>
+                fn (ReferenceValue $referenceValue) =>
                 $this->mapReferenceValue($referenceValue),
-                $referenceValues
+                $referenceValues,
             ),
             shipperValue: array_map(
-                fn(ShipperValue $shipperValue) =>
+                fn (ShipperValue $shipperValue) =>
                 $this->mapShipperValue($shipperValue),
-                $shippersValues
+                $shippersValues,
             ),
             recipientValue: array_map(
-                fn(RecipientValue $recipientValue) =>
+                fn (RecipientValue $recipientValue) =>
                 $this->mapRecipientValue($recipientValue),
-                $recipientsValues
+                $recipientsValues,
             ),
             scheduledValue: array_map(
-                fn(ScheduledValue $scheduledValue) =>
+                fn (ScheduledValue $scheduledValue) =>
                 $this->mapScheduledValue($scheduledValue),
-                $scheduledValues
+                $scheduledValues,
             ),
         );
 
@@ -297,7 +297,7 @@ class ShippingService implements ShippingServiceInterface
             if ($esdValue !== null) {
                 EsdException::throwIfEsdError(
                     $errorCode,
-                    $errorMessage
+                    $errorMessage,
                 );
             }
 
@@ -341,12 +341,12 @@ class ShippingService implements ShippingServiceInterface
         ?ScheduledValue $scheduledValue = null,
         ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): MonoParcelV7 {
         $headerValue = new HeaderValue(
-            intval($accountNumber->getAccountNumber()),
+            (int) ($accountNumber->getAccountNumber()),
             'CHRFR',
-            ''
+            '',
         );
 
         $skyBillParameters = $skyBillParameters ?? new SkyBillParameters();
@@ -361,7 +361,7 @@ class ShippingService implements ShippingServiceInterface
             skybillValue: $this->mapSkybillValueV3($skybillValue),
             skybillParamsValue: $this->mapParameters($skyBillParameters),
             password: $password->getPassword(),
-            modeRetour: strval($skyBillOutputMode->value),
+            modeRetour: (string) ($skyBillOutputMode->value),
             version: '2.0',
             scheduledValue: $scheduledValue ? $this->mapScheduledValue($scheduledValue) : null,
         );
@@ -369,7 +369,7 @@ class ShippingService implements ShippingServiceInterface
         $result = $this->shippingService->shippingV7($parameters);
         if ($result === false) {
             $lastError = $this->shippingService->getLastErrorForMethod(
-                methodName: Shipping::class . '::shippingV7'
+                methodName: Shipping::class . '::shippingV7',
             );
             throw new ApiError('Failed to call from shipping service', $lastError);
         }
@@ -430,11 +430,11 @@ class ShippingService implements ShippingServiceInterface
         int $numberOfParcel = 1,
         bool $multiParcel = false,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): MultiParcelV4 {
         // phpcs:enable
         $headerValue = new HeaderValueV2();
-        $headerValue->setAccountNumber(intval($accountNumber->getAccountNumber()));
+        $headerValue->setAccountNumber((int) ($accountNumber->getAccountNumber()));
         $headerValue->setIdEmit('CHRFR');
         $headerValue->setIdentWebPro('');
 
@@ -444,38 +444,38 @@ class ShippingService implements ShippingServiceInterface
             esdValue: $esdValue ? $this->mapEsdValue($esdValue) : null,
             headerValue: $headerValue,
             shipperValue: array_map(
-                fn(ShipperValue $sv) => $this->mapShipperValue($sv),
-                $shippersValues
+                fn (ShipperValue $sv) => $this->mapShipperValue($sv),
+                $shippersValues,
             ),
             customerValue: $this->mapCustomerValue($customerValue),
             recipientValue: array_map(
-                fn(RecipientValue $rv) => $this->mapRecipientValue($rv),
-                $recipientsValues
+                fn (RecipientValue $rv) => $this->mapRecipientValue($rv),
+                $recipientsValues,
             ),
             refValue: array_map(
-                fn(ReferenceValue $rv) => $this->mapReferenceValue($rv),
-                $referenceValues
+                fn (ReferenceValue $rv) => $this->mapReferenceValue($rv),
+                $referenceValues,
             ),
             skybillValue: array_map(
-                fn(SkyBillValue $sv) => $this->mapSkybillValueV8($sv),
-                $skybillValues
+                fn (SkyBillValue $sv) => $this->mapSkybillValueV8($sv),
+                $skybillValues,
             ),
             skybillParamsValue: $this->mapParameters($skyBillParameters),
             password: $password->getPassword(),
-            modeRetour: strval($skyBillOutputMode->value),
+            modeRetour: (string) ($skyBillOutputMode->value),
             numberOfParcel: $numberOfParcel,
             version: '2.0',
             multiParcel: $multiParcel ? 'Y' : 'N',
             scheduledValue: array_map(
-                fn(ScheduledValue $sv) => $this->mapScheduledValue($sv),
-                $scheduledValues
+                fn (ScheduledValue $sv) => $this->mapScheduledValue($sv),
+                $scheduledValues,
             ),
         );
 
         $result = $this->shippingService->shippingMultiParcelV7($parameters);
         if ($result === false) {
             $lastError = $this->shippingService->getLastErrorForMethod(
-                methodName: Shipping::class . '::shippingMultiParcelV7'
+                methodName: Shipping::class . '::shippingMultiParcelV7',
             );
             throw new ApiError('Failed to call from shipping service', $lastError);
         }
@@ -531,12 +531,12 @@ class ShippingService implements ShippingServiceInterface
         ?EsdValue $esdValue = null,
         ?ScheduledValue $scheduledValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): ReservationResult {
         $headerValue = new HeaderValue(
-            intval($accountNumber->getAccountNumber()),
+            (int) ($accountNumber->getAccountNumber()),
             'CHRFR',
-            ''
+            '',
         );
 
         $skyBillParameters = $skyBillParameters ?? new SkyBillParameters();
@@ -551,7 +551,7 @@ class ShippingService implements ShippingServiceInterface
             skybillValue: $this->mapSkybillValueV2($skybillValue),
             skybillParamsValue: $this->mapParametersV1($skyBillParameters),
             password: $password->getPassword(),
-            modeRetour: strval($skyBillOutputMode->value),
+            modeRetour: (string) ($skyBillOutputMode->value),
             version: '2.0',
             scheduledValue: $scheduledValue ? $this->mapScheduledValue($scheduledValue) : null,
         );
@@ -559,7 +559,7 @@ class ShippingService implements ShippingServiceInterface
         $result = $this->shippingService->shippingWithReservationV2($parameters);
         if ($result === false) {
             $lastError = $this->shippingService->getLastErrorForMethod(
-                methodName: Shipping::class . '::shippingWithReservationV2'
+                methodName: Shipping::class . '::shippingWithReservationV2',
             );
             throw new ApiError('Failed to call from shipping service', $lastError);
         }
@@ -619,12 +619,12 @@ class ShippingService implements ShippingServiceInterface
         int $numberOfParcel = 1,
         bool $multiParcel = false,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): ReservationMultiParcelResult {
         $headerValue = new HeaderValue(
-            intval($accountNumber->getAccountNumber()),
+            (int) ($accountNumber->getAccountNumber()),
             'CHRFR',
-            ''
+            '',
         );
 
         $skyBillParameters = $skyBillParameters ?? new SkyBillParameters();
@@ -635,20 +635,20 @@ class ShippingService implements ShippingServiceInterface
             shipperValue: $this->mapShipperValueV1($shipperValue),
             customerValue: $this->mapCustomerValue($customerValue),
             recipientValue: array_map(
-                fn(RecipientValue $rv) => $this->mapRecipientValueV1($rv),
-                $recipientsValues
+                fn (RecipientValue $rv) => $this->mapRecipientValueV1($rv),
+                $recipientsValues,
             ),
             refValue: array_map(
-                fn(ReferenceValue $rv) => $this->mapReferenceValueV1($rv),
-                $referenceValues
+                fn (ReferenceValue $rv) => $this->mapReferenceValueV1($rv),
+                $referenceValues,
             ),
             skybillValue: array_map(
-                fn(SkyBillValue $sv) => $this->mapSkybillValueDimV2($sv),
-                $skybillValues
+                fn (SkyBillValue $sv) => $this->mapSkybillValueDimV2($sv),
+                $skybillValues,
             ),
             skybillParamsValue: $this->mapParametersV1($skyBillParameters),
             password: $password->getPassword(),
-            modeRetour: strval($skyBillOutputMode->value),
+            modeRetour: (string) ($skyBillOutputMode->value),
             numberOfParcel: $numberOfParcel,
             version: '2.0',
             multiParcel: $multiParcel ? 'Y' : 'N',
@@ -658,7 +658,7 @@ class ShippingService implements ShippingServiceInterface
         $result = $this->shippingService->shippingMultiParcelWithReservationV3($parameters);
         if ($result === false) {
             $lastError = $this->shippingService->getLastErrorForMethod(
-                methodName: Shipping::class . '::shippingMultiParcelWithReservationV3'
+                methodName: Shipping::class . '::shippingMultiParcelWithReservationV3',
             );
             throw new ApiError('Failed to call from shipping service', $lastError);
         }
@@ -666,7 +666,7 @@ class ShippingService implements ShippingServiceInterface
         $response = $result->getReturn();
         if ($response === null) {
             throw new ApiError(
-                'Failed to get result from shippingMultiParcelWithReservationV3 service, null response'
+                'Failed to get result from shippingMultiParcelWithReservationV3 service, null response',
             );
         }
 
@@ -714,12 +714,12 @@ class ShippingService implements ShippingServiceInterface
         ReferenceValue $referenceValue,
         EsdValue $esdValue,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): ReservationResult {
         $headerValue = new HeaderValue(
-            intval($accountNumber->getAccountNumber()),
+            (int) ($accountNumber->getAccountNumber()),
             'CHRFR',
-            ''
+            '',
         );
 
         $skyBillParameters = $skyBillParameters ?? new SkyBillParameters();
@@ -734,14 +734,14 @@ class ShippingService implements ShippingServiceInterface
             skybillValue: $this->mapSkybillValueBase($skybillValue),
             skybillParamsValue: $this->mapParametersV1($skyBillParameters),
             password: $password->getPassword(),
-            modeRetour: strval($skyBillOutputMode->value),
+            modeRetour: (string) ($skyBillOutputMode->value),
             version: '2.0',
         );
 
         $result = $this->shippingService->shippingWithESDOnlyV2($parameters);
         if ($result === false) {
             $lastError = $this->shippingService->getLastErrorForMethod(
-                methodName: Shipping::class . '::shippingWithESDOnlyV2'
+                methodName: Shipping::class . '::shippingWithESDOnlyV2',
             );
             throw new ApiError('Failed to call from shipping service', $lastError);
         }
@@ -792,7 +792,7 @@ class ShippingService implements ShippingServiceInterface
         RecipientValue $recipientValue,
         ReferenceValue $referenceValue,
         EsdValue $esdValue,
-        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
     ): ReservationResult {
         // phpcs:enable
         $closingDateTime   = $esdValue->closingDateTime;
@@ -811,7 +811,7 @@ class ShippingService implements ShippingServiceInterface
         $parameters->setShipperCarriesCode($esdValue->shipperCarriesCode);
         $parameters->setShipperBuildingFloor($esdValue->shipperBuildingFloor);
         $parameters->setShipperServiceDirection($esdValue->shipperServiceDirection);
-        $parameters->setNombreDePassageMaximum(strval($esdValue->maximumPasses));
+        $parameters->setNombreDePassageMaximum((string) ($esdValue->maximumPasses));
         $parameters->setLtAImprimerParChronopost($esdValue->ltShouldBePrintedByChronopost ? '1' : '0');
 
         $parameters->setAccountNumber($accountNumber->getAccountNumber());
@@ -862,19 +862,19 @@ class ShippingService implements ShippingServiceInterface
         $parameters->setProductCode($skybillValue->productCode);
         $parameters->setService($skybillValue->serviceCode);
         $parameters->setObjectType($skybillValue->objectType->value);
-        $parameters->setWeight(strval(number_format($skybillValue->weight, 2, '.', '')));
+        $parameters->setWeight((string) (number_format($skybillValue->weight, 2, '.', '')));
         $parameters->setEvtCode('DC');
-        $parameters->setModeRetour(strval($skyBillOutputMode->value));
+        $parameters->setModeRetour((string) ($skyBillOutputMode->value));
 
         if ($shipDateTime !== null) {
             $parameters->setShipDate($shipDateTime->format('Y-m-d\TH:i:s'));
-            $parameters->setShipHour(strval(intval($shipDateTime->format('H'))));
+            $parameters->setShipHour((string) ((int) ($shipDateTime->format('H'))));
         }
 
         $result = $this->shippingService->shippingWithReservationAndESDWithRefClientPC($parameters);
         if ($result === false) {
             $lastError = $this->shippingService->getLastErrorForMethod(
-                methodName: Shipping::class . '::shippingWithReservationAndESDWithRefClientPC'
+                methodName: Shipping::class . '::shippingWithReservationAndESDWithRefClientPC',
             );
             throw new ApiError('Failed to call from shipping service', $lastError);
         }
@@ -882,7 +882,7 @@ class ShippingService implements ShippingServiceInterface
         $response = $result->getReturn();
         if ($response === null) {
             throw new ApiError(
-                'Failed to get result from shippingWithReservationAndESDWithRefClientPC service, null response'
+                'Failed to get result from shippingWithReservationAndESDWithRefClientPC service, null response',
             );
         }
 
@@ -930,7 +930,7 @@ class ShippingService implements ShippingServiceInterface
             }
         }
 
-        $skybill->setBulkNumber(strval($skybillValue->bulkNumber));
+        $skybill->setBulkNumber((string) ($skybillValue->bulkNumber));
         $skybill->setCodCurrency($skybillValue->codCurrency);
         $skybill->setCodValue($skybillValue->codValue);
         $skybill->setCustomsCurrency($skybillValue->customsCurrency);
@@ -947,16 +947,16 @@ class ShippingService implements ShippingServiceInterface
 
         if ($shipDateTime !== null) {
             $skybill->setShipDate($shipDateTime->format('Y-m-d\TH:i:s'));
-            $skybill->setShipHour(intval($shipDateTime->format('H')));
+            $skybill->setShipHour((int) ($shipDateTime->format('H')));
         }
 
-        $skybill->setSkybillRank(strval($skybillValue->skybillRank));
+        $skybill->setSkybillRank((string) ($skybillValue->skybillRank));
 
-        $skybill->setWeight(floatval(number_format(
+        $skybill->setWeight((float) (number_format(
             $skybillValue->weight,
             2,
             '.',
-            ''
+            '',
         )));
         $skybill->setWeightUnit('KGM');
 
@@ -994,34 +994,34 @@ class ShippingService implements ShippingServiceInterface
 
         $esdValue3 = new EsdValue3();
         $esdValue3->setClosingDateTime(
-            $closingDateTime->format('Y-m-d\TH:i:s')
+            $closingDateTime->format('Y-m-d\TH:i:s'),
         );
         $esdValue3->setHeight(0);
         $esdValue3->setLength(0);
         $esdValue3->setWidth(0);
         $esdValue3->setRetrievalDateTime(
-            $retrievalDateTime->format('Y-m-d\TH:i:s')
+            $retrievalDateTime->format('Y-m-d\TH:i:s'),
         );
         $esdValue3->setShipperBuildingFloor(
-            $esdValue->shipperBuildingFloor
+            $esdValue->shipperBuildingFloor,
         );
         $esdValue3->setShipperCarriesCode(
-            $esdValue->shipperCarriesCode
+            $esdValue->shipperCarriesCode,
         );
         $esdValue3->setShipperServiceDirection(
-            $esdValue->shipperServiceDirection
+            $esdValue->shipperServiceDirection,
         );
         $esdValue3->setSpecificInstructions(
-            $esdValue->specificInstructions
+            $esdValue->specificInstructions,
         );
         $esdValue3->setLtAImprimerParChronopost(
-            $esdValue->ltShouldBePrintedByChronopost
+            $esdValue->ltShouldBePrintedByChronopost,
         );
         $esdValue3->setNombreDePassageMaximum(
-            $esdValue->maximumPasses
+            $esdValue->maximumPasses,
         );
         $esdValue3->setRefEsdClient(
-            $esdValue->esdClientReference
+            $esdValue->esdClientReference,
         );
 
         return $esdValue3;
@@ -1075,7 +1075,7 @@ class ShippingService implements ShippingServiceInterface
             $appointementValue->end->format('Y-m-d\TH:i:s'),
             $appointementValue->start->format('Y-m-d\TH:i:s'),
             // Niveau tarifaire, champ fixe : N1 .
-            'N1'
+            'N1',
         );
     }
 
@@ -1091,7 +1091,7 @@ class ShippingService implements ShippingServiceInterface
         $mode        = $skyBillParameters->mode;
         $reservation = $skyBillParameters->reservation;
         $paramsV2    = new SkybillParamsValueV2(
-            $reservation->value
+            $reservation->value,
         );
         $paramsV2->setMode($mode->value);
         $paramsV2->setDuplicata($skyBillParameters->duplicata ? 'Y' : 'N');
@@ -1115,7 +1115,7 @@ class ShippingService implements ShippingServiceInterface
         $postCode      = $recipientValue->postCode;
 
         $recipientValueV2 = new RecipientValueV2(
-            strval($recipientType->value),
+            (string) ($recipientType->value),
         );
         $recipientValueV2->setRecipientAdress1($recipientValue->address1);
         $recipientValueV2->setRecipientAdress2($recipientValue->address2);
@@ -1164,7 +1164,7 @@ class ShippingService implements ShippingServiceInterface
             // Pre alert is not used in this context.
             null,
             $postCode->getPostCode(),
-            $customerValue->printAsSender ? 'Y' : 'N'
+            $customerValue->printAsSender ? 'Y' : 'N',
         );
     }
 
@@ -1185,7 +1185,7 @@ class ShippingService implements ShippingServiceInterface
         $mobilePhone = $shipperValue->mobilePhone;
 
         $shipperValueV2 = new ShipperValueV2(
-            strval($shipperType->value),
+            (string) ($shipperType->value),
         );
 
         $shipperValueV2->setShipperAdress1($shipperValue->address1);
@@ -1485,7 +1485,7 @@ class ShippingService implements ShippingServiceInterface
      */
     private function populateBaseSkybillFields(
         SkybillValueChronopost $skybill,
-        SkyBillValue $skybillValue
+        SkyBillValue $skybillValue,
     ): void {
         // phpcs:enable
         $shipDateTime  = $skybillValue->shipDateTime;
@@ -1507,7 +1507,7 @@ class ShippingService implements ShippingServiceInterface
             }
         }
 
-        $skybill->setBulkNumber(strval($skybillValue->bulkNumber));
+        $skybill->setBulkNumber((string) ($skybillValue->bulkNumber));
         $skybill->setCodCurrency($skybillValue->codCurrency);
         $skybill->setCodValue($skybillValue->codValue);
         $skybill->setCustomsCurrency($skybillValue->customsCurrency);
@@ -1522,11 +1522,11 @@ class ShippingService implements ShippingServiceInterface
 
         if ($shipDateTime !== null) {
             $skybill->setShipDate($shipDateTime->format('Y-m-d\TH:i:s'));
-            $skybill->setShipHour(intval($shipDateTime->format('H')));
+            $skybill->setShipHour((int) ($shipDateTime->format('H')));
         }
 
-        $skybill->setSkybillRank(strval($skybillValue->skybillRank));
-        $skybill->setWeight(floatval(number_format($skybillValue->weight, 2, '.', '')));
+        $skybill->setSkybillRank((string) ($skybillValue->skybillRank));
+        $skybill->setWeight((float) (number_format($skybillValue->weight, 2, '.', '')));
         $skybill->setWeightUnit('KGM');
     }
 

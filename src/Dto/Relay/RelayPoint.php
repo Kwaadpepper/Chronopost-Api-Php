@@ -31,7 +31,7 @@ class RelayPoint implements Dto
         /** @var RelayPointOpeningShift[] $openingShifts */
         public readonly array $openingShifts,
         /** @var RelayPointClosingShift[] $closingShifts */
-        public readonly array $closingShifts
+        public readonly array $closingShifts,
     ) {
     }
 }

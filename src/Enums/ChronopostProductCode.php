@@ -23,12 +23,12 @@ enum ChronopostProductCode: string
 
     case CHRONO_RELAIS_13         = '5A';
     case CHRONO_RELAIS_13_SPECIAL = '5L';
-// Variante contractuelle ou Marketplace
+    // Variante contractuelle ou Marketplace
     // --- INTERNATIONAL ---
     case CHRONO_CLASSIC = '06';
-// Souvent Export
+    // Souvent Export
     case CHRONO_INTL_EXP = '07';
-// Export Express
+    // Export Express
     // --- RETRAIT ---
     case CHRONO_RETRAIT_BUREAU = '00';
 
@@ -47,30 +47,30 @@ enum ChronopostProductCode: string
 
     // --- SERVICES SPÉCIFIQUES & OPTIONS ---
     case CHRONO_REP = '09';
-// Reverse
+    // Reverse
     case CHRONO_AGENDA = '20';
-// Sur RDV
+    // Sur RDV
     case CHRONO_RELAIS_EUROPE = '49';
-// Relais Europe
+    // Relais Europe
     case CHRONO_RELAIS = '86';
-// Relais national
+    // Relais national
     case CHRONO_RELAIS_AMBIENT = '5Q';
-// Relais Ambient
+    // Relais Ambient
     case CHRONO_TO_SHOP_DIRECT = '5X';
-// ToShopDirect national
+    // ToShopDirect national
     case CHRONO_TO_SHOP_DIRECT_EUROPE = '6B';
-// ToShopDirect Europe
+    // ToShopDirect Europe
     // --- B2B & EXPRESS MATIN ---
     case CHRONO_8       = '75';
     case CHRONO_9       = '76';
     case CHRONO_12      = '77';
     case CHRONO_TEMP_13 = '78';
-// Temporaire/Spécifique
+    // Temporaire/Spécifique
     case CHRONO_9_RELAIS = '80';
 
     // --- SPÉCIFIQUE LIVRAISON ---
     case CHRONO_13_BAL = '58';
-// Boite aux lettres
+    // Boite aux lettres
     case CHRONO_13_POSTE                 = '93';
     case CHRONO_13_REMISE_PAS_DE_PORTE   = '1F';
     case CHRONO_13_REMISE_PAS_DE_PORTE_2 = '1G';
@@ -123,7 +123,7 @@ enum ChronopostProductCode: string
     case CHRONO_18_LIVRAISON_BOITE_A_LETTRES       = '2L';
     case CHRONO_18_LIVRAISON_BOITE_A_LETTRES_MIXTE = '2M';
     case CHRONO_RENDEZ_VOUS                        = '2O';
-// Souvent appelé Chrono Precise
+    // Souvent appelé Chrono Precise
     case CHRONO_ZENGO_13        = '3J';
     case CHRONO_ZENGO_RELAIS_13 = '3K';
     case CHRONO_FRET_DOM        = '3S';
@@ -131,7 +131,7 @@ enum ChronopostProductCode: string
     case CHRONO_SAME_DAY        = '4I';
     case CHRONO_RELAIS_DOM      = '4P';
     case CHRONO_DIRECT          = '4Q';
-// Livraison directe/Course
+    // Livraison directe/Course
     // --- REVERSE (RETOUR) ---
     case CHRONO_REVERSE_9  = '4R';
     case CHRONO_REVERSE_10 = '4S';

@@ -30,7 +30,7 @@ readonly class EventInfo implements Dto
         public ?string $npc = null,
         public ?string $officeLabel = null,
         public ?string $zipCode = null,
-        public array $events = []
+        public array $events = [],
     ) {
         foreach ($events as $event) {
             // @phpstan-ignore instanceof.alwaysTrue

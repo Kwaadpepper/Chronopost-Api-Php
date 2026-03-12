@@ -21,7 +21,7 @@ readonly class TrackingNumber implements \Stringable
         preg_match(
             '/^[A-Z]{2}[0-9]{9}[A-Z]{2}$/',
             $this->value,
-            $matches
+            $matches,
         );
         if (count($matches) !== 1) {
             throw new \InvalidArgumentException('Invalid tracking number');

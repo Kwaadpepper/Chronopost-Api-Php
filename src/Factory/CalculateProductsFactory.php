@@ -19,7 +19,7 @@ class CalculateProductsFactory implements Factory
     {
         $products = array_map(
             $this->toProduct(...),
-            $result->getProductList() ?? []
+            $result->getProductList() ?? [],
         );
 
         return new ProductList($products);
@@ -31,7 +31,7 @@ class CalculateProductsFactory implements Factory
     private function toProduct(ChronopostProduct $product): Product
     {
         return new Product(
-            $product->getProductCode()
+            $product->getProductCode(),
         );
     }
 }

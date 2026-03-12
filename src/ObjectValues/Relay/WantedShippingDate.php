@@ -11,7 +11,7 @@ use DateTimeInterface;
 final class WantedShippingDate
 {
     public function __construct(
-        public readonly DateTimeInterface $date
+        public readonly DateTimeInterface $date,
     ) {
         $now = new DateTimeImmutable('today');
 

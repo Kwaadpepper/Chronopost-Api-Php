@@ -23,7 +23,7 @@ class RelaySearchException extends \RuntimeException
     public function __construct(
         string $message = '',
         int $code = 0,
-        ?\Throwable $previous = null
+        ?\Throwable $previous = null,
     ) {
         parent::__construct($message, $code, $previous);
 
@@ -55,7 +55,7 @@ class RelaySearchException extends \RuntimeException
             RelayErrorCode::from($code);
             throw new self(
                 $message ?: 'A Relay error occurred.',
-                $code
+                $code,
             );
         } catch (\ValueError $e) {
             // Not a Relay error code, do nothing.

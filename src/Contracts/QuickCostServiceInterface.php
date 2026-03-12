@@ -20,6 +20,6 @@ interface QuickCostServiceInterface
         PostCode $to,
         float $weight,
         ProductCode $productCode,
-        ShippingType $shippingType
+        ShippingType $shippingType,
     ): QuickCostV3;
 }

@@ -20,7 +20,7 @@ class MultiParcelPart
     public function __construct(
         public readonly SkyBillValue $skybillValue,
         public readonly ReferenceValue $referenceValue,
-        public readonly ?ScheduledValue $scheduledValue = null
+        public readonly ?ScheduledValue $scheduledValue = null,
     ) {
     }
 }

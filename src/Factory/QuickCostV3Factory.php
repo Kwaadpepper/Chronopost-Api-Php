@@ -63,7 +63,7 @@ class QuickCostV3Factory implements Factory
         $zone        = $result->getZone();
         $supplements = array_map(
             $this->toSupplement(...),
-            $result->getService()
+            $result->getService(),
         );
         $insurance   = $this->toInsurance($result->getAssurance());
         $capacity    = $this->toCapacity($result->getCap());
@@ -151,7 +151,7 @@ class QuickCostV3Factory implements Factory
 
         return $this->moneyParser->parse(
             $amountWithFloatingPoint,
-            $this->currency
+            $this->currency,
         );
     }
 }

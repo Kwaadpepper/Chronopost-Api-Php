@@ -120,7 +120,7 @@ class TrackSearchService implements TrackingServiceInterface
 
         return array_map(
             fn (EventInfoComp $event) => $factory->create($event),
-            $events
+            $events,
         );
     }
 
@@ -179,7 +179,7 @@ class TrackSearchService implements TrackingServiceInterface
 
         if ($result === false) {
             $lastError = $this->trackService->getLastErrorForMethod(
-                methodName: Track::class . '::trackSearch'
+                methodName: Track::class . '::trackSearch',
             );
             throw new ApiError('Failed to call track search service', $lastError);
         }
@@ -234,7 +234,7 @@ class TrackSearchService implements TrackingServiceInterface
 
         if ($result === false) {
             $lastError = $this->trackService->getLastErrorForMethod(
-                methodName: Track::class . '::trackWithSenderRef'
+                methodName: Track::class . '::trackWithSenderRef',
             );
             throw new ApiError('Failed to call track with sender ref service', $lastError);
         }
@@ -243,7 +243,7 @@ class TrackSearchService implements TrackingServiceInterface
 
         if ($response === null) {
             throw new ApiError(
-                'Failed to get result from track with sender ref service, null response'
+                'Failed to get result from track with sender ref service, null response',
             );
         }
 
@@ -285,7 +285,7 @@ class TrackSearchService implements TrackingServiceInterface
 
         if ($result === false) {
             $lastError = $this->trackService->getLastErrorForMethod(
-                methodName: Track::class . '::trackESD'
+                methodName: Track::class . '::trackESD',
             );
             throw new ApiError('Failed to call track ESD service', $lastError);
         }

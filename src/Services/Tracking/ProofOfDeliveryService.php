@@ -98,7 +98,7 @@ class ProofOfDeliveryService
 
         if ($result === false) {
             $lastError = $this->searchService->getLastErrorForMethod(
-                methodName: Search::class . '::searchPOD'
+                methodName: Search::class . '::searchPOD',
             );
             throw new ApiError('Failed to call search POD service', $lastError);
         }
@@ -156,7 +156,7 @@ class ProofOfDeliveryService
 
         if ($result === false) {
             $lastError = $this->searchService->getLastErrorForMethod(
-                methodName: Search::class . '::searchPODWithSenderRef'
+                methodName: Search::class . '::searchPODWithSenderRef',
             );
             throw new ApiError('Failed to call search POD with sender ref service', $lastError);
         }
@@ -165,7 +165,7 @@ class ProofOfDeliveryService
 
         if ($response === null) {
             throw new ApiError(
-                'Failed to get result from search POD with sender ref service, null response'
+                'Failed to get result from search POD with sender ref service, null response',
             );
         }
 

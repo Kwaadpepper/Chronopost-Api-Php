@@ -58,7 +58,7 @@ readonly class PhoneNumber
             PhoneNumberTypeLib::FIXED_LINE => PhoneNumberType::FIXED,
             PhoneNumberTypeLib::FIXED_LINE_OR_MOBILE => PhoneNumberType::MOBILE,
             PhoneNumberTypeLib::UNKNOWN => throw new \InvalidArgumentException(
-                sprintf('Unknown phone number type for: %s', $phoneNumber)
+                sprintf('Unknown phone number type for: %s', $phoneNumber),
             ),
             default => PhoneNumberType::OTHER,
         };
@@ -146,7 +146,7 @@ readonly class PhoneNumber
      */
     private function parseToPhoneNumber(
         #[\SensitiveParameter] string $phoneNumber,
-        string $countryCode
+        string $countryCode,
     ): PhoneNumberLib|null {
         $phoneUtil = PhoneNumberUtil::getInstance();
         try {

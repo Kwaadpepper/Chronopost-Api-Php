@@ -17,7 +17,7 @@ class ProductList implements Dto
     {
         array_map(
             fn (Product $item) => $item,
-            $products
+            $products,
         );
     }
 }

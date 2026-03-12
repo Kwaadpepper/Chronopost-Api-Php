@@ -28,7 +28,7 @@ class SkybillLabelFactory implements Factory
      */
     public function createWithIdentifier(
         ResultGetReservedSkybillValue|ResultGetReservedSkybillWithTypeValue $response,
-        string $identifier
+        string $identifier,
     ): SkybillLabel {
         $pdf = $response->getSkybill();
 

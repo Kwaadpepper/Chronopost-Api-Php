@@ -95,7 +95,7 @@ class TrackCancelService
 
         if ($result === false) {
             $lastError = $this->cancelService->getLastErrorForMethod(
-                methodName: Cancel::class . '::cancelSkybill'
+                methodName: Cancel::class . '::cancelSkybill',
             );
             throw new ApiError('Failed to call cancel skybill service', $lastError);
         }
@@ -155,7 +155,7 @@ class TrackCancelService
 
         if ($result === false) {
             $lastError = $this->cancelService->getLastErrorForMethod(
-                methodName: Cancel::class . '::cancelListSkybill'
+                methodName: Cancel::class . '::cancelListSkybill',
             );
             throw new ApiError('Failed to call cancel list skybill service', $lastError);
         }

@@ -37,7 +37,7 @@ class QuickCostService implements QuickCostServiceInterface
      * @param  array<string, mixed> $soapOptions Additional options for the soap client.
      */
     public function __construct(
-        array $soapOptions = []
+        array $soapOptions = [],
     ) {
         $soapOptions = array_merge(
             $soapOptions,
@@ -74,7 +74,7 @@ class QuickCostService implements QuickCostServiceInterface
         PostCode $to,
         float $weight,
         ProductCode $productCode,
-        ShippingType $shippingType
+        ShippingType $shippingType,
     ): QuickCostV3 {
         $parameters = new QuickCostV3Input(
             $accountNumber->getAccountNumber(),

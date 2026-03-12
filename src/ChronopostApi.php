@@ -82,7 +82,7 @@ class ChronopostApi
      */
     public function __construct(
         #[\SensitiveParameter] private AccountNumber $accountNumber,
-        #[\SensitiveParameter] private Password $password
+        #[\SensitiveParameter] private Password $password,
     ) {
         $defaultSopapOptions = [
             SoapClientInterface::WSDL_LOGIN    => $accountNumber->getAccountNumber(),
@@ -134,7 +134,7 @@ class ChronopostApi
         string $toCityName,
         ProductCode $productCode,
         ShippingType $shippingType,
-        ServiceCode $serviceCode
+        ServiceCode $serviceCode,
     ): DeliveryTime {
         return $this->calculateService->calculateDeliveryTime(
             $from,
@@ -142,7 +142,7 @@ class ChronopostApi
             $toCityName,
             $productCode,
             $shippingType,
-            $serviceCode
+            $serviceCode,
         );
     }
 
@@ -171,7 +171,7 @@ class ChronopostApi
         ?float $height = null,
         ?float $length = null,
         ?float $width = null,
-        ?DateTime $shippingDate = null
+        ?DateTime $shippingDate = null,
     ): ProductList {
         return $this->calculateService->calculateProducts(
             $this->accountNumber,
@@ -184,7 +184,7 @@ class ChronopostApi
             $height,
             $length,
             $width,
-            $shippingDate
+            $shippingDate,
         );
     }
 
@@ -206,7 +206,7 @@ class ChronopostApi
         PostCode $to,
         int $weightInGrams,
         ProductCode $productCode,
-        ShippingType $shippingType
+        ShippingType $shippingType,
     ): QuickCostV3 {
         return $this->quickCostService->quickCostV3(
             $this->accountNumber,
@@ -215,7 +215,7 @@ class ChronopostApi
             $to,
             $weightInGrams / 1000,
             $productCode,
-            $shippingType
+            $shippingType,
         );
     }
 
@@ -236,7 +236,7 @@ class ChronopostApi
         ?ScheduledValue $scheduledValue = null,
         ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): MultiParcelV4 {
         return $this->shippingService->multiParcelV4(
             $this->accountNumber,
@@ -251,7 +251,7 @@ class ChronopostApi
             numberOfParcel: 1,
             multiParcel: false,
             skyBillOutputMode: $skyBillOutputMode,
-            skyBillParameters: $skyBillParameters
+            skyBillParameters: $skyBillParameters,
         );
     }
 
@@ -272,7 +272,7 @@ class ChronopostApi
         RecipientValue $recipientValue,
         ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): MultiParcelV4 {
         $skybillValues   = [];
         $referenceValues = [];
@@ -300,7 +300,7 @@ class ChronopostApi
             numberOfParcel: count($multiParcelParts),
             multiParcel: count($multiParcelParts) > 1,
             skyBillOutputMode: $skyBillOutputMode,
-            skyBillParameters: $skyBillParameters
+            skyBillParameters: $skyBillParameters,
         );
     }
 
@@ -329,7 +329,7 @@ class ChronopostApi
         RelayServiceType $relayServiceType = RelayServiceType::ANY,
         ?float $weight = null,
         ?int $maxResults = null,
-        ?int $radiusInKm = null
+        ?int $radiusInKm = null,
     ): RelaySearchResult {
         return $this->relayPointService->searchRelayPoint(
             $this->accountNumber,
@@ -341,7 +341,7 @@ class ChronopostApi
             $relayServiceType,
             $weight,
             $maxResults,
-            $radiusInKm
+            $radiusInKm,
         );
     }
 
@@ -541,7 +541,7 @@ class ChronopostApi
         ?ScheduledValue $scheduledValue = null,
         ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): MonoParcelV7 {
         return $this->shippingService->singleParcelV7(
             $this->accountNumber,
@@ -582,7 +582,7 @@ class ChronopostApi
         int $numberOfParcel = 1,
         bool $multiParcel = false,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): MultiParcelV4 {
         return $this->shippingService->multiParcelV7(
             $this->accountNumber,
@@ -617,7 +617,7 @@ class ChronopostApi
         ?EsdValue $esdValue = null,
         ?ScheduledValue $scheduledValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): ReservationResult {
         return $this->shippingService->singleParcelWithReservation(
             $this->accountNumber,
@@ -656,7 +656,7 @@ class ChronopostApi
         int $numberOfParcel = 1,
         bool $multiParcel = false,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): ReservationMultiParcelResult {
         return $this->shippingService->multiParcelWithReservation(
             $this->accountNumber,
@@ -690,7 +690,7 @@ class ChronopostApi
         ReferenceValue $referenceValue,
         EsdValue $esdValue,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): ReservationResult {
         return $this->shippingService->shippingWithEsdOnly(
             $this->accountNumber,
@@ -720,7 +720,7 @@ class ChronopostApi
         RecipientValue $recipientValue,
         ReferenceValue $referenceValue,
         EsdValue $esdValue,
-        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
     ): ReservationResult {
         return $this->shippingService->shippingWithReservationAndEsd(
             $this->accountNumber,

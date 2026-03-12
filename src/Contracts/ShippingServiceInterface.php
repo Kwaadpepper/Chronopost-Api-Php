@@ -47,7 +47,7 @@ interface ShippingServiceInterface
         ?ScheduledValue $scheduledValue = null,
         ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): MultiParcelV4;
 
     /**
@@ -79,7 +79,7 @@ interface ShippingServiceInterface
         int $numberOfParcel = 1,
         bool $multiParcel = false,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): MultiParcelV4;
 
     /**
@@ -107,7 +107,7 @@ interface ShippingServiceInterface
         ?ScheduledValue $scheduledValue = null,
         ?EsdValue $esdValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): MonoParcelV7;
 
     /**
@@ -139,7 +139,7 @@ interface ShippingServiceInterface
         int $numberOfParcel = 1,
         bool $multiParcel = false,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): MultiParcelV4;
 
     /**
@@ -167,7 +167,7 @@ interface ShippingServiceInterface
         ?EsdValue $esdValue = null,
         ?ScheduledValue $scheduledValue = null,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): ReservationResult;
 
     /**
@@ -199,7 +199,7 @@ interface ShippingServiceInterface
         int $numberOfParcel = 1,
         bool $multiParcel = false,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): ReservationMultiParcelResult;
 
     /**
@@ -225,7 +225,7 @@ interface ShippingServiceInterface
         ReferenceValue $referenceValue,
         EsdValue $esdValue,
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
-        ?SkyBillParameters $skyBillParameters = null
+        ?SkyBillParameters $skyBillParameters = null,
     ): ReservationResult;
 
     /**
@@ -249,6 +249,6 @@ interface ShippingServiceInterface
         RecipientValue $recipientValue,
         ReferenceValue $referenceValue,
         EsdValue $esdValue,
-        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
     ): ReservationResult;
 }

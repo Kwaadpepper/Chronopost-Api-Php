@@ -9,7 +9,7 @@ use Kwaadpepper\ChronopostApiPhp\Helpers\StringHelper;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PhoneNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 
-readonly abstract class ParcelInfo
+abstract readonly class ParcelInfo
 {
     /**
      * CcountryName
@@ -50,7 +50,7 @@ readonly abstract class ParcelInfo
     ) {
         if ($mobilePhone !== null && !$mobilePhone->isMobile()) {
             throw new \InvalidArgumentException(
-                'Mobile phone number must be a mobile number for ParcelInfo.'
+                'Mobile phone number must be a mobile number for ParcelInfo.',
             );
         }
         if (is_null($phone) && $mobilePhone !== null) {

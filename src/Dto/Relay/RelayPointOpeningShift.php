@@ -14,7 +14,7 @@ class RelayPointOpeningShift implements Dto
         public readonly string $morningClosingTime,
         public readonly string $afternoonStartingTime,
         public readonly string $afternoonClosingTime,
-        public readonly string $timeAsString
+        public readonly string $timeAsString,
     ) {
     }
 

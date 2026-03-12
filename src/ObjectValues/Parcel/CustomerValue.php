@@ -43,7 +43,7 @@ readonly class CustomerValue extends ParcelInfo
         ?PhoneNumber $mobilePhone,
         ?PhoneNumber $phone = null,
         string|null $contactName = null,
-        public bool $printAsSender = false
+        public bool $printAsSender = false,
     ) {
         $splittedName  = StringHelper::cutStringToFitOnMultipleLines($name, 100, 2);
         $customerName  = $splittedName[0];
@@ -60,7 +60,7 @@ readonly class CustomerValue extends ParcelInfo
             $customerName2,
             $mobilePhone,
             $phone,
-            $postCode
+            $postCode,
         );
     }
 }

@@ -11,7 +11,7 @@ class RelayPointClosingShift implements Dto
     public function __construct(
         public readonly int $number,
         public readonly \DateTimeImmutable $from,
-        public readonly \DateTimeImmutable $to
+        public readonly \DateTimeImmutable $to,
     ) {
     }
 }

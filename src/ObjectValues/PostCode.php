@@ -31,7 +31,7 @@ readonly class PostCode implements \Stringable
      */
     public function __construct(
         string $postCode,
-        CountryForChronopost $countryDelivery
+        CountryForChronopost $countryDelivery,
     ) {
         $this->validate($postCode, $countryDelivery);
         $this->postCode        = $postCode;
@@ -71,7 +71,7 @@ readonly class PostCode implements \Stringable
                 'The post code "%s" is not valid for the country "%s".',
                 $postCode,
                 $ofCountry->name,
-            )
+            ),
         );
     }
 

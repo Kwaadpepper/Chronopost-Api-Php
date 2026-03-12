@@ -51,7 +51,7 @@ class RelayPointService implements RelaySearchServiceInterface
      * @param array<string, mixed> $soapOptions Additional options for the soap client.
      */
     public function __construct(
-        array $soapOptions = []
+        array $soapOptions = [],
     ) {
         $soapOptions = array_merge(
             $soapOptions,
@@ -111,10 +111,10 @@ class RelayPointService implements RelaySearchServiceInterface
             $relayPointType->value,
             $productCode->getValue(),
             $relayServiceType->value,
-            $weight !== null ? strval($weight) : null,
+            $weight !== null ? (string) $weight : null,
             $wantedShippingDate->date->format('d/m/Y'),
-            strval($maxResults),
-            strval($radiusInKm),
+            (string) $maxResults,
+            (string) $radiusInKm,
             '1',
             $language,
             $version,

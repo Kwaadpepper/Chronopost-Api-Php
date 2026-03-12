@@ -26,7 +26,7 @@ interface CalculateServiceInterface
         ?float $height = null,
         ?float $length = null,
         ?float $width = null,
-        ?\DateTime $shippingDate = null
+        ?\DateTime $shippingDate = null,
     ): ProductList;
 
     public function calculateDeliveryTime(
@@ -35,6 +35,6 @@ interface CalculateServiceInterface
         string $toCityName,
         ProductCode $productCode,
         ShippingType $shippingType,
-        ServiceCode $serviceCode
+        ServiceCode $serviceCode,
     ): DeliveryTime;
 }

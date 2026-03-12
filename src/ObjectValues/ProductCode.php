@@ -21,7 +21,7 @@ readonly class ProductCode implements \Stringable
         preg_match(
             '/^[a-zA-Z0-9]{1,2}$/',
             $this->value,
-            $matches
+            $matches,
         );
         if (count($matches) !== 1) {
             throw new \InvalidArgumentException('Invalid product code');

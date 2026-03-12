@@ -11,7 +11,7 @@ class Product
     public readonly ChronopostProductCode $code;
 
     public function __construct(
-        public string $originalCode
+        public string $originalCode,
     ) {
         $this->code = $this->toChronopostProductCode($originalCode);
     }

@@ -30,7 +30,7 @@ readonly class ReservationMultiParcelResult implements Dto
             // @phpstan-ignore instanceof.alwaysTrue
             if (!($parcelValue instanceof ReservationParcelValue)) {
                 throw new \InvalidArgumentException(
-                    'Parcel values must be an array of ' . ReservationParcelValue::class
+                    'Parcel values must be an array of ' . ReservationParcelValue::class,
                 );
             }
         }

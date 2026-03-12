@@ -27,6 +27,6 @@ interface RelaySearchServiceInterface
         ?int $maxResults = null,
         ?int $radiusInKm = null,
         string $language = 'FR',
-        string $version = '2.0'
+        string $version = '2.0',
     ): RelaySearchResult;
 }

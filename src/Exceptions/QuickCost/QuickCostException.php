@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost;
 
-use Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\ErrorCode;
-
 /**
  * @phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
  */
@@ -28,7 +26,7 @@ class QuickCostException extends \RuntimeException
     public function __construct(
         string $message = '',
         int $code = 0,
-        ?\Throwable $previous = null
+        ?\Throwable $previous = null,
     ) {
         parent::__construct($message, $code, $previous);
 

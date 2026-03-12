@@ -36,9 +36,9 @@ readonly class TrackingV2Locale implements \Stringable
             throw new \InvalidArgumentException(
                 "Locale `{$locale->value}` must be one of: " .
                 implode(', ', array_map(
-                    fn($locale) => $locale->value,
-                    self::ALLOWED_LOCALES
-                ))
+                    fn ($locale) => $locale->value,
+                    self::ALLOWED_LOCALES,
+                )),
             );
         }
     }

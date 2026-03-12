@@ -208,7 +208,7 @@ class ShippingLabelService implements ShippingLabelServiceInterface
         $result = $this->getService->getReservedSkybillWithTypeAndModeAuth(new GetReservedSkybillWithTypeAndModeAuth(
             numberSearch: $numberSearch,
             mode: $mode,
-            accountNumber: intval($accountNumber->getAccountNumber()),
+            accountNumber: (int) ($accountNumber->getAccountNumber()),
             password: $password->getPassword(),
         ));
 
@@ -243,7 +243,7 @@ class ShippingLabelService implements ShippingLabelServiceInterface
             new GetReservedSkybillWithTypeAndModeByReservation(
                 reservationNumber: $reservationNumber,
                 mode: $mode,
-            )
+            ),
         );
 
         $return = $this->extractReturnOrThrow(
@@ -319,7 +319,7 @@ class ShippingLabelService implements ShippingLabelServiceInterface
         SkybillValueBase $skybillValueBase,
     ): ShippingInformation {
         $parameters = new GetShippingInformation(
-            headerValue: new HeaderValue(intval($accountNumber->getAccountNumber()), 'CHRFR', ''),
+            headerValue: new HeaderValue((int) ($accountNumber->getAccountNumber()), 'CHRFR', ''),
             shipperValue: $shipperValue,
             recipientValue: $recipientValue,
             skybillValueBase: $skybillValueBase,

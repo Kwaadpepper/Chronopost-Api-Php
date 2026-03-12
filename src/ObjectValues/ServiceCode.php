@@ -27,7 +27,7 @@ readonly class ServiceCode implements \Stringable
         preg_match(
             '/^[0-9]{1}|[0-9]{3}$/',
             $this->value,
-            $matches
+            $matches,
         );
         if (count($matches) !== 1) {
             throw new \InvalidArgumentException('Invalid service code');

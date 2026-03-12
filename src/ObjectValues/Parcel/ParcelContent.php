@@ -57,12 +57,12 @@ readonly class ParcelContent
      * @throws \InvalidArgumentException If the provided content is invalid.
      */
     public function __construct(
-        string $content
+        string $content,
     ) {
         StringHelper::validateValue(
             $content,
             'content',
-            '/^[a-zA-Z0-9]{0,220}$/'
+            '/^[a-zA-Z0-9]{0,220}$/',
         );
 
         $descriptionsLines = StringHelper::cutStringToFitOnMultipleLines($content, 45, 5);

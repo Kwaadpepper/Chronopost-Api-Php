@@ -114,7 +114,7 @@ class ShippingServiceTest extends \PHPUnit\Framework\TestCase
             $customerValue,
             $shipperValue,
             $recipientValue,
-            $referenceValue
+            $referenceValue,
         );
         $firstParcelValue = $result->multiParcelValue[0] ?? null;
 

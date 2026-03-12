@@ -33,18 +33,18 @@ class RelayPointSearchResultFactory implements Factory
     {
         return new RelaySearchResult(
             RelayPointQualityResult::from($response->getQualiteReponse()),
-            array_map([$this, 'mapRelayPoint'], $response->getListePointRelais())
+            array_map([$this, 'mapRelayPoint'], $response->getListePointRelais()),
         );
     }
 
     private function mapRelayPoint(PointCHR $point): RelayPoint
     {
         $codePays    = $point->getCodePays();
-        $country     = CountryForChronopost::tryFrom($codePays ? intval($codePays) : null) ?? CountryForChronopost::FRANCE;
+        $country     = CountryForChronopost::tryFrom($codePays ? (int) $codePays : null) ?? CountryForChronopost::FRANCE;
         $postCode    = new PostCode($point->getCodePostal(), $country);
         $coordinates = new Coordinates(
-            floatval($point->getCoordGeolocalisationLatitude()),
-            floatval($point->getCoordGeolocalisationLongitude())
+            (float) ($point->getCoordGeolocalisationLatitude()),
+            (float) ($point->getCoordGeolocalisationLongitude()),
         );
         $relayId     = new RelayId($point->getIdentifiant());
         $relayType   = RelayPointType::tryFrom($point->getTypeDePoint()) ?? RelayPointType::ANY;

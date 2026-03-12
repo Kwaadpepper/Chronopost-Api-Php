@@ -40,27 +40,27 @@ class EsdValue
         StringHelper::validateValue(
             $shipperBuildingFloor,
             'shipperBuildingFloor',
-            '/^[a-zA-Z0-9]{0,32}$/'
+            '/^[a-zA-Z0-9]{0,32}$/',
         );
         StringHelper::validateValue(
             $shipperCarriesCode,
             'shipperCarriesCode',
-            '/^[a-zA-Z0-9]{0,38}$/'
+            '/^[a-zA-Z0-9]{0,38}$/',
         );
         StringHelper::validateValue(
             $shipperServiceDirection,
             'shipperServiceDirection',
-            '/^[a-zA-Z0-9]{0,32}$/'
+            '/^[a-zA-Z0-9]{0,32}$/',
         );
         StringHelper::validateValue(
             $specificInstructions,
             'specificInstructions',
-            '/^[a-zA-Z0-9]{0,255}$/'
+            '/^[a-zA-Z0-9]{0,255}$/',
         );
         StringHelper::validateValue(
             $esdClientReference,
             'esdClientReference',
-            '/^[a-zA-Z0-9]{0,32}$/'
+            '/^[a-zA-Z0-9]{0,32}$/',
         );
 
         if ($maximumPasses < 1) {

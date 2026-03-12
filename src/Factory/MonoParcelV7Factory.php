@@ -74,7 +74,7 @@ class MonoParcelV7Factory implements Factory
         if ($esdFullNumber !== null && $esdNumber !== null && $pickupDate !== null) {
             $parsedDate = \DateTimeImmutable::createFromFormat(
                 'Y-m-d\TH:i:s',
-                $pickupDate
+                $pickupDate,
             );
 
             if ($parsedDate === false) {

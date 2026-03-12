@@ -114,33 +114,33 @@ readonly class SkyBillValue
 
         if ($this->codValue < 0) {
             throw new \InvalidArgumentException(
-                'The codValue must be a positive integer.'
+                'The codValue must be a positive integer.',
             );
         }
         if ($this->customsValue < 0) {
             throw new \InvalidArgumentException(
-                'The customsValue must be a positive integer.'
+                'The customsValue must be a positive integer.',
             );
         }
         if ($this->insuredValue < 0) {
             throw new \InvalidArgumentException(
-                'The insuredValue must be a positive integer.'
+                'The insuredValue must be a positive integer.',
             );
         }
         StringHelper::validateValue(
             $this->productCode,
             'productCode',
-            '/^[a-zA-Z0-9]{0,2}$/'
+            '/^[a-zA-Z0-9]{0,2}$/',
         );
         StringHelper::validateValue(
             $this->serviceCode,
             'service',
-            '/^[0-9]{3}|[0-9]{1}$/'
+            '/^[0-9]{3}|[0-9]{1}$/',
         );
         StringHelper::validateValue(
             $this->alternateProductCode,
             'alternateProductCode',
-            '/^[a-zA-Z0-9]{2}$/'
+            '/^[a-zA-Z0-9]{2}$/',
         );
     }
 }

@@ -69,7 +69,7 @@ readonly class RecipientValue extends ParcelInfo
             $shipperName2,
             $mobilePhone,
             $phone,
-            $postCode
+            $postCode,
         );
     }
 }

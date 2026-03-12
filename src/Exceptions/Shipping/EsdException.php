@@ -23,7 +23,7 @@ class EsdException extends \RuntimeException
     public function __construct(
         string $message = '',
         int $code = 0,
-        ?\Throwable $previous = null
+        ?\Throwable $previous = null,
     ) {
         parent::__construct($message, $code, $previous);
 
@@ -55,7 +55,7 @@ class EsdException extends \RuntimeException
             EsdErrorCode::from($code);
             throw new self(
                 $message ?: 'An ESD error occurred.',
-                $code
+                $code,
             );
         } catch (\ValueError $e) {
             // Not an ESD error code, do nothing.

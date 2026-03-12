@@ -10,7 +10,6 @@ use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\EsdInfo;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelValue;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\TransportTicket;
-use Kwaadpepper\ChronopostApiPhp\Factory\Factory;
 
 class MultiParcelV4Factory implements Factory
 {
@@ -26,8 +25,8 @@ class MultiParcelV4Factory implements Factory
     {
         $resultMultiParcel = $result->getResultMultiParcelValue();
         $multiParcelValues = array_map(
-            fn(ResultMultiParcelValue $parcelValue) => $this->mapToMultiParcelValue($parcelValue),
-            $resultMultiParcel
+            fn (ResultMultiParcelValue $parcelValue) => $this->mapToMultiParcelValue($parcelValue),
+            $resultMultiParcel,
         );
         $reservationNumber = $result->getReservationNumber();
         $esdInfo           = $this->mapToEsdInfo($result);
@@ -35,7 +34,7 @@ class MultiParcelV4Factory implements Factory
         return new MultiParcelV4(
             $multiParcelValues,
             $reservationNumber,
-            $esdInfo
+            $esdInfo,
         );
     }
 
@@ -106,7 +105,7 @@ class MultiParcelV4Factory implements Factory
         if ($esdFullNumber !== null && $esdNumber !== null && $pickupDate !== null) {
             $parsedDate = \DateTimeImmutable::createFromFormat(
                 'Y-m-d\TH:i:s',
-                $pickupDate
+                $pickupDate,
             );
 
             // Fallback: try standard ISO 8601 parsing if the strict format fails

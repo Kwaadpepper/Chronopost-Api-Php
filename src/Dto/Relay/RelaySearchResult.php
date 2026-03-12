@@ -12,7 +12,7 @@ class RelaySearchResult implements Dto
     public function __construct(
         public readonly RelayPointQualityResult $quality,
         /** @var RelayPoint[] $relayList */
-        public readonly array $relayList
+        public readonly array $relayList,
     ) {
     }
 }

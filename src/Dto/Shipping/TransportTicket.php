@@ -57,7 +57,7 @@ readonly class TransportTicket implements Dto
         if ($bytesWritten === 0 && !empty($decodedContent)) {
             throw new \RuntimeException(sprintf(
                 'Wrote 0 bytes to file %s, but content was not empty. Possible disk full or permission issue.',
-                $filePath
+                $filePath,
             ));
         }
 
