@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\Contracts;
 
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MonoParcelV7;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ReservationMultiParcelResult;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ReservationResult;
 use Kwaadpepper\ChronopostApiPhp\Enums\SkyBillOutputMode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue;
@@ -48,4 +51,89 @@ interface ShippingServiceInterface
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
         ?SkyBillParameters $skyBillParameters = null
     ): MultiParcelV4;
+
+    public function singleParcelV7(
+        AccountNumber $accountNumber,
+        Password $password,
+        SkyBillValue $skybillValue,
+        CustomerValue $customerValue,
+        ShipperValue $shipperValue,
+        RecipientValue $recipientValue,
+        ReferenceValue $referenceValue,
+        ?ScheduledValue $scheduledValue = null,
+        ?EsdValue $esdValue = null,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
+        ?SkyBillParameters $skyBillParameters = null
+    ): MonoParcelV7;
+
+    public function multiParcelV7(
+        AccountNumber $accountNumber,
+        Password $password,
+        array $skybillValues,
+        CustomerValue $customerValue,
+        array $shippersValues,
+        array $recipientsValues,
+        array $referenceValues = [],
+        array $scheduledValues = [],
+        ?EsdValue $esdValue = null,
+        int $numberOfParcel = 1,
+        bool $multiParcel = false,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
+        ?SkyBillParameters $skyBillParameters = null
+    ): MultiParcelV4;
+
+    public function singleParcelWithReservation(
+        AccountNumber $accountNumber,
+        Password $password,
+        SkyBillValue $skybillValue,
+        CustomerValue $customerValue,
+        ShipperValue $shipperValue,
+        RecipientValue $recipientValue,
+        ReferenceValue $referenceValue,
+        ?EsdValue $esdValue = null,
+        ?ScheduledValue $scheduledValue = null,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
+        ?SkyBillParameters $skyBillParameters = null
+    ): ReservationResult;
+
+    public function multiParcelWithReservation(
+        AccountNumber $accountNumber,
+        Password $password,
+        array $skybillValues,
+        CustomerValue $customerValue,
+        ShipperValue $shipperValue,
+        array $recipientsValues,
+        array $referenceValues = [],
+        ?EsdValue $esdValue = null,
+        ?ScheduledValue $scheduledValue = null,
+        int $numberOfParcel = 1,
+        bool $multiParcel = false,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
+        ?SkyBillParameters $skyBillParameters = null
+    ): ReservationMultiParcelResult;
+
+    public function shippingWithEsdOnly(
+        AccountNumber $accountNumber,
+        Password $password,
+        SkyBillValue $skybillValue,
+        CustomerValue $customerValue,
+        ShipperValue $shipperValue,
+        RecipientValue $recipientValue,
+        ReferenceValue $referenceValue,
+        EsdValue $esdValue,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
+        ?SkyBillParameters $skyBillParameters = null
+    ): ReservationResult;
+
+    public function shippingWithReservationAndEsd(
+        AccountNumber $accountNumber,
+        Password $password,
+        SkyBillValue $skybillValue,
+        CustomerValue $customerValue,
+        ShipperValue $shipperValue,
+        RecipientValue $recipientValue,
+        ReferenceValue $referenceValue,
+        EsdValue $esdValue,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING
+    ): ReservationResult;
 }

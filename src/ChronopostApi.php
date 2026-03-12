@@ -9,7 +9,10 @@ use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\DeliveryTime;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MonoParcelV7;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ReservationMultiParcelResult;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ReservationResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\CancelListResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\CancelResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\EsdTrackResult;
@@ -509,6 +512,216 @@ class ChronopostApi
             $this->password,
             $senderRef,
             $pdf,
+        );
+    }
+
+    /**
+     * Creates a single-parcel shipment using the V7 API.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the shipping operation fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
+     */
+    public function singleParcelV7(
+        SkyBillValue $skybillValue,
+        CustomerValue $customerValue,
+        ShipperValue $shipperValue,
+        RecipientValue $recipientValue,
+        ReferenceValue $referenceValue,
+        ?ScheduledValue $scheduledValue = null,
+        ?EsdValue $esdValue = null,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
+        ?SkyBillParameters $skyBillParameters = null
+    ): MonoParcelV7 {
+        return $this->shippingService->singleParcelV7(
+            $this->accountNumber,
+            $this->password,
+            $skybillValue,
+            $customerValue,
+            $shipperValue,
+            $recipientValue,
+            $referenceValue,
+            $scheduledValue,
+            $esdValue,
+            $skyBillOutputMode,
+            $skyBillParameters,
+        );
+    }
+
+    /**
+     * Creates a multi-parcel shipment using the V7 API.
+     *
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue[]   $skybillValues
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue[]   $shippersValues
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\RecipientValue[] $recipientsValues
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ReferenceValue[] $referenceValues
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ScheduledValue[] $scheduledValues
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the shipping operation fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
+     */
+    public function multiParcelV7(
+        array $skybillValues,
+        CustomerValue $customerValue,
+        array $shippersValues,
+        array $recipientsValues,
+        array $referenceValues = [],
+        array $scheduledValues = [],
+        ?EsdValue $esdValue = null,
+        int $numberOfParcel = 1,
+        bool $multiParcel = false,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
+        ?SkyBillParameters $skyBillParameters = null
+    ): MultiParcelV4 {
+        return $this->shippingService->multiParcelV7(
+            $this->accountNumber,
+            $this->password,
+            $skybillValues,
+            $customerValue,
+            $shippersValues,
+            $recipientsValues,
+            $referenceValues,
+            $scheduledValues,
+            $esdValue,
+            $numberOfParcel,
+            $multiParcel,
+            $skyBillOutputMode,
+            $skyBillParameters,
+        );
+    }
+
+    /**
+     * Creates a single-parcel shipment with reservation.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the shipping operation fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
+     */
+    public function singleParcelWithReservation(
+        SkyBillValue $skybillValue,
+        CustomerValue $customerValue,
+        ShipperValue $shipperValue,
+        RecipientValue $recipientValue,
+        ReferenceValue $referenceValue,
+        ?EsdValue $esdValue = null,
+        ?ScheduledValue $scheduledValue = null,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
+        ?SkyBillParameters $skyBillParameters = null
+    ): ReservationResult {
+        return $this->shippingService->singleParcelWithReservation(
+            $this->accountNumber,
+            $this->password,
+            $skybillValue,
+            $customerValue,
+            $shipperValue,
+            $recipientValue,
+            $referenceValue,
+            $esdValue,
+            $scheduledValue,
+            $skyBillOutputMode,
+            $skyBillParameters,
+        );
+    }
+
+    /**
+     * Creates a multi-parcel shipment with reservation.
+     *
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue[]   $skybillValues
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\RecipientValue[] $recipientsValues
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ReferenceValue[] $referenceValues
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the shipping operation fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
+     */
+    public function multiParcelWithReservation(
+        array $skybillValues,
+        CustomerValue $customerValue,
+        ShipperValue $shipperValue,
+        array $recipientsValues,
+        array $referenceValues = [],
+        ?EsdValue $esdValue = null,
+        ?ScheduledValue $scheduledValue = null,
+        int $numberOfParcel = 1,
+        bool $multiParcel = false,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
+        ?SkyBillParameters $skyBillParameters = null
+    ): ReservationMultiParcelResult {
+        return $this->shippingService->multiParcelWithReservation(
+            $this->accountNumber,
+            $this->password,
+            $skybillValues,
+            $customerValue,
+            $shipperValue,
+            $recipientsValues,
+            $referenceValues,
+            $esdValue,
+            $scheduledValue,
+            $numberOfParcel,
+            $multiParcel,
+            $skyBillOutputMode,
+            $skyBillParameters,
+        );
+    }
+
+    /**
+     * Creates a shipment with ESD only (no transport ticket).
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the shipping operation fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
+     */
+    public function shippingWithEsdOnly(
+        SkyBillValue $skybillValue,
+        CustomerValue $customerValue,
+        ShipperValue $shipperValue,
+        RecipientValue $recipientValue,
+        ReferenceValue $referenceValue,
+        EsdValue $esdValue,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
+        ?SkyBillParameters $skyBillParameters = null
+    ): ReservationResult {
+        return $this->shippingService->shippingWithEsdOnly(
+            $this->accountNumber,
+            $this->password,
+            $skybillValue,
+            $customerValue,
+            $shipperValue,
+            $recipientValue,
+            $referenceValue,
+            $esdValue,
+            $skyBillOutputMode,
+            $skyBillParameters,
+        );
+    }
+
+    /**
+     * Creates a shipment with reservation and ESD with client reference.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the shipping operation fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
+     */
+    public function shippingWithReservationAndEsd(
+        SkyBillValue $skybillValue,
+        CustomerValue $customerValue,
+        ShipperValue $shipperValue,
+        RecipientValue $recipientValue,
+        ReferenceValue $referenceValue,
+        EsdValue $esdValue,
+        SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING
+    ): ReservationResult {
+        return $this->shippingService->shippingWithReservationAndEsd(
+            $this->accountNumber,
+            $this->password,
+            $skybillValue,
+            $customerValue,
+            $shipperValue,
+            $recipientValue,
+            $referenceValue,
+            $esdValue,
+            $skyBillOutputMode,
         );
     }
 }
