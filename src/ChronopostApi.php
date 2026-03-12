@@ -14,6 +14,9 @@ use ChronopostShipping\StructType\ParticularitesEsd;
 use ChronopostShipping\StructType\RecipientValue as RecipientValueChronopost;
 use ChronopostShipping\StructType\ShipperValue as ShipperValueChronopost;
 use ChronopostShipping\StructType\SkybillValueBase;
+use Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotConfirmation;
+use Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotSearchResult;
+use Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\GeocodingResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\DeliveryTime;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductCatalog;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
@@ -62,6 +65,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
 use Kwaadpepper\ChronopostApiPhp\Services\Calculate\CalculateService;
 use Kwaadpepper\ChronopostApiPhp\Services\Cost\QuickCostService;
+use Kwaadpepper\ChronopostApiPhp\Services\DeliverySlot\DeliverySlotService;
 use Kwaadpepper\ChronopostApiPhp\Services\RelayPoint\RelayPointService;
 use Kwaadpepper\ChronopostApiPhp\Services\Shipping\PickupService;
 use Kwaadpepper\ChronopostApiPhp\Services\Shipping\ShippingLabelService;
@@ -91,6 +95,8 @@ class ChronopostApi
 
     private PickupService $pickupService;
 
+    private DeliverySlotService $deliverySlotService;
+
     /**
      * Constructor
      *
@@ -115,6 +121,7 @@ class ChronopostApi
         $this->quickCostService       = new QuickCostService($defaultSopapOptions);
         $this->relayPointService      = new RelayPointService($defaultSopapOptions);
         $this->pickupService          = new PickupService($defaultSopapOptions);
+        $this->deliverySlotService    = new DeliverySlotService($defaultSopapOptions);
     }
 
     /**
@@ -1152,6 +1159,129 @@ class ChronopostApi
             $length,
             $width,
             $shippingDate,
+        );
+    }
+
+    /**
+     * Search for available delivery time slots.
+     *
+     * @param string      $productType     The product type code.
+     * @param string      $recipientAddr1  Recipient address line 1.
+     * @param string      $recipientZip    Recipient postal code.
+     * @param string      $recipientCity   Recipient city.
+     * @param string      $recipientCountry Recipient country code.
+     * @param string      $dateBegin       Start date (YYYY-MM-DD).
+     * @param string      $dateEnd         End date (YYYY-MM-DD).
+     * @param string|null $shipperAddr1    Shipper address line 1.
+     * @param string|null $shipperZip      Shipper postal code.
+     * @param string|null $shipperCity     Shipper city.
+     * @param string|null $shipperCountry  Shipper country code.
+     * @param integer|null $weight         Weight in grams.
+     * @param string|null $slotType        Slot type filter.
+     *
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotSearchResult
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\DeliverySlot\DeliverySlotException
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     */
+    public function searchDeliverySlots(
+        string $productType,
+        string $recipientAddr1,
+        string $recipientZip,
+        string $recipientCity,
+        string $recipientCountry,
+        string $dateBegin,
+        string $dateEnd,
+        ?string $shipperAddr1 = null,
+        ?string $shipperZip = null,
+        ?string $shipperCity = null,
+        ?string $shipperCountry = null,
+        ?int $weight = null,
+        ?string $slotType = null,
+    ): DeliverySlotSearchResult {
+        return $this->deliverySlotService->searchDeliverySlots(
+            $this->accountNumber,
+            $this->password,
+            $productType,
+            $recipientAddr1,
+            $recipientZip,
+            $recipientCity,
+            $recipientCountry,
+            $dateBegin,
+            $dateEnd,
+            $shipperAddr1,
+            $shipperZip,
+            $shipperCity,
+            $shipperCountry,
+            $weight,
+            $slotType,
+        );
+    }
+
+    /**
+     * Confirm a delivery time slot.
+     *
+     * @param string $productType   The product type code.
+     * @param string $codeSlot      The delivery slot code.
+     * @param string $meshCode      The mesh code from search result.
+     * @param string $transactionId The transaction ID from search result.
+     * @param string $rank          The rank of the slot.
+     * @param string $position      The position of the slot.
+     * @param string $dateSelected  The selected date.
+     *
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\DeliverySlotConfirmation
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\DeliverySlot\DeliverySlotException
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     */
+    public function confirmDeliverySlot(
+        string $productType,
+        string $codeSlot,
+        string $meshCode,
+        string $transactionId,
+        string $rank,
+        string $position,
+        string $dateSelected,
+    ): DeliverySlotConfirmation {
+        return $this->deliverySlotService->confirmDeliverySlot(
+            $this->accountNumber,
+            $this->password,
+            $productType,
+            $codeSlot,
+            $meshCode,
+            $transactionId,
+            $rank,
+            $position,
+            $dateSelected,
+        );
+    }
+
+    /**
+     * Geocode an address to get coordinates.
+     *
+     * @param string      $address1 Address line 1.
+     * @param string      $zipCode  Postal code.
+     * @param string      $city     City name.
+     * @param string|null $address2 Address line 2.
+     *
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\DeliverySlot\GeocodingResult
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\DeliverySlot\DeliverySlotException
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     */
+    public function geocodeAddress(
+        string $address1,
+        string $zipCode,
+        string $city,
+        ?string $address2 = null,
+    ): GeocodingResult {
+        return $this->deliverySlotService->geocodeAddress(
+            $this->accountNumber,
+            $this->password,
+            $address1,
+            $zipCode,
+            $city,
+            $address2,
         );
     }
 }
