@@ -8,7 +8,7 @@ parameters:
         - tests/
 
     # Level 9 is the highest level
-    level: 5
+    level: 6
 
     ignoreErrors:
         # assertInstanceOf is intentional in tests even when PHPStan can infer the type

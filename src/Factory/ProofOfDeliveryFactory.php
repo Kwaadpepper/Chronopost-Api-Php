@@ -20,10 +20,10 @@ class ProofOfDeliveryFactory implements Factory
     {
         // phpcs:enable
         return new ProofOfDelivery(
-            podPresent: (bool)$result->getPodPresente(),
+            podPresent: (bool) $result->getPodPresente(),
             format: $result->getFormatPOD(),
             podData: $result->getPod(),
-            statusCode: (int)$result->getStatusCode(),
+            statusCode: (int) $result->getStatusCode(),
         );
     }
 }

@@ -41,7 +41,7 @@ class TrackSearchResultFactory implements Factory
         $event = $info->getSignificantEvent();
 
         return new ParcelInfo(
-            skybillNumber: (string)$info->getSkybillNumber(),
+            skybillNumber: (string) $info->getSkybillNumber(),
             dateDeposit: $info->getDateDeposit(),
             depositCountry: $info->getDepositCountry(),
             depositZipCode: $info->getDepositZipCode(),

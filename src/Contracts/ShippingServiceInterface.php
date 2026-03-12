@@ -36,6 +36,22 @@ interface ShippingServiceInterface
         ?SkyBillParameters $skyBillParameters = null
     ): MultiParcelV4;
 
+    /**
+     * @param AccountNumber                  $accountNumber
+     * @param Password                       $password
+     * @param array<int, SkyBillValue>       $skybillValues
+     * @param CustomerValue                  $customerValue
+     * @param array<int, ShipperValue>       $shippersValues
+     * @param array<int, RecipientValue>     $recipientsValues
+     * @param array<int, ReferenceValue>     $referenceValues
+     * @param array<int, ScheduledValue>     $scheduledValues
+     * @param EsdValue|null                  $esdValue
+     * @param int                            $numberOfParcel
+     * @param bool                           $multiParcel
+     * @param SkyBillOutputMode              $skyBillOutputMode
+     * @param SkyBillParameters|null         $skyBillParameters
+     * @return MultiParcelV4
+     */
     public function multiParcelV4(
         AccountNumber $accountNumber,
         Password $password,
@@ -66,6 +82,22 @@ interface ShippingServiceInterface
         ?SkyBillParameters $skyBillParameters = null
     ): MonoParcelV7;
 
+    /**
+     * @param AccountNumber                  $accountNumber
+     * @param Password                       $password
+     * @param array<int, SkyBillValue>       $skybillValues
+     * @param CustomerValue                  $customerValue
+     * @param array<int, ShipperValue>       $shippersValues
+     * @param array<int, RecipientValue>     $recipientsValues
+     * @param array<int, ReferenceValue>     $referenceValues
+     * @param array<int, ScheduledValue>     $scheduledValues
+     * @param EsdValue|null                  $esdValue
+     * @param int                            $numberOfParcel
+     * @param bool                           $multiParcel
+     * @param SkyBillOutputMode              $skyBillOutputMode
+     * @param SkyBillParameters|null         $skyBillParameters
+     * @return MultiParcelV4
+     */
     public function multiParcelV7(
         AccountNumber $accountNumber,
         Password $password,
@@ -96,6 +128,22 @@ interface ShippingServiceInterface
         ?SkyBillParameters $skyBillParameters = null
     ): ReservationResult;
 
+    /**
+     * @param AccountNumber                  $accountNumber
+     * @param Password                       $password
+     * @param array<int, SkyBillValue>       $skybillValues
+     * @param CustomerValue                  $customerValue
+     * @param ShipperValue                   $shipperValue
+     * @param array<int, RecipientValue>     $recipientsValues
+     * @param array<int, ReferenceValue>     $referenceValues
+     * @param EsdValue|null                  $esdValue
+     * @param ScheduledValue|null            $scheduledValue
+     * @param int                            $numberOfParcel
+     * @param bool                           $multiParcel
+     * @param SkyBillOutputMode              $skyBillOutputMode
+     * @param SkyBillParameters|null         $skyBillParameters
+     * @return ReservationMultiParcelResult
+     */
     public function multiParcelWithReservation(
         AccountNumber $accountNumber,
         Password $password,

@@ -48,7 +48,7 @@ class RelayPointService implements RelaySearchServiceInterface
     /**
      * Constructor
      *
-     * @param array $soapOptions Additional options for the soap client.
+     * @param array<string, mixed> $soapOptions Additional options for the soap client.
      */
     public function __construct(
         array $soapOptions = []

@@ -35,7 +35,7 @@ class ProofOfDeliveryService
     /**
      * Constructor
      *
-     * @param array                                       $soapOptions   Additional options for the soap client.
+     * @param array<string, mixed>                        $soapOptions   Additional options for the soap client.
      * @param \ChronopostTracking\ServiceType\Search|null $searchService Injected search service (for testing).
      *
      * @phpcs:disable Generic.Files.LineLength.TooLong
@@ -89,8 +89,8 @@ class ProofOfDeliveryService
         $parameters = new SearchPOD(
             accountNumber: $accountNumber->getAccountNumber(),
             password: $password->getPassword(),
-            language: (string)$locale,
-            skybillNumber: (string)$trackingNumber,
+            language: (string) $locale,
+            skybillNumber: (string) $trackingNumber,
             pdf: $pdf,
         );
 
@@ -111,8 +111,8 @@ class ProofOfDeliveryService
 
         if ($response->getErrorCode() !== 0) {
             throw new TrackingException(
-                (string)$response->getErrorMessage(),
-                (int)$response->getErrorCode(),
+                (string) $response->getErrorMessage(),
+                (int) $response->getErrorCode(),
             );
         }
 
@@ -147,7 +147,7 @@ class ProofOfDeliveryService
         $parameters = new SearchPODWithSenderRef(
             accountNumber: $accountNumber->getAccountNumber(),
             password: $password->getPassword(),
-            language: (string)$locale,
+            language: (string) $locale,
             sendersRef: $senderRef,
             pdf: $pdf,
         );
@@ -171,8 +171,8 @@ class ProofOfDeliveryService
 
         if ($response->getErrorCode() !== 0) {
             throw new TrackingException(
-                (string)$response->getErrorMessage(),
-                (int)$response->getErrorCode(),
+                (string) $response->getErrorMessage(),
+                (int) $response->getErrorCode(),
             );
         }
 

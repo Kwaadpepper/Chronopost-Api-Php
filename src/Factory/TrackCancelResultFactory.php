@@ -20,9 +20,9 @@ class TrackCancelResultFactory implements Factory
     {
         // phpcs:enable
         return new CancelResult(
-            errorCode: (int)$result->getErrorCode(),
-            errorMessage: (string)$result->getErrorMessage(),
-            statusCode: (int)$result->getStatusCode(),
+            errorCode: (int) $result->getErrorCode(),
+            errorMessage: (string) $result->getErrorMessage(),
+            statusCode: (int) $result->getStatusCode(),
         );
     }
 }

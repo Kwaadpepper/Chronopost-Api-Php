@@ -24,7 +24,7 @@ class StringHelper
      * This function's primary goal is to perform word wrapping and generate as many lines
      * as necessary without imposing a line limit here.
      *
-     * @param array   $words      An array of individual words.
+     * @param array<int, string>   $words      An array of individual words.
      * @param integer $lineLength The maximum character length allowed per line.
      * @return string[] An array of strings, where each string represents a wrapped line.
      */

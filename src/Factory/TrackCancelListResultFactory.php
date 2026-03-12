@@ -20,9 +20,9 @@ class TrackCancelListResultFactory implements Factory
     {
         // phpcs:enable
         return new CancelListResult(
-            errorCode: (int)$result->getErrorCode(),
-            errorMessage: (string)$result->getErrorMessage(),
-            statusCode: (int)$result->getStatusCode(),
+            errorCode: (int) $result->getErrorCode(),
+            errorMessage: (string) $result->getErrorMessage(),
+            statusCode: (int) $result->getStatusCode(),
             skybills: $result->getSkybills() ?? [],
         );
     }

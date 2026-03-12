@@ -1,0 +1,126 @@
+N7 chronopost
+
+Description de la marchandise.
+
+Catégorie douai Valeur
+
+ren: ner
+
+ALCOOL ET SPIRITUEUX M_o1
+BOISSONS NON ALCOOLISÉES M_02
+VIN (ÉCHANTILLON) M_03
+PARFUM (ÉCHANTILLON) M_04
+PASSEPORT, DOCUMENTS D8#039:IDENTITÉS D_05
+TABAC M_06
+EFFETS PERSONNELS M_07
+MATÉRIEL INFORMATIQUE M_08
+MACHINES / APPAREILS MÉCANIQUES M_09
+APPAREILS ET SUPPORTS D&#039;ENREGISTREMENT DU SON OU DE M_10
+L8&#039;IMAGE
+
+MATÉRIEL OPTIQUE OÙ MÉDICAL M1
+HORLOGERIE M_12
+INSTRUMENT DE MUSIQUE M_13
+ETIQUETTES / BOITES / CARTON M_14
+LIVRES / MAGAZINES / AFFICHES / CATALOGUES / PHOTOS M_15
+PRODUITS PHARMACEUTIQUES / MÉDICAMENTS M_16
+PRODUITS CHIMIQUES M_17
+COSMÉTIQUES M_18
+PIÈCES AUTOMOBILES M_19
+JOUETS / JEUX M_20
+MOBILIER / MATÉRIEL D'ÉCLAIRAGE / OBJET DÉCORATIF (HORS OEUVRE M_21
+D'ART)
+
+VÊTEMENTS / ACCESSOIRES DU VÊTEMENT M_22
+
+ÿ dpdgroup
+N7 chronopost
+
+TISSU M_23
+OUTILLAGE / PIÈCES MÉTALLIQUES M_24
+BIJOUX FANTAISIE M_25
+PEAUX OÙ CUIRS M_26
+CHAUSSURES M_27
+RADIOGRAPHIE M_28
+DENRÉES ALIMENTAIRES NON PÉRISSABLES OÙ EN CONSERVE M_29
+AUTRES DOCUMENTS SANS VALEUR COMMERCIALE D_30
+
+ÿ dpdgroup
+N7 chronopost
+
+Codes produit.
+
+Vous êtes un client n'ayant pas contractualisé avec Chronopost
+
+ODUIT CODES
+
+Chrono 13 9A
+Chrono 10 9B
+Chrono 18 Le)
+Chrono Express 9D
+Chrono Premium SE
+Chrono Classic 9F
+Chrono Express 9J
+Chrono Classic 9L
+
+ÿ dpdgroup
+N7 chronopost
+
+Vous êtes un client ayant un contrat avec Chronopost
+
+PRODUIT CODES
+
+Chrono 13 1
+
+Chrono 10 2
+
+Chrono 18 16
+Chrono Express 17
+Chrono Premium 37
+Chrono Classic 44
+Chrono Relais Europe 49
+Chrono 13 BAL (instance relais et BP) 58
+Chrono 8 75
+Chrono 9 76
+Chrono 12 77
+Chrono Relais 86
+Chrono 13 (instance Poste obligatoire) 93
+Chrono 13 (remise pas de porte possible) 1F
+Chrono 18 (remise pas de porte possible) 1G
+Chrono Marchandises Dangereuses 13 1M
+Chrono Marchandises Dangereuses 18 1N
+Chrono 13 (Instance Agence) 1S
+Chrono 13 (instance Relais) iT
+Chrono 10 (instance agence) 10
+Chrono 18 (instance agence) 1V
+Chrono Medical 8 2A
+Chrono Medical 9 2B
+
+ÿ dpdgroup
+N7 chronopost
+
+Chrono Fresh Rendez-Vous 2E
+Chrono 18 BAL (instance relais et BP) 2L
+Chrono Rendez-Vous 20
+Chrono Freeze Same Day 2Q
+Chrono Fresh 13 2R
+Chrono Freeze 13 2S
+Chrono Fret DOM 3s
+Chrono 18 (instance Relais) 3Z
+Chrono Same Day 41
+Chrono Reverse 10 4S
+Chrono Fresh 12 4V
+Chrono Freeze 12 4W
+Chrono Fresh Classic 4x
+Chrono Medical 10 8A
+Chrono Medical 13 8B
+Chrono Medical 18 8C
+Chrono Médical 10 thermosensible 8D
+Chrono Medical 13 thermosensible 8E
+Chrono Medical 18 thermosensible 8F
+Chrono Medical Marchandises Dangereuses 13 8G
+Chrono Medical Marchandises Dangereuses 18 8H
+Chrono Medical Marchandises Dangereuses 13 thermosensible 8l
+Chrono Médical Marchandises Dangereuses 18 thermosensible 8J
+
+ÿ dpdgroup

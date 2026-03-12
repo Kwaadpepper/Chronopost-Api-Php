@@ -39,11 +39,11 @@ class ProofOfDeliveryByRefFactory implements Factory
     private function mapParcelPod(ParcelPOD $parcelPod): ParcelProofOfDelivery
     {
         return new ParcelProofOfDelivery(
-            skybillNumber: (string)$parcelPod->getSkybillNumber(),
-            podPresent: (bool)$parcelPod->getPodPresente(),
+            skybillNumber: (string) $parcelPod->getSkybillNumber(),
+            podPresent: (bool) $parcelPod->getPodPresente(),
             format: $parcelPod->getFormatPOD(),
             podData: $parcelPod->getPod(),
-            statusCode: (int)$parcelPod->getStatusCode(),
+            statusCode: (int) $parcelPod->getStatusCode(),
         );
     }
 }

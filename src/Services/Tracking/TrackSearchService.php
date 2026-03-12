@@ -46,7 +46,7 @@ class TrackSearchService implements TrackingServiceInterface
     /**
      * Constructor
      *
-     * @param array                                      $soapOptions  Additional options for the soap client.
+     * @param array<string, mixed>                       $soapOptions  Additional options for the soap client.
      * @param \ChronopostTracking\ServiceType\Track|null $trackService Injected track service (for testing).
      *
      * @phpcs:disable Generic.Files.LineLength.TooLong
@@ -90,8 +90,8 @@ class TrackSearchService implements TrackingServiceInterface
         // phpcs:enable
         $locale     = $locale ?? TrackingV2Locale::create(Locale::FR);
         $parameters = new TrackSkybillV2(
-            language: (string)$locale,
-            skybillNumber: (string)$trackingNumber,
+            language: (string) $locale,
+            skybillNumber: (string) $trackingNumber,
         );
 
         $result = $this->trackService->trackSkybillV2($parameters);
@@ -164,7 +164,7 @@ class TrackSearchService implements TrackingServiceInterface
         $parameters = new TrackSearch(
             accountNumber: $accountNumber->getAccountNumber(),
             password: $password->getPassword(),
-            language: (string)$locale,
+            language: (string) $locale,
             consigneesCountry: $consigneesCountry,
             consigneesRef: $consigneesRef,
             consigneesZipCode: $consigneesZipCode,
@@ -192,8 +192,8 @@ class TrackSearchService implements TrackingServiceInterface
 
         if ($response->getErrorCode() !== 0) {
             throw new TrackingException(
-                (string)$response->getErrorMessage(),
-                (int)$response->getErrorCode(),
+                (string) $response->getErrorMessage(),
+                (int) $response->getErrorCode(),
             );
         }
 
@@ -226,7 +226,7 @@ class TrackSearchService implements TrackingServiceInterface
         $parameters = new TrackWithSenderRef(
             accountNumber: $accountNumber->getAccountNumber(),
             password: $password->getPassword(),
-            language: (string)$locale,
+            language: (string) $locale,
             sendersRef: $senderRef,
         );
 
@@ -249,8 +249,8 @@ class TrackSearchService implements TrackingServiceInterface
 
         if ($response->getErrorCode() !== 0) {
             throw new TrackingException(
-                (string)$response->getErrorMessage(),
-                (int)$response->getErrorCode(),
+                (string) $response->getErrorMessage(),
+                (int) $response->getErrorCode(),
             );
         }
 
@@ -277,7 +277,7 @@ class TrackSearchService implements TrackingServiceInterface
         // phpcs:enable
         $locale     = $locale ?? TrackingV2Locale::create(Locale::FR);
         $parameters = new TrackESD(
-            language: (string)$locale,
+            language: (string) $locale,
             esdNumber: $esdNumber,
         );
 
@@ -298,8 +298,8 @@ class TrackSearchService implements TrackingServiceInterface
 
         if ($response->getErrorCode() !== 0) {
             throw new TrackingException(
-                (string)$response->getErrorMessage(),
-                (int)$response->getErrorCode(),
+                (string) $response->getErrorMessage(),
+                (int) $response->getErrorCode(),
             );
         }
 

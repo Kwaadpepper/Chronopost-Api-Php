@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kwaadpepper\ChronopostApiPhp\ObjectValues;
 
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ReferenceValue;

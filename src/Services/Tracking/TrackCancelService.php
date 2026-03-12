@@ -35,7 +35,7 @@ class TrackCancelService
     /**
      * Constructor
      *
-     * @param array                                       $soapOptions   Additional options for the soap client.
+     * @param array<string, mixed>                        $soapOptions   Additional options for the soap client.
      * @param \ChronopostTracking\ServiceType\Cancel|null $cancelService Injected cancel service (for testing).
      *
      * @phpcs:disable Generic.Files.LineLength.TooLong
@@ -87,8 +87,8 @@ class TrackCancelService
         $parameters = new CancelSkybill(
             accountNumber: $accountNumber->getAccountNumber(),
             password: $password->getPassword(),
-            language: (string)$locale,
-            skybillNumber: (string)$trackingNumber,
+            language: (string) $locale,
+            skybillNumber: (string) $trackingNumber,
         );
 
         $result = $this->cancelService->cancelSkybill($parameters);
@@ -108,8 +108,8 @@ class TrackCancelService
 
         if ($response->getErrorCode() !== 0) {
             throw new TrackingException(
-                (string)$response->getErrorMessage(),
-                (int)$response->getErrorCode(),
+                (string) $response->getErrorMessage(),
+                (int) $response->getErrorCode(),
             );
         }
 
@@ -141,13 +141,13 @@ class TrackCancelService
         $locale            = $locale ?? TrackingV2Locale::create(Locale::FR);
         $skybillNumbersCsv = implode(
             ',',
-            array_map(fn (TrackingNumber $tn) => (string)$tn, $trackingNumbers),
+            array_map(fn (TrackingNumber $tn) => (string) $tn, $trackingNumbers),
         );
 
         $parameters = new CancelListSkybill(
             accountNumber: $accountNumber->getAccountNumber(),
             password: $password->getPassword(),
-            language: (string)$locale,
+            language: (string) $locale,
             skybillNumber: $skybillNumbersCsv,
         );
 
@@ -168,8 +168,8 @@ class TrackCancelService
 
         if ($response->getErrorCode() !== 0) {
             throw new TrackingException(
-                (string)$response->getErrorMessage(),
-                (int)$response->getErrorCode(),
+                (string) $response->getErrorMessage(),
+                (int) $response->getErrorCode(),
             );
         }
 

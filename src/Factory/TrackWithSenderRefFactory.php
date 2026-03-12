@@ -47,7 +47,7 @@ class TrackWithSenderRefFactory implements Factory
         );
 
         return new ParcelEvents(
-            skybillNumber: (string)$listEvents->getSkybillNumber(),
+            skybillNumber: (string) $listEvents->getSkybillNumber(),
             events: $events,
         );
     }
@@ -60,10 +60,10 @@ class TrackWithSenderRefFactory implements Factory
     private function mapEvent(Event $event): EventInfo
     {
         return new EventInfo(
-            code: (string)$event->getCode(),
-            date: new DateTimeImmutable((string)$event->getEventDate()),
-            label: (string)$event->getEventLabel(),
-            highPriority: (bool)$event->getHighPriority(),
+            code: (string) $event->getCode(),
+            date: new DateTimeImmutable((string) $event->getEventDate()),
+            label: (string) $event->getEventLabel(),
+            highPriority: (bool) $event->getHighPriority(),
             npc: $event->getNPC(),
             officeLabel: $event->getOfficeLabel(),
             zipCode: $event->getZipCode(),

@@ -38,7 +38,7 @@ class CalculateService implements CalculateServiceInterface
     /**
      * Constructor
      *
-     * @param  array $soapOptions Additional options for the soap client.
+     * @param  array<string, mixed> $soapOptions Additional options for the soap client.
      */
     public function __construct(
         array $soapOptions = []
@@ -72,16 +72,16 @@ class CalculateService implements CalculateServiceInterface
         $parameters = new CalculateProducts(
             $accountNumber->getAccountNumber(),
             $password->getPassword(),
-            (string)$from->getCountryDelivery()->getCode(),
+            (string) $from->getCountryDelivery()->getCode(),
             $from->getPostCode(),
-            (string)$to->getCountryDelivery()->getCode(),
+            (string) $to->getCountryDelivery()->getCode(),
             $to->getPostCode(),
             $toCityName,
             $shippingType->oneLetterCode(),
-            (string)$weight,
-            $height !== null ? (string)$height : null,
-            $length !== null ? (string)$length : null,
-            $width !== null ? (string)$width : null,
+            (string) $weight,
+            $height !== null ? (string) $height : null,
+            $length !== null ? (string) $length : null,
+            $width !== null ? (string) $width : null,
             $shippingDate !== null ? $shippingDate->format('d/m/Y') : null
         );
 
@@ -122,9 +122,9 @@ class CalculateService implements CalculateServiceInterface
         ServiceCode $serviceCode,
     ): DeliveryTime {
         $parameters = new CalculateDeliveryTime(
-            (string)$from->getCountryDelivery()->getCode(),
+            (string) $from->getCountryDelivery()->getCode(),
             $from->getPostCode(),
-            (string)$to->getCountryDelivery()->getCode(),
+            (string) $to->getCountryDelivery()->getCode(),
             $to->getPostCode(),
             $toCityName,
             $productCode->getValue(),

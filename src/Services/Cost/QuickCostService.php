@@ -34,7 +34,7 @@ class QuickCostService implements QuickCostServiceInterface
     /**
      * Constructor
      *
-     * @param  array $soapOptions Additional options for the soap client.
+     * @param  array<string, mixed> $soapOptions Additional options for the soap client.
      */
     public function __construct(
         array $soapOptions = []
@@ -81,7 +81,7 @@ class QuickCostService implements QuickCostServiceInterface
             $password->getPassword(),
             $from->getPostCode(),
             $to->getPostCode(),
-            (string)$weight,
+            (string) $weight,
             $productCode->getValue(),
             $shippingType->oneLetterCode(),
         );

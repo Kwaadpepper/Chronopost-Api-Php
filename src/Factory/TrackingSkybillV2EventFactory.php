@@ -25,7 +25,7 @@ class TrackingSkybillV2EventFactory implements Factory
         $code         = $result->getCode();
         $date         = $result->getEventDate();
         $label        = $result->getEventLabel();
-        $highPriority = (bool)$result->getHighPriority();
+        $highPriority = (bool) $result->getHighPriority();
         $npc          = $result->getNpc();
         $officeLabel  = $result->getOfficeLabel();
         $zipCode      = $result->getZipCode();

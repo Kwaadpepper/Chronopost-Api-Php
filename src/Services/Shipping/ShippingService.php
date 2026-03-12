@@ -81,7 +81,7 @@ class ShippingService implements ShippingServiceInterface
     /**
      * Constructor
      *
-     * @param array                                         $soapOptions     Additional options for the soap client.
+     * @param array<string, mixed>                          $soapOptions     Additional options for the soap client.
      * @param \ChronopostShipping\ServiceType\Shipping|null $shippingService Injected shipping service for testing.
      */
     public function __construct(
@@ -161,12 +161,12 @@ class ShippingService implements ShippingServiceInterface
      *
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber                 $accountNumber
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                      $password
-     * @param array                                                                    $skybillValues
+     * @param array<int, SkyBillValue>                                                 $skybillValues
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
-     * @param array                                                                    $shippersValues
-     * @param array                                                                    $recipientsValues
-     * @param array                                                                    $referenceValues
-     * @param array                                                                    $scheduledValues
+     * @param array<int, ShipperValue>                                                 $shippersValues
+     * @param array<int, RecipientValue>                                               $recipientsValues
+     * @param array<int, ReferenceValue>                                               $referenceValues
+     * @param array<int, ScheduledValue>                                               $scheduledValues
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\EsdValue|null          $esdValue
      * @param integer                                                                  $numberOfParcel
      * @param boolean                                                                  $multiParcel
@@ -179,7 +179,6 @@ class ShippingService implements ShippingServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the shipping operation fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
      * @phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
-     * @phpcs:disable Squiz.Commenting.FunctionCommentThrowTag.WrongNumber
      */
     public function multiParcelV4(
         AccountNumber $accountNumber,
@@ -399,12 +398,12 @@ class ShippingService implements ShippingServiceInterface
      *
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber                 $accountNumber
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                      $password
-     * @param array                                                                    $skybillValues
+     * @param array<int, SkyBillValue>                                                 $skybillValues
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
-     * @param array                                                                    $shippersValues
-     * @param array                                                                    $recipientsValues
-     * @param array                                                                    $referenceValues
-     * @param array                                                                    $scheduledValues
+     * @param array<int, ShipperValue>                                                 $shippersValues
+     * @param array<int, RecipientValue>                                               $recipientsValues
+     * @param array<int, ReferenceValue>                                               $referenceValues
+     * @param array<int, ScheduledValue>                                               $scheduledValues
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\EsdValue|null          $esdValue
      * @param integer                                                                  $numberOfParcel
      * @param boolean                                                                  $multiParcel
@@ -417,7 +416,6 @@ class ShippingService implements ShippingServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails or returns an invalid response.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the shipping operation fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
-     * @phpcs:disable Squiz.Commenting.FunctionCommentThrowTag.WrongNumber
      */
     public function multiParcelV7(
         AccountNumber $accountNumber,
@@ -590,11 +588,11 @@ class ShippingService implements ShippingServiceInterface
      *
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber                 $accountNumber
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                      $password
-     * @param array                                                                    $skybillValues
+     * @param array<int, SkyBillValue>                                                 $skybillValues
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue           $shipperValue
-     * @param array                                                                    $recipientsValues
-     * @param array                                                                    $referenceValues
+     * @param array<int, RecipientValue>                                               $recipientsValues
+     * @param array<int, ReferenceValue>                                               $referenceValues
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\EsdValue|null          $esdValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ScheduledValue|null    $scheduledValue
      * @param integer                                                                  $numberOfParcel
@@ -1479,7 +1477,7 @@ class ShippingService implements ShippingServiceInterface
     /**
      * Populates base skybill fields common to all skybill types.
      *
-     * @param SkybillValueChronopost                                        $skybill
+     * @param SkybillValueChronopost                                         $skybill
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue $skybillValue
      *
      * @return void

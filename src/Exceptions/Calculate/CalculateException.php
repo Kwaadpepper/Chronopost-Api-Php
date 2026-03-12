@@ -28,7 +28,7 @@ class CalculateException extends \RuntimeException
     ) {
         parent::__construct($message, $code, $previous);
 
-        $this->errorCode = (string)$code;
+        $this->errorCode = (string) $code;
     }
 
     /**
