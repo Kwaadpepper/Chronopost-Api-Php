@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace Kwaadpepper\ChronopostApiPhp;
 
 use DateTime;
+use ChronopostShipping\StructType\RecipientValue as RecipientValueChronopost;
+use ChronopostShipping\StructType\ShipperValue as ShipperValueChronopost;
+use ChronopostShipping\StructType\SkybillValueBase;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\DeliveryTime;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MonoParcelV7;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\RoutingInfo;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ReservationMultiParcelResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ReservationResult;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ShippingInformation;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\CancelListResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\CancelResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\EsdTrackResult;
@@ -43,6 +49,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
 use Kwaadpepper\ChronopostApiPhp\Services\Calculate\CalculateService;
 use Kwaadpepper\ChronopostApiPhp\Services\Cost\QuickCostService;
 use Kwaadpepper\ChronopostApiPhp\Services\RelayPoint\RelayPointService;
+use Kwaadpepper\ChronopostApiPhp\Services\Shipping\ShippingLabelService;
 use Kwaadpepper\ChronopostApiPhp\Services\Shipping\ShippingService;
 use Kwaadpepper\ChronopostApiPhp\Services\Tracking\ProofOfDeliveryService;
 use Kwaadpepper\ChronopostApiPhp\Services\Tracking\TrackCancelService;
@@ -58,6 +65,8 @@ class ChronopostApi
     private ProofOfDeliveryService $proofOfDeliveryService;
 
     private ShippingService $shippingService;
+
+    private ShippingLabelService $shippingLabelService;
 
     private CalculateService $calculateService;
 
@@ -84,6 +93,7 @@ class ChronopostApi
         $this->trackCancelService     = new TrackCancelService($defaultSopapOptions);
         $this->proofOfDeliveryService = new ProofOfDeliveryService($defaultSopapOptions);
         $this->shippingService        = new ShippingService($defaultSopapOptions);
+        $this->shippingLabelService   = new ShippingLabelService($defaultSopapOptions);
         $this->calculateService       = new CalculateService($defaultSopapOptions);
         $this->quickCostService       = new QuickCostService($defaultSopapOptions);
         $this->relayPointService      = new RelayPointService($defaultSopapOptions);
@@ -722,6 +732,88 @@ class ChronopostApi
             $referenceValue,
             $esdValue,
             $skyBillOutputMode,
+        );
+    }
+
+    /**
+     * Get a transport label from a skybill number.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
+     */
+    public function getShippingLabel(
+        string $numberSearch,
+        string $mode = 'PDF',
+        ?string $key = null,
+    ): SkybillLabel {
+        return $this->shippingLabelService->getSkybill(
+            $this->accountNumber,
+            $this->password,
+            $numberSearch,
+            $mode,
+            $key,
+        );
+    }
+
+    /**
+     * Get a reserved transport label from reservation number.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
+     */
+    public function getReservedShippingLabel(
+        string $reservationNumber,
+        string $mode = 'PDF',
+    ): SkybillLabel {
+        return $this->shippingLabelService->getReservedSkybillWithTypeAndModeByReservation(
+            $this->accountNumber,
+            $this->password,
+            $reservationNumber,
+            $mode,
+        );
+    }
+
+    /**
+     * Get routing information for a destination.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
+     */
+    public function getRouting(
+        string $shipperDepot,
+        string $countryCode,
+        string $zipCode,
+        ?string $socode = null,
+        ?string $ascode = null,
+    ): RoutingInfo {
+        return $this->shippingLabelService->getRouting(
+            $this->accountNumber,
+            $this->password,
+            $shipperDepot,
+            $countryCode,
+            $zipCode,
+            $socode,
+            $ascode,
+        );
+    }
+
+    /**
+     * Get shipping information for a shipment context.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
+     */
+    public function getShippingInformation(
+        ShipperValueChronopost $shipperValue,
+        RecipientValueChronopost $recipientValue,
+        SkybillValueBase $skybillValueBase,
+    ): ShippingInformation {
+        return $this->shippingLabelService->getShippingInformation(
+            $this->accountNumber,
+            $this->password,
+            $shipperValue,
+            $recipientValue,
+            $skybillValueBase,
         );
     }
 }
