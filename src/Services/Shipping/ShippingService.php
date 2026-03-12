@@ -17,6 +17,7 @@ use ChronopostShipping\StructType\ShipperValueV2;
 use ChronopostShipping\StructType\ShippingMultiParcelV4;
 use ChronopostShipping\StructType\SkybillParamsValueV2;
 use ChronopostShipping\StructType\SkybillWithDimensionsValueV6;
+use Kwaadpepper\ChronopostApiPhp\Contracts\ShippingServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4;
 use Kwaadpepper\ChronopostApiPhp\Enums\SkyBillOutputMode;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
@@ -36,7 +37,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
-class ShippingService
+class ShippingService implements ShippingServiceInterface
 {
     /**
      * Soap tracking service

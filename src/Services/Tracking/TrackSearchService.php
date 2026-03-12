@@ -8,6 +8,7 @@ use ChronopostTracking\ClassMap;
 use ChronopostTracking\ServiceType\Track;
 use ChronopostTracking\StructType\EventInfoComp;
 use ChronopostTracking\StructType\TrackSkybillV2;
+use Kwaadpepper\ChronopostApiPhp\Contracts\TrackingServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\Enums\Locale;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\TrackingException;
@@ -16,7 +17,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
-class TrackSearchService
+class TrackSearchService implements TrackingServiceInterface
 {
     /**
      * Soap tracking service

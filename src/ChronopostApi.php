@@ -295,7 +295,7 @@ class ChronopostApi
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Relay\RelaySearchException If the API returns an error response.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError          If the API call fails or returns an invalid response.
      */
-    public function seachRelayPoint(
+    public function searchRelayPoint(
         ProductCode $productCode,
         AddressSearch $addressSearch,
         WantedShippingDate $wantedShippingDate,
@@ -305,7 +305,7 @@ class ChronopostApi
         ?int $maxResults = null,
         ?int $radiusInKm = null
     ): RelaySearchResult {
-        return $this->relayPointService->seachRelayPoint(
+        return $this->relayPointService->searchRelayPoint(
             $this->accountNumber,
             $this->password,
             $productCode,

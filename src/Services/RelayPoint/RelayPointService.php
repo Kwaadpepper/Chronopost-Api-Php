@@ -7,6 +7,7 @@ namespace Kwaadpepper\ChronopostApiPhp\Services\RelayPoint;
 use ChronopostRelay\ClassMap;
 use ChronopostRelay\ServiceType\Recherche;
 use ChronopostRelay\StructType\RecherchePointChronopostInter;
+use Kwaadpepper\ChronopostApiPhp\Contracts\RelaySearchServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\Relay\RelaySearchException;
@@ -28,7 +29,7 @@ use WsdlToPhp\PackageBase\SoapClientInterface;
  * N'hésitez pas à solliciter votre commercial afin de vous assurer
  * des contraintes avant de proposer une livraison en consigne à vos clients.
 */
-class RelayPointService
+class RelayPointService implements RelaySearchServiceInterface
 {
     /**
      * Soap tracking service
@@ -84,7 +85,7 @@ class RelayPointService
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Relay\RelaySearchException If the API returns an error response.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError          If the API call fails or returns an invalid response.
      */
-    public function seachRelayPoint(
+    public function searchRelayPoint(
         AccountNumber $accountNumber,
         Password $password,
         ProductCode $productCode,

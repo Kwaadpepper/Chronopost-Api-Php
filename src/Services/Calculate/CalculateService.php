@@ -8,6 +8,8 @@ use ChronopostQuickCost\ClassMap;
 use ChronopostQuickCost\ServiceType\Calculate;
 use ChronopostQuickCost\StructType\CalculateDeliveryTime;
 use ChronopostQuickCost\StructType\CalculateProducts;
+use Kwaadpepper\ChronopostApiPhp\Contracts\CalculateServiceInterface;
+use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\DeliveryTime;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
@@ -21,7 +23,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode;
 use WsdlToPhp\PackageBase\SoapClientInterface;
 
-class CalculateService
+class CalculateService implements CalculateServiceInterface
 {
     /**
      * Calculate service
@@ -118,7 +120,7 @@ class CalculateService
         ProductCode $productCode,
         ShippingType $shippingType,
         ServiceCode $serviceCode,
-    ) {
+    ): DeliveryTime {
         $parameters = new CalculateDeliveryTime(
             (string) $from->getCountryDelivery()->getCode(),
             $from->getPostCode(),
