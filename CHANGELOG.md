@@ -1,5 +1,9 @@
 ##  (2026-03-12)
 
+### Features
+
+* add facade interfaces for dependency injection and testing ([2b4ece9](https://github.com/Kwaadpepper/Chronopost-Api-Php/commit/2b4ece95baf19308be27f8bd0c702f1f0699e45c))
+
 ## [4.0.0](https://github.com/Kwaadpepper/Chronopost-Api-Php/compare/3.1.0...4.0.0) (2026-03-12)
 
 ### Features
@@ -19,6 +23,8 @@
 
 * handle unknown ESD error codes and nullable relay opening hours ([7bd33b6](https://github.com/Kwaadpepper/Chronopost-Api-Php/commit/7bd33b692e68f6718b1c1b0536770d8326717af5))
 * **tracking:** correct TrackingException PSR-4 namespace\n\nThe namespace was Kwaadpepper\\ChronopostApiPhp\\Exceptions instead of\nKwaadpepper\\ChronopostApiPhp\\Exceptions\\Tracking, which violated PSR-4\nautoloading for the file location at src/Exceptions/Tracking/." ([86cc89c](https://github.com/Kwaadpepper/Chronopost-Api-Php/commit/86cc89c768e90e49cf521967f03574afcb409c5c))
+
+## [3.1.0](https://github.com/Kwaadpepper/Chronopost-Api-Php/compare/3.0.1...3.1.0) (2026-03-11)
 
 ## [3.0.1](https://github.com/Kwaadpepper/Chronopost-Api-Php/compare/3.0.0...3.0.1) (2026-03-10)
 
