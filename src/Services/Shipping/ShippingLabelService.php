@@ -15,12 +15,8 @@ use ChronopostShipping\StructType\GetRouting;
 use ChronopostShipping\StructType\GetShippingInformation;
 use ChronopostShipping\StructType\GetSkybill;
 use ChronopostShipping\StructType\HeaderValue;
-use ChronopostShipping\StructType\RecipientValue as RecipientValueChronopost;
-use ChronopostShipping\StructType\ResultGetReservedSkybillValue;
-use ChronopostShipping\StructType\ResultGetReservedSkybillWithTypeValue;
-use ChronopostShipping\StructType\ResultGetRouting;
-use ChronopostShipping\StructType\ResultShippingInfo;
-use ChronopostShipping\StructType\ShipperValue as ShipperValueChronopost;
+use ChronopostShipping\StructType\RecipientValue;
+use ChronopostShipping\StructType\ShipperValue;
 use ChronopostShipping\StructType\SkybillValueBase;
 use Kwaadpepper\ChronopostApiPhp\Contracts\ShippingLabelServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\RoutingInfo;
@@ -47,7 +43,7 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     protected static string $serviceUrl = 'https://ws.chronopost.fr/shipping-cxf/ShippingServiceWS?wsdl';
 
     /**
-     * @param array<string, mixed>                  $soapOptions
+     * @param array<string, mixed>                     $soapOptions
      * @param \ChronopostShipping\ServiceType\Get|null $getService
      */
     public function __construct(array $soapOptions = [], ?Get $getService = null)
@@ -69,8 +65,14 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber Account number.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      Account password.
+     * @param string                                                   $numberSearch  Skybill number.
+     * @param string                                                   $mode          Label mode (e.g. PDF).
+     * @param string|null                                              $key           Authentication key.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the SOAP call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getSkybill(
         AccountNumber $accountNumber,
@@ -99,8 +101,12 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber     Account number.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password          Account password.
+     * @param string                                                   $reservationNumber Reservation number.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the SOAP call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getReservedSkybill(
         AccountNumber $accountNumber,
@@ -124,8 +130,12 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber     Account number.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password          Account password.
+     * @param string                                                   $reservationNumber Reservation number.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the SOAP call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getReservedSkybillWithType(
         AccountNumber $accountNumber,
@@ -149,8 +159,13 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber     Account number.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password          Account password.
+     * @param string                                                   $reservationNumber Reservation number.
+     * @param string                                                   $mode              Label mode.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the SOAP call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getReservedSkybillWithTypeAndMode(
         AccountNumber $accountNumber,
@@ -176,8 +191,13 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber Account number.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      Account password.
+     * @param string                                                   $numberSearch  Search number.
+     * @param string                                                   $mode          Label mode.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the SOAP call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getReservedSkybillWithTypeAndModeAuth(
         AccountNumber $accountNumber,
@@ -205,8 +225,13 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber     Account number.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password          Account password.
+     * @param string                                                   $reservationNumber Reservation number.
+     * @param string                                                   $mode              Label mode.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the SOAP call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getReservedSkybillWithTypeAndModeByReservation(
         AccountNumber $accountNumber,
@@ -234,8 +259,16 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber Account number.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      Account password.
+     * @param string                                                   $shipperDepot  Shipper depot code.
+     * @param string                                                   $countryCode   Destination country code.
+     * @param string                                                   $zipCode       Destination zip code.
+     * @param string|null                                              $socode        Optional SO code.
+     * @param string|null                                              $ascode        Optional AS code.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\RoutingInfo
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the SOAP call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getRouting(
         AccountNumber $accountNumber,
@@ -269,14 +302,20 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
-     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber    Account number.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password         Account password.
+     * @param \ChronopostShipping\StructType\ShipperValue              $shipperValue     Shipper payload.
+     * @param \ChronopostShipping\StructType\RecipientValue            $recipientValue   Recipient payload.
+     * @param \ChronopostShipping\StructType\SkybillValueBase          $skybillValueBase Skybill payload.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ShippingInformation
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the SOAP call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getShippingInformation(
         AccountNumber $accountNumber,
         Password $password,
-        ShipperValueChronopost $shipperValue,
-        RecipientValueChronopost $recipientValue,
+        ShipperValue $shipperValue,
+        RecipientValue $recipientValue,
         SkybillValueBase $skybillValueBase,
     ): ShippingInformation {
         $parameters = new GetShippingInformation(
@@ -309,7 +348,11 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @param bool|object $result
+     * @param boolean|object $result      SOAP response object or false.
+     * @param string         $method      SOAP method name.
+     * @param string         $nullMessage Message when return payload is null.
+     * @return object
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If SOAP call or payload is invalid.
      */
     private function extractReturnOrThrow(bool|object $result, string $method, string $nullMessage): object
     {
@@ -332,6 +375,12 @@ class ShippingLabelService implements ShippingLabelServiceInterface
         return $return;
     }
 
+    /**
+     * @param integer|null $errorCode    API error code.
+     * @param string|null  $errorMessage API error message.
+     * @return void
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If API reported an error.
+     */
     private function assertNoShippingError(?int $errorCode, ?string $errorMessage): void
     {
         if ($errorCode !== null && $errorCode !== 0) {

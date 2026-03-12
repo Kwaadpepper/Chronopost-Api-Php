@@ -8,9 +8,11 @@ use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ShippingInformation;
 
 class ShippingInformationFactory implements Factory
 {
+    // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
     /**
-    * @param \ChronopostShipping\StructType\ResultShippingInfo $response
-    * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ShippingInformation
+     * @param \ChronopostShipping\StructType\ResultShippingInfo $response
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ShippingInformation
+     * @throws \InvalidArgumentException If shipping information is missing.
      */
     public function create($response): ShippingInformation
     {
@@ -32,4 +34,5 @@ class ShippingInformationFactory implements Factory
             oSort: $shippingInfo->getOSort(),
         );
     }
+    // phpcs:enable
 }

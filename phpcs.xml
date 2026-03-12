@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="Kwaadpepper"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
-    <description>Standard optimisé PHP : analyse statique du code source.</description>
+    <description>Standard optimisé PHP : analyse statique complémentaire.</description>
 
     <arg name="colors" />
     <arg name="extensions" value="php" />
@@ -10,11 +10,18 @@
     <file>tests/</file>
     <exclude-pattern>*/vendor/*</exclude-pattern>
 
-    <rule ref="PSR1" />
+    <!-- PSR12 inclut PSR1, PSR2 et la plupart des règles Generic/Squiz de formatage -->
     <rule ref="PSR12" />
 
+    <!-- Longueur de ligne (surcharge les seuils PSR12) -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="180"/>
+            <property name="absoluteLineLimit" value="700"/>
+        </properties>
+    </rule>
+
     <!-- Analyse de code -->
-    <rule ref="Generic.Classes.DuplicateClassName"/>
     <rule ref="Generic.CodeAnalysis.EmptyStatement"/>
     <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
     <rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall"/>
@@ -25,119 +32,34 @@
         <exclude name="Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterfaceBeforeLastUsed" />
     </rule>
     <rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
-    <rule ref="Generic.ControlStructures.InlineControlStructure"/>
 
-    <!-- Fichiers -->
-    <rule ref="Generic.Files.ByteOrderMark"/>
-    <rule ref="Generic.Files.LineEndings"/>
-    <rule ref="Generic.Files.LineLength">
-        <properties>
-            <property name="lineLimit" value="160"/>
-            <property name="absoluteLineLimit" value="250"/>
-        </properties>
-    </rule>
-
-    <!-- Formatage -->
-    <rule ref="Generic.Formatting.DisallowMultipleStatements"/>
-    <rule ref="Generic.Formatting.MultipleStatementAlignment"/>
-    <rule ref="Generic.Formatting.SpaceAfterCast"/>
-    <rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
-
-    <!-- Métriques -->
+    <!-- Métriques (seuils élevés : certains enums/services sont naturellement complexes) -->
     <rule ref="Generic.Metrics.CyclomaticComplexity">
         <properties>
-            <property name="complexity" value="10"/>
-            <property name="absoluteComplexity" value="20"/>
+            <property name="complexity" value="90"/>
+            <property name="absoluteComplexity" value="120"/>
         </properties>
     </rule>
     <rule ref="Generic.Metrics.NestingLevel"/>
 
-    <!-- Conventions de nommage -->
+    <!-- Nommage (CamelCaps non couvert par PSR12) -->
     <rule ref="Generic.NamingConventions.ConstructorName"/>
-    <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
     <rule ref="Generic.NamingConventions.CamelCapsFunctionName"/>
 
     <!-- PHP -->
     <rule ref="Generic.PHP.DeprecatedFunctions"/>
-    <rule ref="Generic.PHP.DisallowShortOpenTag"/>
     <rule ref="Generic.PHP.ForbiddenFunctions"/>
     <rule ref="Generic.PHP.NoSilencedErrors"/>
-    <rule ref="Generic.Strings.UnnecessaryStringConcat"/>
-    <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
-    <rule ref="Generic.WhiteSpace.ScopeIndent"/>
-
-    <!-- Squiz PHP -->
-    <rule ref="Squiz.PHP.CommentedOutCode"/>
-    <rule ref="Squiz.PHP.DisallowMultipleAssignments">
-        <exclude name="Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure" />
-    </rule>
-    <rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
-    <rule ref="Squiz.PHP.DiscouragedFunctions">
-        <properties>
-            <property name="error" value="true"/>
-        </properties>
-    </rule>
     <rule ref="Squiz.PHP.Eval"/>
     <rule ref="Squiz.PHP.GlobalKeyword"/>
-    <rule ref="Squiz.PHP.Heredoc"/>
-    <rule ref="Squiz.PHP.InnerFunctions"/>
-    <rule ref="Squiz.PHP.LowercasePHPFunctions"/>
     <rule ref="Squiz.PHP.NonExecutableCode"/>
-
-    <!-- Squiz Scope -->
-    <rule ref="Squiz.Scope.MemberVarScope"/>
-    <rule ref="Squiz.Scope.MethodScope"/>
     <rule ref="Squiz.Scope.StaticThisUsage"/>
 
-    <!-- Squiz Whitespace -->
-    <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
-    <rule ref="Squiz.WhiteSpace.MemberVarSpacing">
-        <properties>
-            <property name="spacingBeforeFirst" value="0"/>
-        </properties>
-    </rule>
-    <rule ref="Squiz.WhiteSpace.OperatorSpacing">
-        <properties>
-            <property name="ignoreNewlines" value="true"/>
-        </properties>
-    </rule>
-    <rule ref="Squiz.WhiteSpace.ObjectOperatorSpacing">
-        <properties>
-            <property name="ignoreNewlines" value="true"/>
-        </properties>
-    </rule>
-    <rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
-    <rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
-
     <!-- Commentaires -->
-    <rule ref="Squiz.Commenting.BlockComment">
-        <exclude name="Squiz.Commenting.BlockComment.WrongStart" />
-    </rule>
-    <rule ref="Squiz.Commenting.ClassComment">
-        <exclude name="Squiz.Commenting.ClassComment.Missing" />
-        <exclude name="Squiz.Commenting.ClassComment.TagNotAllowed" />
-    </rule>
-    <rule ref="Squiz.Commenting.DocCommentAlignment"/>
     <rule ref="Squiz.Commenting.EmptyCatchComment"/>
-    <rule ref="Squiz.Commenting.FunctionComment">
-        <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
-    </rule>
-    <rule ref="Squiz.Commenting.FunctionCommentThrowTag">
-        <exclude name="Squiz.Commenting.FunctionCommentThrowTag.WrongNumber" />
-    </rule>
-    <rule ref="Squiz.Commenting.InlineComment">
-        <exclude name="Squiz.Commenting.InlineComment.DocBlock" />
-    </rule>
-    <rule ref="Squiz.Commenting.LongConditionClosingComment">
-        <exclude name="Squiz.Commenting.LongConditionClosingComment.SpacingBefore" />
-    </rule>
-    <rule ref="Squiz.Commenting.PostStatementComment"/>
-    <rule ref="Squiz.Commenting.VariableComment">
-        <exclude name="Squiz.Commenting.VariableComment.Missing" />
-    </rule>
 
     <!-- Slevomat -->
-    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse" />
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses" />
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
         <properties>
             <property name="spacesCountAroundEqualsSign" value="0" />

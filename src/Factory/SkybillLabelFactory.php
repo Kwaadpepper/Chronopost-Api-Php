@@ -22,14 +22,14 @@ class SkybillLabelFactory implements Factory
 
     /**
      * @param \ChronopostShipping\StructType\ResultGetReservedSkybillValue|\ChronopostShipping\StructType\ResultGetReservedSkybillWithTypeValue $response
-     * @param string $identifier
+     * @param string                                                                                                                            $identifier
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel
+     * @throws \InvalidArgumentException If skybill label payload is missing.
      */
     public function createWithIdentifier(
         ResultGetReservedSkybillValue|ResultGetReservedSkybillWithTypeValue $response,
         string $identifier
-    ): SkybillLabel
-    {
+    ): SkybillLabel {
         $pdf = $response->getSkybill();
 
         if ($pdf === null || $pdf === '') {
@@ -49,6 +49,10 @@ class SkybillLabelFactory implements Factory
         );
     }
 
+    /**
+     * @param string $value Candidate string.
+     * @return boolean
+     */
     private function isBase64(string $value): bool
     {
         if ($value === '' || strlen($value) % 4 !== 0) {
