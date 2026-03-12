@@ -38,6 +38,10 @@ To run the tests, use PHPUnit:
 vendor/bin/phpunit
 ```
 
+## Changelog
+
+Release notes are maintained in [CHANGELOG.md](CHANGELOG.md).
+
 ## Contribution
 
 Contributions are welcome! Please submit a pull request or open an issue to report a problem.

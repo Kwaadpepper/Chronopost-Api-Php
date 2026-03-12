@@ -34,6 +34,12 @@
         }
     ],
     "scripts": {
+        "changelog": [
+            "npx -y -p conventional-changelog -p conventional-changelog-conventionalcommits conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0"
+        ],
+        "changelog:latest": [
+            "npx -y -p conventional-changelog -p conventional-changelog-conventionalcommits conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 1"
+        ],
         "lint": [
             "@php vendor/bin/phpcs src",
             "@php vendor/bin/phpcs src"
