@@ -1,5 +1,7 @@
 ##  (2026-03-12)
 
+## [4.0.0](https://github.com/Kwaadpepper/Chronopost-Api-Php/compare/3.1.0...4.0.0) (2026-03-12)
+
 ### Features
 
 * add DeliverySlotService — search slots, confirm and geocode (Phase 7) ([2639634](https://github.com/Kwaadpepper/Chronopost-Api-Php/commit/26396341d6c0464c3e3bda6bc2ca1b956324492f))
