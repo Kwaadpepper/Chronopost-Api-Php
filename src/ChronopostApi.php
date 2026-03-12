@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace Kwaadpepper\ChronopostApiPhp;
 
 use DateTime;
+use ChronopostShipping\StructType\AdresseEnlevementV3;
+use ChronopostShipping\StructType\DestinatairesDpd;
+use ChronopostShipping\StructType\DonneurDOrdre;
+use ChronopostShipping\StructType\HeaderValue;
+use ChronopostShipping\StructType\Options;
+use ChronopostShipping\StructType\ParticularitesEsd;
 use ChronopostShipping\StructType\RecipientValue as RecipientValueChronopost;
 use ChronopostShipping\StructType\ShipperValue as ShipperValueChronopost;
 use ChronopostShipping\StructType\SkybillValueBase;
@@ -12,8 +18,12 @@ use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\DeliveryTime;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\CancelPickupResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MonoParcelV7;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupConstraints;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupCreationResult;
+use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupFeasibility;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\RoutingInfo;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ReservationMultiParcelResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ReservationResult;
@@ -49,6 +59,7 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
 use Kwaadpepper\ChronopostApiPhp\Services\Calculate\CalculateService;
 use Kwaadpepper\ChronopostApiPhp\Services\Cost\QuickCostService;
 use Kwaadpepper\ChronopostApiPhp\Services\RelayPoint\RelayPointService;
+use Kwaadpepper\ChronopostApiPhp\Services\Shipping\PickupService;
 use Kwaadpepper\ChronopostApiPhp\Services\Shipping\ShippingLabelService;
 use Kwaadpepper\ChronopostApiPhp\Services\Shipping\ShippingService;
 use Kwaadpepper\ChronopostApiPhp\Services\Tracking\ProofOfDeliveryService;
@@ -74,6 +85,8 @@ class ChronopostApi
 
     private RelayPointService $relayPointService;
 
+    private PickupService $pickupService;
+
     /**
      * Constructor
      *
@@ -97,6 +110,7 @@ class ChronopostApi
         $this->calculateService       = new CalculateService($defaultSopapOptions);
         $this->quickCostService       = new QuickCostService($defaultSopapOptions);
         $this->relayPointService      = new RelayPointService($defaultSopapOptions);
+        $this->pickupService          = new PickupService($defaultSopapOptions);
     }
 
     /**
@@ -814,6 +828,130 @@ class ChronopostApi
             $shipperValue,
             $recipientValue,
             $skybillValueBase,
+        );
+    }
+
+    /**
+     * Check if a pickup (ESD) is feasible.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\PickupException
+     */
+    public function checkPickupFeasibility(
+        ShipperValueChronopost $shipperValue,
+        string $retrievalDateTime,
+        string $closingDateTime,
+    ): PickupFeasibility {
+        return $this->pickupService->checkFeasibility(
+            $shipperValue,
+            $retrievalDateTime,
+            $closingDateTime,
+        );
+    }
+
+    /**
+     * Search pickup constraints for a location.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\PickupException
+     */
+    public function searchPickupConstraints(
+        string $country,
+        string $zipCode,
+        string $city,
+    ): PickupConstraints {
+        return $this->pickupService->searchConstraints(
+            $this->accountNumber,
+            $this->password,
+            $country,
+            $zipCode,
+            $city,
+        );
+    }
+
+    /**
+     * Create a national pickup (ESD).
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\PickupException
+     *
+     * @phpcs:disable Generic.Files.LineLength.TooLong
+     */
+    public function createNationalPickup(
+        HeaderValue $headerValue,
+        string $datePassage,
+        string $datePassageFermeture,
+        DonneurDOrdre $donneurDOrdre,
+        AdresseEnlevementV3 $adresseEnlevement,
+        ?ParticularitesEsd $particularitesEsd = null,
+        ?string $referenceEsdClient = null,
+        ?string $contenu = null,
+        ?Options $options = null,
+        ?string $locale = null,
+    ): PickupCreationResult {
+        // phpcs:enable
+        return $this->pickupService->createNationalPickup(
+            $this->accountNumber,
+            $this->password,
+            $headerValue,
+            $datePassage,
+            $datePassageFermeture,
+            $donneurDOrdre,
+            $adresseEnlevement,
+            $particularitesEsd,
+            $referenceEsdClient,
+            $contenu,
+            $options,
+            $locale,
+        );
+    }
+
+    /**
+     * Create a European pickup (ESD).
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\PickupException
+     *
+     * @phpcs:disable Generic.Files.LineLength.TooLong
+     */
+    public function createEuropeanPickup(
+        HeaderValue $headerValue,
+        string $datePassage,
+        DonneurDOrdre $donneurDOrdre,
+        AdresseEnlevementV3 $adresseEnlevement,
+        ?DestinatairesDpd $destinatairesEsd = null,
+        ?string $locale = null,
+    ): PickupCreationResult {
+        // phpcs:enable
+        return $this->pickupService->createEuropeanPickup(
+            $this->accountNumber,
+            $this->password,
+            $headerValue,
+            $datePassage,
+            $donneurDOrdre,
+            $adresseEnlevement,
+            $destinatairesEsd,
+            $locale,
+        );
+    }
+
+    /**
+     * Cancel one or more pickups (ESD).
+     *
+     * @param string[] $esdNumbers
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\PickupException
+     */
+    public function cancelPickups(
+        array $esdNumbers,
+        ?string $locale = null,
+    ): CancelPickupResult {
+        return $this->pickupService->cancelPickups(
+            $this->accountNumber,
+            $this->password,
+            $esdNumbers,
+            $locale,
         );
     }
 }
