@@ -16,7 +16,12 @@ parameters:
             identifier: staticMethod.alreadyNarrowedType
             path: tests/*
 
-        # class_implements returns array<string, class-string>, docblock narrowing is acceptable
+        # assertNull / assertCount on known types is intentional in tests
         -
-            identifier: varTag.nativeType
+            identifier: method.alreadyNarrowedType
+            path: tests/*
+
+        # method_exists on known classes is intentional in architecture tests
+        -
+            identifier: function.alreadyNarrowedType
             path: tests/*
