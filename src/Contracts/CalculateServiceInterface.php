@@ -37,4 +37,19 @@ interface CalculateServiceInterface
         ShippingType $shippingType,
         ServiceCode $serviceCode,
     ): DeliveryTime;
+
+    public function calculateProductsV2(
+        string $caller,
+        PostCode $from,
+        PostCode $to,
+        string $toCityName,
+        ShippingType $shippingType,
+        float $weight,
+        ?float $height = null,
+        ?float $length = null,
+        ?float $width = null,
+        ?\DateTime $shippingDate = null,
+        ?string $nationalite = null,
+        ?string $isPart = null,
+    ): ProductList;
 }

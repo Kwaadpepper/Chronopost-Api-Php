@@ -15,6 +15,7 @@ use ChronopostShipping\StructType\RecipientValue as RecipientValueChronopost;
 use ChronopostShipping\StructType\ShipperValue as ShipperValueChronopost;
 use ChronopostShipping\StructType\SkybillValueBase;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\DeliveryTime;
+use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductCatalog;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult;
@@ -952,6 +953,99 @@ class ChronopostApi
             $this->password,
             $esdNumbers,
             $locale,
+        );
+    }
+
+    /**
+     * Calculate possible products for a shipment (V2, with caller token).
+     *
+     * @param  string                                                   $caller       The caller token.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode      $from         The sender's postal code.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode      $to           The recipient's postal code.
+     * @param  string                                                   $toCityName   The recipient's city name.
+     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType         $shippingType The shipping type.
+     * @param  float                                                    $weight       The weight in kilograms.
+     * @param  float|null                                               $height       The height in centimeters.
+     * @param  float|null                                               $length       The length in centimeters.
+     * @param  float|null                                               $width        The width in centimeters.
+     * @param  \DateTime|null                                           $shippingDate The desired shipping date.
+     * @param  string|null                                              $nationalite  The nationality code.
+     * @param  string|null                                              $isPart       Whether the sender is a private individual.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList  The list of possible products.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Calculate\CalculateException If the API returns an error.
+     */
+    public function calculatePossibleProductsForShippingV2(
+        string $caller,
+        PostCode $from,
+        PostCode $to,
+        string $toCityName,
+        ShippingType $shippingType,
+        float $weight,
+        ?float $height = null,
+        ?float $length = null,
+        ?float $width = null,
+        ?DateTime $shippingDate = null,
+        ?string $nationalite = null,
+        ?string $isPart = null,
+    ): ProductList {
+        return $this->calculateService->calculateProductsV2(
+            $caller,
+            $from,
+            $to,
+            $toCityName,
+            $shippingType,
+            $weight,
+            $height,
+            $length,
+            $width,
+            $shippingDate,
+            $nationalite,
+            $isPart,
+        );
+    }
+
+    /**
+     * Get available products for a route (without pricing).
+     *
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode         $from         The sender's postal code.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode         $to           The recipient's postal code.
+     * @param  string                                                      $toCityName   The recipient's city name.
+     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType            $shippingType The shipping type.
+     * @param  float                                                       $weight       The weight in kilograms.
+     * @param  float|null                                                  $height       The height in centimeters.
+     * @param  float|null                                                  $length       The length in centimeters.
+     * @param  float|null                                                  $width        The width in centimeters.
+     * @param  \DateTime|null                                              $shippingDate The desired shipping date.
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductCatalog  The available products catalog.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException If the API returns an error.
+     */
+    public function getAvailableProducts(
+        PostCode $from,
+        PostCode $to,
+        string $toCityName,
+        ShippingType $shippingType,
+        float $weight,
+        ?float $height = null,
+        ?float $length = null,
+        ?float $width = null,
+        ?DateTime $shippingDate = null,
+    ): ProductCatalog {
+        return $this->quickCostService->getProducts(
+            $this->accountNumber,
+            $this->password,
+            $from,
+            $to,
+            $toCityName,
+            $shippingType,
+            $weight,
+            $height,
+            $length,
+            $width,
+            $shippingDate,
         );
     }
 }

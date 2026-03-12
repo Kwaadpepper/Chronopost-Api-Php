@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Kwaadpepper\ChronopostApiPhp\Services\Cost;
 
 use ChronopostQuickCost\ClassMap;
+use ChronopostQuickCost\ServiceType\Get;
 use ChronopostQuickCost\ServiceType\Quick;
+use ChronopostQuickCost\StructType\GetProducts as GetProductsInput;
 use ChronopostQuickCost\StructType\QuickCostV3 as QuickCostV3Input;
 use Kwaadpepper\ChronopostApiPhp\Contracts\QuickCostServiceInterface;
+use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductCatalog;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError;
 use Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException;
+use Kwaadpepper\ChronopostApiPhp\Factory\GetProductsFactory;
 use Kwaadpepper\ChronopostApiPhp\Factory\QuickCostV3Factory;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
@@ -26,6 +30,8 @@ class QuickCostService implements QuickCostServiceInterface
      */
     private Quick $quickService;
 
+    private Get $getService;
+
     /**
      * Tracking service soap url
      */
@@ -38,7 +44,15 @@ class QuickCostService implements QuickCostServiceInterface
      */
     public function __construct(
         array $soapOptions = [],
+        ?Quick $quickService = null,
+        ?Get $getService = null,
     ) {
+        if ($quickService !== null && $getService !== null) {
+            $this->quickService = $quickService;
+            $this->getService = $getService;
+            return;
+        }
+
         $soapOptions = array_merge(
             $soapOptions,
             [
@@ -47,7 +61,8 @@ class QuickCostService implements QuickCostServiceInterface
             ],
         );
 
-        $this->quickService = new Quick($soapOptions);
+        $this->quickService = $quickService ?? new Quick($soapOptions);
+        $this->getService = $getService ?? new Get($soapOptions);
     }
 
     /**
@@ -108,5 +123,60 @@ class QuickCostService implements QuickCostServiceInterface
         $factory = new QuickCostV3Factory();
 
         return $factory->create($response);
+    }
+
+    /**
+     * Get available products for a route.
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the API call fails.
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException If the API returns an error.
+     */
+    public function getProducts(
+        AccountNumber $accountNumber,
+        Password $password,
+        PostCode $from,
+        PostCode $to,
+        string $toCityName,
+        ShippingType $shippingType,
+        float $weight,
+        ?float $height = null,
+        ?float $length = null,
+        ?float $width = null,
+        ?\DateTime $shippingDate = null,
+    ): ProductCatalog {
+        $parameters = new GetProductsInput(
+            $accountNumber->getAccountNumber(),
+            $password->getPassword(),
+            (string) $from->getCountryDelivery()->getCode(),
+            $from->getPostCode(),
+            (string) $to->getCountryDelivery()->getCode(),
+            $to->getPostCode(),
+            $toCityName,
+            $shippingType->oneLetterCode(),
+            (string) $weight,
+            $height !== null ? (string) $height : null,
+            $length !== null ? (string) $length : null,
+            $width !== null ? (string) $width : null,
+            $shippingDate !== null ? $shippingDate->format('d/m/Y') : null,
+        );
+
+        $result = $this->getService->getProducts($parameters);
+
+        if ($result === false) {
+            $lastError = $this->getService->getLastErrorForMethod(methodName: Get::class . '::getProducts');
+            throw new ApiError('Failed to call from getProducts service', $lastError);
+        }
+
+        $response = $result->getReturn();
+
+        if ($response === null) {
+            throw new ApiError('Failed to get result from getProducts service, null response');
+        }
+
+        if ($response->getErrorCode() !== 0) {
+            throw new QuickCostException($response->getErrorMessage(), $response->getErrorCode());
+        }
+
+        return (new GetProductsFactory())->create($response);
     }
 }

@@ -8,6 +8,7 @@ use ChronopostQuickCost\ClassMap;
 use ChronopostQuickCost\ServiceType\Calculate;
 use ChronopostQuickCost\StructType\CalculateDeliveryTime;
 use ChronopostQuickCost\StructType\CalculateProducts;
+use ChronopostQuickCost\StructType\CalculateProductsV2 as CalculateProductsV2Input;
 use Kwaadpepper\ChronopostApiPhp\Contracts\CalculateServiceInterface;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\DeliveryTime;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductList;
@@ -42,7 +43,13 @@ class CalculateService implements CalculateServiceInterface
      */
     public function __construct(
         array $soapOptions = [],
+        ?Calculate $calculateService = null,
     ) {
+        if ($calculateService !== null) {
+            $this->calculateService = $calculateService;
+            return;
+        }
+
         $soapOptions            = array_merge(
             $soapOptions,
             [
@@ -108,6 +115,62 @@ class CalculateService implements CalculateServiceInterface
         $factory = new CalculateProductsFactory();
 
         return $factory->create($response);
+    }
+
+    /**
+     * Calculate available products for a shipment (V2, with caller token).
+     */
+    public function calculateProductsV2(
+        string $caller,
+        PostCode $from,
+        PostCode $to,
+        string $toCityName,
+        ShippingType $shippingType,
+        float $weight,
+        ?float $height = null,
+        ?float $length = null,
+        ?float $width = null,
+        ?\DateTime $shippingDate = null,
+        ?string $nationalite = null,
+        ?string $isPart = null,
+    ): ProductList {
+        $parameters = new CalculateProductsV2Input(
+            $caller,
+            (string) $from->getCountryDelivery()->getCode(),
+            $from->getPostCode(),
+            (string) $to->getCountryDelivery()->getCode(),
+            $to->getPostCode(),
+            $toCityName,
+            $shippingType->oneLetterCode(),
+            (string) $weight,
+            $height !== null ? (string) $height : null,
+            $length !== null ? (string) $length : null,
+            $width !== null ? (string) $width : null,
+            $shippingDate !== null ? $shippingDate->format('d/m/Y') : null,
+            $nationalite,
+            $isPart,
+        );
+
+        $result = $this->calculateService->calculateProductsV2($parameters);
+
+        if ($result === false) {
+            $lastError = $this->calculateService->getLastErrorForMethod(
+                methodName: Calculate::class . '::calculateProductsV2',
+            );
+            throw new ApiError('Failed to call from calculate service', $lastError);
+        }
+
+        $response = $result->getReturn();
+
+        if ($response === null) {
+            throw new ApiError('Failed to get result from calculateProductsV2 service, null response');
+        }
+
+        if ($response->getErrorCode() !== 0) {
+            throw new CalculateException($response->getErrorMessage(), $response->getErrorCode());
+        }
+
+        return (new CalculateProductsFactory())->create($response);
     }
 
     /**
