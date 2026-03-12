@@ -1,3 +1,7 @@
 vendor
 phpstan-report.xml
 .phpunit.result.cache
+documentation/Chrono Shopper Max.txt
+documentation/Documentation Web Services VL3.24.10.14-FR.txt
+documentation/Etiquette Chrono 13H.txt
+documentation/guide_dimport_des_envois_etape_par_etape.txt
