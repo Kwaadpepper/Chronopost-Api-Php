@@ -8,7 +8,8 @@ use InvalidArgumentException;
 use DateTimeImmutable;
 use DateTimeInterface;
 
-final class WantedShippingDate {
+final class WantedShippingDate
+{
     public function __construct(
         public readonly DateTimeInterface $date
     ) {

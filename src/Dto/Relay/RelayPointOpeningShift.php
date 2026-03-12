@@ -6,7 +6,8 @@ namespace Kwaadpepper\ChronopostApiPhp\Dto\Relay;
 
 use Kwaadpepper\ChronopostApiPhp\Dto\Dto;
 
-class RelayPointOpeningShift implements Dto{
+class RelayPointOpeningShift implements Dto
+{
     public function __construct(
         public readonly int $dayOfWeek,
         public readonly string $morningStartingTime,

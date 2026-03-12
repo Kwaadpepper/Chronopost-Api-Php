@@ -39,18 +39,18 @@ class RelayPointSearchResultFactory implements Factory
 
     private function mapRelayPoint(PointCHR $point): RelayPoint
     {
-        $codePays = $point->getCodePays();
-        $country = CountryForChronopost::tryFrom($codePays ? intval($codePays) : null) ?? CountryForChronopost::FRANCE;
-        $postCode = new PostCode($point->getCodePostal(), $country);
+        $codePays    = $point->getCodePays();
+        $country     = CountryForChronopost::tryFrom($codePays ? intval($codePays) : null) ?? CountryForChronopost::FRANCE;
+        $postCode    = new PostCode($point->getCodePostal(), $country);
         $coordinates = new Coordinates(
             floatval($point->getCoordGeolocalisationLatitude()),
             floatval($point->getCoordGeolocalisationLongitude())
         );
-        $relayId = new RelayId($point->getIdentifiant());
-        $relayType = RelayPointType::tryFrom($point->getTypeDePoint()) ?? RelayPointType::ANY;
+        $relayId     = new RelayId($point->getIdentifiant());
+        $relayType   = RelayPointType::tryFrom($point->getTypeDePoint()) ?? RelayPointType::ANY;
 
         $oppeningShifts = $point->getListeHoraireOuverture();
-        $closingShifts = $point->getListePeriodeFermeture();
+        $closingShifts  = $point->getListePeriodeFermeture();
 
         return new RelayPoint(
             $point->getAccesPersonneMobiliteReduite() ?? false,

@@ -28,7 +28,7 @@ use WsdlToPhp\PackageBase\SoapClientInterface;
  * Tous les gabarits de colis ne sont pas éligibles à être livrés dans les consignes.
  * N'hésitez pas à solliciter votre commercial afin de vous assurer
  * des contraintes avant de proposer une livraison en consigne à vos clients.
-*/
+ */
 class RelayPointService implements RelaySearchServiceInterface
 {
     /**
@@ -67,18 +67,18 @@ class RelayPointService implements RelaySearchServiceInterface
     /**
      * Find relay points using search criteria.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber      The account number for authentication.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password           The password for authentication.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode   $productCode        The product code for the search.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AddressSearch $addressSearch      The address search criteria.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber            $accountNumber      The account number for authentication.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                 $password           The password for authentication.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode              $productCode        The product code for the search.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AddressSearch            $addressSearch      The address search criteria.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\WantedShippingDate $wantedShippingDate The desired shipping date.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayPointType $relayPointType    The type of relay point to search for (default is ANY).
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayServiceType $relayServiceType  The type of relay service to search for (default is ANY).
-     * @param float|null $weight Optional weight of the package (in kg) for filtering results.
-     * @param int|null   $maxResults Optional maximum number of results to return (default is 25, max is 25).
-     * @param int|null   $radiusInKm Optional search radius in kilometers (default is 50, max is 50).
-     * @param string     $language Optional language code for the response (default is 'FR').
-     * @param string     $version Optional version of the API to use (default is '2.0').
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayPointType     $relayPointType     The type of relay point to search for (default is ANY).
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayServiceType   $relayServiceType   The type of relay service to search for (default is ANY).
+     * @param float|null                                                          $weight             Optional weight of the package (in kg) for filtering results.
+     * @param integer|null                                                        $maxResults         Optional maximum number of results to return (default is 25, max is 25).
+     * @param integer|null                                                        $radiusInKm         Optional search radius in kilometers (default is 50, max is 50).
+     * @param string                                                              $language           Optional language code for the response (default is 'FR').
+     * @param string                                                              $version            Optional version of the API to use (default is '2.0').
      *
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult An array of relay points matching the search criteria.
      *
@@ -101,7 +101,7 @@ class RelayPointService implements RelaySearchServiceInterface
     ): RelaySearchResult {
         $maxResults = max(1, min(25, $maxResults ?? 25));
         $radiusInKm = max(1, min(50, $radiusInKm ?? 50));
-        $parameter = new RecherchePointChronopostInter(
+        $parameter  = new RecherchePointChronopostInter(
             $accountNumber->getAccountNumber(),
             $password->getPassword(),
             $addressSearch->address,

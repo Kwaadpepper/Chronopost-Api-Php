@@ -16,27 +16,28 @@ namespace Kwaadpepper\ChronopostApiPhp\Enums;
 enum ChronopostProductCode: string
 {
     // --- NATIONAL ---
-    case CHRONO_13        = '01';
-    case CHRONO_10        = '02';
-    case CHRONO_18        = '16';
-    case CHRONO_SAMEDI    = '05';
+    case CHRONO_13     = '01';
+    case CHRONO_10     = '02';
+    case CHRONO_18     = '16';
+    case CHRONO_SAMEDI = '05';
 
     case CHRONO_RELAIS_13         = '5A';
-    case CHRONO_RELAIS_13_SPECIAL = '5L'; // Variante contractuelle ou Marketplace
-
+    case CHRONO_RELAIS_13_SPECIAL = '5L';
+// Variante contractuelle ou Marketplace
     // --- INTERNATIONAL ---
-    case CHRONO_CLASSIC   = '06'; // Souvent Export
-    case CHRONO_INTL_EXP  = '07'; // Export Express
-
+    case CHRONO_CLASSIC = '06';
+// Souvent Export
+    case CHRONO_INTL_EXP = '07';
+// Export Express
     // --- RETRAIT ---
     case CHRONO_RETRAIT_BUREAU = '00';
 
     // --- CODES PETITS PROS ---
-    case CHRONO_10_PETITPROS           = '9B';
-    case CHRONO_13_PETITPROS           = '9A';
-    case CHRONO_18_PETITPROS           = '9C';
-    case CHRONO_CLASSIC_PETITPROS      = '9F';
-    case CHRONO_EXPRESS_PETITPROS      = '9D';
+    case CHRONO_10_PETITPROS             = '9B';
+    case CHRONO_13_PETITPROS             = '9A';
+    case CHRONO_18_PETITPROS             = '9C';
+    case CHRONO_CLASSIC_PETITPROS        = '9F';
+    case CHRONO_EXPRESS_PETITPROS        = '9D';
     case CHRONO_TO_SHOP_DIRECT_PETITPROS = '5E';
 
     // --- INTERNATIONAL SPÉCIFIQUE ---
@@ -45,43 +46,51 @@ enum ChronopostProductCode: string
     case CHRONO_CLASSIC_INTERNATIONAL = '44';
 
     // --- SERVICES SPÉCIFIQUES & OPTIONS ---
-    case CHRONO_REP                                                = '09'; // Reverse
-    case CHRONO_AGENDA                                             = '20'; // Sur RDV
-    case CHRONO_RELAIS_EUROPE                                      = '49'; // Relais Europe
-    case CHRONO_RELAIS                                             = '86'; // Relais national
-    case CHRONO_RELAIS_AMBIENT                                     = '5Q'; // Relais Ambient
-    case CHRONO_TO_SHOP_DIRECT                                     = '5X'; // ToShopDirect national
-    case CHRONO_TO_SHOP_DIRECT_EUROPE                              = '6B'; // ToShopDirect Europe
-
+    case CHRONO_REP = '09';
+// Reverse
+    case CHRONO_AGENDA = '20';
+// Sur RDV
+    case CHRONO_RELAIS_EUROPE = '49';
+// Relais Europe
+    case CHRONO_RELAIS = '86';
+// Relais national
+    case CHRONO_RELAIS_AMBIENT = '5Q';
+// Relais Ambient
+    case CHRONO_TO_SHOP_DIRECT = '5X';
+// ToShopDirect national
+    case CHRONO_TO_SHOP_DIRECT_EUROPE = '6B';
+// ToShopDirect Europe
     // --- B2B & EXPRESS MATIN ---
-    case CHRONO_8                                                  = '75';
-    case CHRONO_9                                                  = '76';
-    case CHRONO_12                                                 = '77';
-    case CHRONO_TEMP_13                                            = '78'; // Temporaire/Spécifique
-    case CHRONO_9_RELAIS                                           = '80';
+    case CHRONO_8       = '75';
+    case CHRONO_9       = '76';
+    case CHRONO_12      = '77';
+    case CHRONO_TEMP_13 = '78';
+// Temporaire/Spécifique
+    case CHRONO_9_RELAIS = '80';
 
     // --- SPÉCIFIQUE LIVRAISON ---
-    case CHRONO_13_BAL                                             = '58'; // Boite aux lettres
-    case CHRONO_13_POSTE                                           = '93';
-    case CHRONO_13_REMISE_PAS_DE_PORTE                             = '1F';
-    case CHRONO_13_REMISE_PAS_DE_PORTE_2                           = '1G';
-    case CHRONO_TEMP_10                                            = '1K';
+    case CHRONO_13_BAL = '58';
+// Boite aux lettres
+    case CHRONO_13_POSTE                 = '93';
+    case CHRONO_13_REMISE_PAS_DE_PORTE   = '1F';
+    case CHRONO_13_REMISE_PAS_DE_PORTE_2 = '1G';
+    case CHRONO_TEMP_10                  = '1K';
 
     // --- MARCHANDISES DANGEREUSES (ADR) ---
-    case CHRONO_MARCHANDISES_DANGEREUSES_13                        = '1M';
-    case CHRONO_MARCHANDISES_DANGEREUSES_18                        = '1N';
+    case CHRONO_MARCHANDISES_DANGEREUSES_13 = '1M';
+    case CHRONO_MARCHANDISES_DANGEREUSES_18 = '1N';
 
     // --- SWAP (ECHANGE) ---
-    case CHRONO_SWAP_13                                            = '1O';
-    case CHRONO_SWAP_18                                            = '1P';
+    case CHRONO_SWAP_13 = '1O';
+    case CHRONO_SWAP_18 = '1P';
 
     // --- GESTION INSTANCE ---
-    case CHRONO_13_INSTANCE_AGENCE                                 = '1S';
-    case CHRONO_13_INSTANCE_RELAIS                                 = '1T';
-    case CHRONO_10_SANS_INSTANCE_POSTE                             = '1U';
-    case CHRONO_18_INSTANCE_AGENCE                                 = '1V';
-    case CHRONO_13_LIVRAISON_COLLECTE                              = '1Y';
-    case CHRONO_18_INSTANCE_RELAIS                                 = '3Z';
+    case CHRONO_13_INSTANCE_AGENCE     = '1S';
+    case CHRONO_13_INSTANCE_RELAIS     = '1T';
+    case CHRONO_10_SANS_INSTANCE_POSTE = '1U';
+    case CHRONO_18_INSTANCE_AGENCE     = '1V';
+    case CHRONO_13_LIVRAISON_COLLECTE  = '1Y';
+    case CHRONO_18_INSTANCE_RELAIS     = '3Z';
 
     // --- MEDICAL / SANTÉ ---
     case CHRONO_8_MEDICAL                                          = '2A';
@@ -98,35 +107,36 @@ enum ChronopostProductCode: string
     case CHRONO_MEDICAL_MARCHANDISES_DANGEREUSES_18_THERMOSENSIBLE = '8J';
 
     // --- FOOD (FRESH/FREEZE) ---
-    case CHRONO_FRESH_RENDEZ_VOUS                                  = '2E';
-    case CHRONO_FREEZE_RENDEZ_VOUS                                 = '2F';
-    case CHRONO_FRESH_SAME_DAY                                     = '2P';
-    case CHRONO_FREEZE_SAME_DAY                                    = '2Q';
-    case CHRONO_FRESH_13                                           = '2R';
-    case CHRONO_FREEZE_13                                          = '2S';
-    case CHRONO_FRESH_10                                           = '3X';
-    case CHRONO_FREEZE_10                                          = '3Y';
-    case CHRONO_FRESH_12                                           = '4V';
-    case CHRONO_FREEZE_12                                          = '4W';
-    case CHRONO_FRESH_CLASSIC                                      = '4X';
+    case CHRONO_FRESH_RENDEZ_VOUS  = '2E';
+    case CHRONO_FREEZE_RENDEZ_VOUS = '2F';
+    case CHRONO_FRESH_SAME_DAY     = '2P';
+    case CHRONO_FREEZE_SAME_DAY    = '2Q';
+    case CHRONO_FRESH_13           = '2R';
+    case CHRONO_FREEZE_13          = '2S';
+    case CHRONO_FRESH_10           = '3X';
+    case CHRONO_FREEZE_10          = '3Y';
+    case CHRONO_FRESH_12           = '4V';
+    case CHRONO_FREEZE_12          = '4W';
+    case CHRONO_FRESH_CLASSIC      = '4X';
 
     // --- AUTRES OPTIONS ---
-    case CHRONO_18_LIVRAISON_BOITE_A_LETTRES                       = '2L';
-    case CHRONO_18_LIVRAISON_BOITE_A_LETTRES_MIXTE                 = '2M';
-    case CHRONO_RENDEZ_VOUS                                        = '2O'; // Souvent appelé Chrono Precise
-    case CHRONO_ZENGO_13                                           = '3J';
-    case CHRONO_ZENGO_RELAIS_13                                    = '3K';
-    case CHRONO_FRET_DOM                                           = '3S';
-    case CHRONO_RETOUR_EUROPE                                      = '3T';
-    case CHRONO_SAME_DAY                                           = '4I';
-    case CHRONO_RELAIS_DOM                                         = '4P';
-    case CHRONO_DIRECT                                             = '4Q'; // Livraison directe/Course
-
+    case CHRONO_18_LIVRAISON_BOITE_A_LETTRES       = '2L';
+    case CHRONO_18_LIVRAISON_BOITE_A_LETTRES_MIXTE = '2M';
+    case CHRONO_RENDEZ_VOUS                        = '2O';
+// Souvent appelé Chrono Precise
+    case CHRONO_ZENGO_13        = '3J';
+    case CHRONO_ZENGO_RELAIS_13 = '3K';
+    case CHRONO_FRET_DOM        = '3S';
+    case CHRONO_RETOUR_EUROPE   = '3T';
+    case CHRONO_SAME_DAY        = '4I';
+    case CHRONO_RELAIS_DOM      = '4P';
+    case CHRONO_DIRECT          = '4Q';
+// Livraison directe/Course
     // --- REVERSE (RETOUR) ---
-    case CHRONO_REVERSE_9                                          = '4R';
-    case CHRONO_REVERSE_10                                         = '4S';
-    case CHRONO_REVERSE_13                                         = '4T';
-    case CHRONO_REVERSE_18                                         = '4U';
+    case CHRONO_REVERSE_9  = '4R';
+    case CHRONO_REVERSE_10 = '4S';
+    case CHRONO_REVERSE_13 = '4T';
+    case CHRONO_REVERSE_18 = '4U';
 
     // --- INCONNU ---
     case UNKNOWN = 'XX';
@@ -247,7 +257,7 @@ enum ChronopostProductCode: string
             self::CHRONO_18_INSTANCE_RELAIS     => 'Chrono 18 (Instance Relais)',
 
             self::UNKNOWN => 'Inconnu',
-        };
+        };//end match
     }
 
     public function isRelayDelivery(): bool

@@ -6,7 +6,8 @@ namespace Kwaadpepper\ChronopostApiPhp\Dto\QuickCost;
 
 use Kwaadpepper\ChronopostApiPhp\Dto\Dto;
 
-class ProductList implements Dto {
+class ProductList implements Dto
+{
     /**
      * Create a new ProductList DTO.
      *

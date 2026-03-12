@@ -9,18 +9,18 @@ namespace Kwaadpepper\ChronopostApiPhp\Exceptions\Relay;
  */
 enum RelayErrorCode: int
 {
-    case WRONG_PARAMETER = 300;
-    case PARAMETER_NULL = 301;
-    case WRONG_POSTAL_CODE = 302;
-    case WRONG_DATE_FORMAT = 306;
-    case WRONG_DATE_VALUE = 307;
-    case NUMBER_NOT_STRING = 309;
-    case HOLIDAY_TOLERANT_NOT_1 = 317;
-    case MAX_DISTANCE_SEARCH_99 = 319;
-    case MAX_POINTS_RETURNED_25 = 320;
-    case WRONG_WEIGHT_FORMAT = 321;
-    case NO_POINTS_FOUND = 601;
-    case SYSTEM_ERROR = 700;
+    case WRONG_PARAMETER            = 300;
+    case PARAMETER_NULL             = 301;
+    case WRONG_POSTAL_CODE          = 302;
+    case WRONG_DATE_FORMAT          = 306;
+    case WRONG_DATE_VALUE           = 307;
+    case NUMBER_NOT_STRING          = 309;
+    case HOLIDAY_TOLERANT_NOT_1     = 317;
+    case MAX_DISTANCE_SEARCH_99     = 319;
+    case MAX_POINTS_RETURNED_25     = 320;
+    case WRONG_WEIGHT_FORMAT        = 321;
+    case NO_POINTS_FOUND            = 601;
+    case SYSTEM_ERROR               = 700;
     case WRONG_CONTRACT_OR_PASSWORD = 1500;
 
     /**

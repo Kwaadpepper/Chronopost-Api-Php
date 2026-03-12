@@ -23,8 +23,8 @@ readonly class PostCode implements \Stringable
     /**
      * Constructor.
      *
-     * @param  string  $postCode  The post code to validate.
-     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost  $countryDelivery  The country delivery object.
+     * @param  string                                                   $postCode        The post code to validate.
+     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost $countryDelivery The country delivery object.
      *
      * @throws \InvalidArgumentException If the post code does not match
      *                                   the format defined in the country delivery object.
@@ -51,8 +51,8 @@ readonly class PostCode implements \Stringable
     /**
      * Validate the post code format based on the country delivery object.
      *
-     * @param  string  $postCode  The post code to validate.
-     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost  $ofCountry  The country delivery object.
+     * @param  string                                                   $postCode  The post code to validate.
+     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost $ofCountry The country delivery object.
      * @return void
      *
      * @throws \InvalidArgumentException If the post code does not match

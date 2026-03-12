@@ -11,7 +11,7 @@ class CalculateDeliveryTimeFactory implements Factory
     /**
      * Create a QuickCostV3 DTO from Chronopost ResultCalculateDeliveryTime.
      *
-     * @param  \ChronopostQuickCost\StructType\ResultCalculateDeliveryTime  $result
+     * @param  \ChronopostQuickCost\StructType\ResultCalculateDeliveryTime $result
      */
     public function create($result): DeliveryTime
     {

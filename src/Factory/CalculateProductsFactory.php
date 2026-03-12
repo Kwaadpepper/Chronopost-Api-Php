@@ -13,7 +13,7 @@ class CalculateProductsFactory implements Factory
     /**
      * Create a QuickCostV3 DTO from Chronopost ResultCalculateProducts.
      *
-     * @param  \ChronopostQuickCost\StructType\ResultCalculateProducts  $result
+     * @param  \ChronopostQuickCost\StructType\ResultCalculateProducts $result
      */
     public function create($result): ProductList
     {

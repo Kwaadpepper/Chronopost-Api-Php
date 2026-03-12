@@ -9,10 +9,10 @@ use Kwaadpepper\ChronopostApiPhp\Enums\ChronopostProductCode;
 readonly class ProductCode implements \Stringable
 {
     /**
-     * @param  string  $value  Delivery product code.
-     *                         The product code must be 1 or 2 characters long,
-     *                         consisting of letters and/or digits.
-     *                         Doc says it is given by an IT contact from Chronopost.
+     * @param  string $value Delivery product code.
+     *                       The product code must be 1 or 2 characters long,
+     *                       consisting of letters and/or digits.
+     *                       Doc says it is given by an IT contact from Chronopost.
      *
      * @throws \InvalidArgumentException If the product code is not valid.
      */
@@ -60,7 +60,7 @@ readonly class ProductCode implements \Stringable
     /**
      * Create a ProductCode from a ChronopostProductCode enum.
      *
-     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ChronopostProductCode  $productCode  The product code enum.
+     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ChronopostProductCode $productCode The product code enum.
      */
     public static function fromEnum(ChronopostProductCode $productCode): self
     {

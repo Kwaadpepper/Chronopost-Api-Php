@@ -6,7 +6,8 @@ namespace Kwaadpepper\ChronopostApiPhp\Dto\Relay;
 
 use Kwaadpepper\ChronopostApiPhp\Dto\Dto;
 
-class RelayPointClosingShift implements Dto {
+class RelayPointClosingShift implements Dto
+{
     public function __construct(
         public readonly int $number,
         public readonly \DateTimeImmutable $from,

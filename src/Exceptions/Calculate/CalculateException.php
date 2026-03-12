@@ -17,9 +17,9 @@ class CalculateException extends \RuntimeException
     /**
      * CalculateException constructor.
      *
-     * @param  string  $message  Exception message.
-     * @param  int  $code  Exception code.
-     * @param  \Throwable|null  $previous  Previous exception.
+     * @param  string          $message  Exception message.
+     * @param  integer         $code     Exception code.
+     * @param  \Throwable|null $previous Previous exception.
      */
     public function __construct(
         string $message = '',
@@ -28,7 +28,7 @@ class CalculateException extends \RuntimeException
     ) {
         parent::__construct($message, $code, $previous);
 
-        $this->errorCode = (string) $code;
+        $this->errorCode = (string)$code;
     }
 
     /**

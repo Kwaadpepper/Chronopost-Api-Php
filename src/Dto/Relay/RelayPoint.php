@@ -10,7 +10,8 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayId;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayPointType;
 
-class RelayPoint implements Dto {
+class RelayPoint implements Dto
+{
     public function __construct(
         public readonly bool $accessibleToReducedMobilityPersons,
         public readonly bool $active,

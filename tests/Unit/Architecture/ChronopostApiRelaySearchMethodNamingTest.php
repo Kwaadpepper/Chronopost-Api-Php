@@ -18,7 +18,7 @@ class ChronopostApiRelaySearchMethodNamingTest extends TestCase
         $className = ChronopostApi::class;
 
         // WHEN.
-        $hasNewMethod = method_exists($className, 'searchRelayPoint');
+        $hasNewMethod        = method_exists($className, 'searchRelayPoint');
         $hasLegacyTypoMethod = method_exists($className, 'seachRelayPoint');
 
         // THEN.

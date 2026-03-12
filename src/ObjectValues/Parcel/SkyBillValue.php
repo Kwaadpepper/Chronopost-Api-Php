@@ -53,33 +53,33 @@ readonly class SkyBillValue
     /**
      * SkyBillValue constructor.
      *
-     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType         $objectType             Type de marchandise.
-     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode   $productCode            Code produit de livraison. Les produits à utiliser sont ceux contractualisés avec Chronopost.
-     *                                                                                              !Codes fournis par votre contact IT Chronopost
-     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode   $serviceCode            Jour de livraison.
-     *                                                                                              !Codes fournis par votre contact IT Chronopost
-     * @param  float                                                    $weight                 Poids du colis en kilogrammes.
-     * @param  int                                                      $height                 Hauteur colis en cm (0 si inconnu).
-     * @param  int                                                      $width                  Largeur colis en cm (0 si inconnu).
-     * @param  int                                                      $length                 Longueur colis en cm (0 si inconnu).
-     * @param  string|null                                              $as                     Code de livraison.
-     *                                                                                              !Codes fournis par votre contact IT Chronopost
-     * @param  string|null                                              $subAccount             Numéro de sous compte.
-     * @param  string|null                                              $toTheOrderOf           Ordre du chèque pour un contre remboursement.
-     * @param  string|null                                              $alternateProductCode   Code produit de 'remplacement' en cas d'indisponibilité du produit principal.
-     *                                                                                          Les produits à utiliser sont ceux contractualisés avec Chronopost.
-     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ParcelContent|null $content    Description du contenu du colis.
-     *                                                                                              ! Must be used for international shipments.
-     * @param  \DateTimeImmutable|null                                $shipDateTime             Date et heure de génération de l'envoi.
-     * @param  string                                                 $codCurrency              Devise du contre remboursement EUR par défaut
-     * @param  int                                                    $codValue                 Montant du contre-remboursement en centimes.
-     * @param  string                                                 $customsCurrency          Devise des douanes EUR par défaut, EUR, USD, GBP.
-     * @param  int                                                    $customsValue             Valeur en centimes pour les douanes.
-     * @param  string                                                 $insuredCurrency          Devise de la valeur assurrée en EUR.
-     * @param  int                                                    $insuredValue             Valeur en centimes pour l'assurance.
-     * @param  string|null                                            $masterSkybillNumber      Numéro du premier colis d'une expédition.
-     * @param  int                                                    $bulkNumber               Nombre total de colis.
-     * @param  int                                                    $skybillRank              Ordre du colis, impératif avec bulk number.
+     * @param  \Kwaadpepper\ChronopostApiPhp\Enums\ShippingType                     $objectType           Type de marchandise.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode               $productCode          Code produit de livraison. Les produits à utiliser sont ceux contractualisés avec Chronopost.
+     *                                                                                                        !Codes fournis par votre contact IT Chronopost
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\ServiceCode               $serviceCode          Jour de livraison.
+     *                                                                                                        !Codes fournis par votre contact IT Chronopost
+     * @param  float                                                                $weight               Poids du colis en kilogrammes.
+     * @param  integer                                                              $height               Hauteur colis en cm (0 si inconnu).
+     * @param  integer                                                              $width                Largeur colis en cm (0 si inconnu).
+     * @param  integer                                                              $length               Longueur colis en cm (0 si inconnu).
+     * @param  string|null                                                          $as                   Code de livraison.
+     *                                                                                                        !Codes fournis par votre contact IT Chronopost
+     * @param  string|null                                                          $subAccount           Numéro de sous compte.
+     * @param  string|null                                                          $toTheOrderOf         Ordre du chèque pour un contre remboursement.
+     * @param  string|null                                                          $alternateProductCode Code produit de 'remplacement' en cas d'indisponibilité du produit principal.
+     *                                                                                                    Les produits à utiliser sont ceux contractualisés avec Chronopost.
+     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ParcelContent|null $content              Description du contenu du colis.
+     *                                                                                                        ! Must be used for international shipments.
+     * @param  \DateTimeImmutable|null                                              $shipDateTime         Date et heure de génération de l'envoi.
+     * @param  string                                                               $codCurrency          Devise du contre remboursement EUR par défaut
+     * @param  integer                                                              $codValue             Montant du contre-remboursement en centimes.
+     * @param  string                                                               $customsCurrency      Devise des douanes EUR par défaut, EUR, USD, GBP.
+     * @param  integer                                                              $customsValue         Valeur en centimes pour les douanes.
+     * @param  string                                                               $insuredCurrency      Devise de la valeur assurrée en EUR.
+     * @param  integer                                                              $insuredValue         Valeur en centimes pour l'assurance.
+     * @param  string|null                                                          $masterSkybillNumber  Numéro du premier colis d'une expédition.
+     * @param  integer                                                              $bulkNumber           Nombre total de colis.
+     * @param  integer                                                              $skybillRank          Ordre du colis, impératif avec bulk number.
      *
      * @throws \InvalidArgumentException If any of the numeric values are negative or if the string values do not match the expected patterns.
      */
