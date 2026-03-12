@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Kwaadpepper\ChronopostApiPhp\Contracts;
 
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
-
 interface DeliverySlotServiceInterface
 {
     /**
@@ -18,8 +15,6 @@ interface DeliverySlotServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function searchDeliverySlots(
-        AccountNumber $accountNumber,
-        Password $password,
         string $productType,
         string $recipientAddr1,
         string $recipientZip,
@@ -44,8 +39,6 @@ interface DeliverySlotServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function confirmDeliverySlot(
-        AccountNumber $accountNumber,
-        Password $password,
         string $productType,
         string $codeSlot,
         string $meshCode,
@@ -64,8 +57,6 @@ interface DeliverySlotServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function geocodeAddress(
-        AccountNumber $accountNumber,
-        Password $password,
         string $address1,
         string $zipCode,
         string $city,

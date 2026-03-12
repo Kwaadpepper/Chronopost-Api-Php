@@ -51,6 +51,8 @@ class RelayPointServiceTest extends TestCase
         $this->password = new Password('255562');
 
         $this->service = new RelayPointService(
+            accountNumber: $this->accountNumber,
+            password: $this->password,
             searchService: $this->rechercheMock,
         );
     }
@@ -131,8 +133,6 @@ class RelayPointServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         $result = $this->service->searchRelayPoint(
-            $this->accountNumber,
-            $this->password,
             new ProductCode('86'),
             new AddressSearch(new PostCode('75001', CountryForChronopost::FRANCE), 'Paris'),
             new WantedShippingDate(new \DateTimeImmutable('+1 day')),
@@ -154,8 +154,6 @@ class RelayPointServiceTest extends TestCase
 
         $this->expectException(ApiError::class);
         $this->service->searchRelayPoint(
-            $this->accountNumber,
-            $this->password,
             new ProductCode('86'),
             new AddressSearch(new PostCode('75001', CountryForChronopost::FRANCE), 'Paris'),
             new WantedShippingDate(new \DateTimeImmutable('+1 day')),
@@ -174,8 +172,6 @@ class RelayPointServiceTest extends TestCase
 
         $this->expectException(RelaySearchException::class);
         $this->service->searchRelayPoint(
-            $this->accountNumber,
-            $this->password,
             new ProductCode('86'),
             new AddressSearch(new PostCode('75001', CountryForChronopost::FRANCE), 'Paris'),
             new WantedShippingDate(new \DateTimeImmutable('+1 day')),
@@ -195,8 +191,6 @@ class RelayPointServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         $result = $this->service->searchRelayPointByCoordinates(
-            $this->accountNumber,
-            $this->password,
             new Coordinates(48.8566, 2.3522),
             new ProductCode('86'),
             new WantedShippingDate(new \DateTimeImmutable('+1 day')),
@@ -218,8 +212,6 @@ class RelayPointServiceTest extends TestCase
 
         $this->expectException(ApiError::class);
         $this->service->searchRelayPointByCoordinates(
-            $this->accountNumber,
-            $this->password,
             new Coordinates(48.8566, 2.3522),
             new ProductCode('86'),
             new WantedShippingDate(new \DateTimeImmutable('+1 day')),
@@ -238,8 +230,6 @@ class RelayPointServiceTest extends TestCase
 
         $this->expectException(RelaySearchException::class);
         $this->service->searchRelayPointByCoordinates(
-            $this->accountNumber,
-            $this->password,
             new Coordinates(48.8566, 2.3522),
             new ProductCode('86'),
             new WantedShippingDate(new \DateTimeImmutable('+1 day')),
@@ -256,8 +246,6 @@ class RelayPointServiceTest extends TestCase
 
         $this->expectException(ApiError::class);
         $this->service->searchRelayPointByCoordinates(
-            $this->accountNumber,
-            $this->password,
             new Coordinates(48.8566, 2.3522),
             new ProductCode('86'),
             new WantedShippingDate(new \DateTimeImmutable('+1 day')),
@@ -345,8 +333,6 @@ class RelayPointServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         $result = $this->service->getRelayPointDetail(
-            $this->accountNumber,
-            $this->password,
             new RelayId('PR001'),
         );
 
@@ -365,8 +351,6 @@ class RelayPointServiceTest extends TestCase
 
         $this->expectException(ApiError::class);
         $this->service->getRelayPointDetail(
-            $this->accountNumber,
-            $this->password,
             new RelayId('PR001'),
         );
     }
@@ -383,8 +367,6 @@ class RelayPointServiceTest extends TestCase
 
         $this->expectException(RelaySearchException::class);
         $this->service->getRelayPointDetail(
-            $this->accountNumber,
-            $this->password,
             new RelayId('PR001'),
         );
     }
@@ -402,8 +384,6 @@ class RelayPointServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         $result = $this->service->getInternationalRelayPointDetail(
-            $this->accountNumber,
-            $this->password,
             new RelayId('PR001'),
             CountryForChronopost::BELGIQUE,
         );
@@ -423,8 +403,6 @@ class RelayPointServiceTest extends TestCase
 
         $this->expectException(ApiError::class);
         $this->service->getInternationalRelayPointDetail(
-            $this->accountNumber,
-            $this->password,
             new RelayId('PR001'),
             CountryForChronopost::BELGIQUE,
         );
@@ -442,8 +420,6 @@ class RelayPointServiceTest extends TestCase
 
         $this->expectException(RelaySearchException::class);
         $this->service->getInternationalRelayPointDetail(
-            $this->accountNumber,
-            $this->password,
             new RelayId('PR001'),
             CountryForChronopost::BELGIQUE,
         );

@@ -41,6 +41,8 @@ class TrackCancelService
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function __construct(
+        #[\SensitiveParameter] private AccountNumber $accountNumber,
+        #[\SensitiveParameter] private Password $password,
         array $soapOptions = [],
         ?Cancel $cancelService = null,
     ) {
@@ -64,8 +66,6 @@ class TrackCancelService
     /**
      * Cancel a single skybill.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber         $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password              $password
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber        $trackingNumber
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale|null $locale
      *
@@ -77,16 +77,14 @@ class TrackCancelService
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function cancelSkybill(
-        AccountNumber $accountNumber,
-        Password $password,
         TrackingNumber $trackingNumber,
         ?TrackingV2Locale $locale = null,
     ): CancelResult {
         // phpcs:enable
         $locale     = $locale ?? TrackingV2Locale::create(Locale::FR);
         $parameters = new CancelSkybill(
-            accountNumber: $accountNumber->getAccountNumber(),
-            password: $password->getPassword(),
+            accountNumber: $this->accountNumber->getAccountNumber(),
+            password: $this->password->getPassword(),
             language: (string) $locale,
             skybillNumber: (string) $trackingNumber,
         );
@@ -119,8 +117,6 @@ class TrackCancelService
     /**
      * Cancel a list of skybills.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber         $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password              $password
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber[]      $trackingNumbers
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale|null $locale
      *
@@ -132,8 +128,6 @@ class TrackCancelService
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function cancelListSkybill(
-        AccountNumber $accountNumber,
-        Password $password,
         array $trackingNumbers,
         ?TrackingV2Locale $locale = null,
     ): CancelListResult {
@@ -145,8 +139,8 @@ class TrackCancelService
         );
 
         $parameters = new CancelListSkybill(
-            accountNumber: $accountNumber->getAccountNumber(),
-            password: $password->getPassword(),
+            accountNumber: $this->accountNumber->getAccountNumber(),
+            password: $this->password->getPassword(),
             language: (string) $locale,
             skybillNumber: $skybillNumbersCsv,
         );

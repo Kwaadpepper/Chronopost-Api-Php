@@ -56,16 +56,18 @@ class PickupServiceTest extends TestCase
         $this->creerMock = $this->createMock(Creer::class);
         $this->annulerMock = $this->createMock(Annuler::class);
 
+        $this->accountNumber = new AccountNumber('19869502');
+        $this->password = new Password('255562');
+
         $this->service = new PickupService(
+            accountNumber: $this->accountNumber,
+            password: $this->password,
             soapOptions: [],
             faisabiliteService: $this->faisabiliteMock,
             rechercherService: $this->rechercherMock,
             creerService: $this->creerMock,
             annulerService: $this->annulerMock,
         );
-
-        $this->accountNumber = new AccountNumber('19869502');
-        $this->password = new Password('255562');
     }
 
     // ──── Feasibility ────
@@ -160,8 +162,6 @@ class PickupServiceTest extends TestCase
 
         // When
         $constraints = $this->service->searchConstraints(
-            $this->accountNumber,
-            $this->password,
             'FR',
             '75018',
             'Paris',
@@ -193,8 +193,6 @@ class PickupServiceTest extends TestCase
 
         // When
         $this->service->searchConstraints(
-            $this->accountNumber,
-            $this->password,
             'FR',
             '99999',
             'Inconnu',
@@ -226,8 +224,6 @@ class PickupServiceTest extends TestCase
 
         // When
         $pickupResult = $this->service->createNationalPickup(
-            $this->accountNumber,
-            $this->password,
             new HeaderValue(accountNumber: 19869502),
             '2026-03-15T09:00:00',
             '2026-03-15T18:00:00',
@@ -260,8 +256,6 @@ class PickupServiceTest extends TestCase
 
         // When
         $this->service->createNationalPickup(
-            $this->accountNumber,
-            $this->password,
             new HeaderValue(accountNumber: 19869502),
             '2026-03-15T09:00:00',
             '2026-03-15T18:00:00',
@@ -292,8 +286,6 @@ class PickupServiceTest extends TestCase
 
         // When
         $pickupResult = $this->service->createEuropeanPickup(
-            $this->accountNumber,
-            $this->password,
             new HeaderValue(accountNumber: 19869502),
             '2026-03-20T10:00:00',
             new DonneurDOrdre(),
@@ -328,8 +320,6 @@ class PickupServiceTest extends TestCase
 
         // When
         $cancelResult = $this->service->cancelPickups(
-            $this->accountNumber,
-            $this->password,
             ['ESD123456', 'ESD789012'],
         );
 
@@ -358,8 +348,6 @@ class PickupServiceTest extends TestCase
 
         // When
         $this->service->cancelPickups(
-            $this->accountNumber,
-            $this->password,
             ['ESD_INVALID'],
         );
     }

@@ -56,6 +56,8 @@ class QuickCostServiceTest extends TestCase
         $this->to = new PostCode('69001', CountryForChronopost::FRANCE);
 
         $this->service = new QuickCostService(
+            accountNumber: $this->accountNumber,
+            password: $this->password,
             quickService: $this->quickMock,
             getService: $this->getMock,
         );
@@ -101,8 +103,6 @@ class QuickCostServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         $result = $this->service->quickCostV3(
-            $this->accountNumber,
-            $this->password,
             $this->from,
             $this->to,
             2.5,
@@ -125,8 +125,6 @@ class QuickCostServiceTest extends TestCase
 
         $this->expectException(ApiError::class);
         $this->service->quickCostV3(
-            $this->accountNumber,
-            $this->password,
             $this->from,
             $this->to,
             2.5,
@@ -152,8 +150,6 @@ class QuickCostServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         $result = $this->service->getProducts(
-            $this->accountNumber,
-            $this->password,
             $this->from,
             $this->to,
             'Lyon',
@@ -179,8 +175,6 @@ class QuickCostServiceTest extends TestCase
 
         $this->expectException(ApiError::class);
         $this->service->getProducts(
-            $this->accountNumber,
-            $this->password,
             $this->from,
             $this->to,
             'Lyon',
@@ -200,8 +194,6 @@ class QuickCostServiceTest extends TestCase
 
         $this->expectException(QuickCostException::class);
         $this->service->getProducts(
-            $this->accountNumber,
-            $this->password,
             $this->from,
             $this->to,
             'Lyon',
@@ -220,8 +212,6 @@ class QuickCostServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         $result = $this->service->getProducts(
-            $this->accountNumber,
-            $this->password,
             $this->from,
             $this->to,
             'Lyon',

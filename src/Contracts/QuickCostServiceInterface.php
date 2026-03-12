@@ -7,16 +7,12 @@ namespace Kwaadpepper\ChronopostApiPhp\Contracts;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\ProductCatalog;
 use Kwaadpepper\ChronopostApiPhp\Dto\QuickCost\QuickCostV3;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
 
 interface QuickCostServiceInterface
 {
     public function quickCostV3(
-        AccountNumber $accountNumber,
-        Password $password,
         PostCode $from,
         PostCode $to,
         float $weight,
@@ -25,8 +21,6 @@ interface QuickCostServiceInterface
     ): QuickCostV3;
 
     public function getProducts(
-        AccountNumber $accountNumber,
-        Password $password,
         PostCode $from,
         PostCode $to,
         string $toCityName,

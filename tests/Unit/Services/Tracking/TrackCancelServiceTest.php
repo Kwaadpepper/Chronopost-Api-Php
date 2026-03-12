@@ -40,7 +40,11 @@ class TrackCancelServiceTest extends TestCase
         $this->accountNumber = new AccountNumber('19869502');
         $this->password = new Password('255562');
 
-        $this->service = new TrackCancelService(cancelService: $this->cancelServiceMock);
+        $this->service = new TrackCancelService(
+            accountNumber: $this->accountNumber,
+            password: $this->password,
+            cancelService: $this->cancelServiceMock,
+        );
     }
 
     public function testGivenValidTrackingNumberWhenCancelThenReturnsCancelResult(): void
@@ -60,8 +64,6 @@ class TrackCancelServiceTest extends TestCase
 
         // WHEN.
         $result = $this->service->cancelSkybill(
-            $this->accountNumber,
-            $this->password,
             $trackingNumber,
         );
 
@@ -87,7 +89,7 @@ class TrackCancelServiceTest extends TestCase
 
         // WHEN / THEN.
         $this->expectException(ApiError::class);
-        $this->service->cancelSkybill($this->accountNumber, $this->password, $trackingNumber);
+        $this->service->cancelSkybill($trackingNumber);
     }
 
     public function testGivenNullResponseWhenCancelThenThrowsApiError(): void
@@ -102,7 +104,7 @@ class TrackCancelServiceTest extends TestCase
 
         // WHEN / THEN.
         $this->expectException(ApiError::class);
-        $this->service->cancelSkybill($this->accountNumber, $this->password, $trackingNumber);
+        $this->service->cancelSkybill($trackingNumber);
     }
 
     public function testGivenErrorCodeWhenCancelThenThrowsTrackingException(): void
@@ -123,7 +125,7 @@ class TrackCancelServiceTest extends TestCase
         // WHEN / THEN.
         $this->expectException(TrackingException::class);
         $this->expectExceptionMessage('Skybill not found');
-        $this->service->cancelSkybill($this->accountNumber, $this->password, $trackingNumber);
+        $this->service->cancelSkybill($trackingNumber);
     }
 
     public function testGivenMultipleNumbersWhenCancelListThenReturnsCancelListResult(): void
@@ -147,8 +149,6 @@ class TrackCancelServiceTest extends TestCase
 
         // WHEN.
         $result = $this->service->cancelListSkybill(
-            $this->accountNumber,
-            $this->password,
             $trackingNumbers,
         );
 
@@ -175,7 +175,7 @@ class TrackCancelServiceTest extends TestCase
 
         // WHEN / THEN.
         $this->expectException(ApiError::class);
-        $this->service->cancelListSkybill($this->accountNumber, $this->password, $trackingNumbers);
+        $this->service->cancelListSkybill($trackingNumbers);
     }
 
     public function testGivenErrorCodeWhenCancelListThenThrowsTrackingException(): void
@@ -196,6 +196,6 @@ class TrackCancelServiceTest extends TestCase
         // WHEN / THEN.
         $this->expectException(TrackingException::class);
         $this->expectExceptionMessage('Batch cancel failed');
-        $this->service->cancelListSkybill($this->accountNumber, $this->password, $trackingNumbers);
+        $this->service->cancelListSkybill($trackingNumbers);
     }
 }

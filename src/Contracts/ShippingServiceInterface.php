@@ -9,7 +9,6 @@ use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\MultiParcelV4;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ReservationMultiParcelResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\ReservationResult;
 use Kwaadpepper\ChronopostApiPhp\Enums\SkyBillOutputMode;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\EsdValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\RecipientValue;
@@ -18,13 +17,10 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ScheduledValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillParameters;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 
 interface ShippingServiceInterface
 {
     /**
-     * @param AccountNumber          $accountNumber
-     * @param Password               $password
      * @param SkyBillValue           $skybillValue
      * @param CustomerValue          $customerValue
      * @param ShipperValue           $shipperValue
@@ -37,8 +33,6 @@ interface ShippingServiceInterface
      * @return MultiParcelV4
      */
     public function singleParcelV4(
-        AccountNumber $accountNumber,
-        Password $password,
         SkyBillValue $skybillValue,
         CustomerValue $customerValue,
         ShipperValue $shipperValue,
@@ -51,8 +45,6 @@ interface ShippingServiceInterface
     ): MultiParcelV4;
 
     /**
-     * @param AccountNumber              $accountNumber
-     * @param Password                   $password
      * @param array<int, SkyBillValue>   $skybillValues
      * @param CustomerValue              $customerValue
      * @param array<int, ShipperValue>   $shippersValues
@@ -67,8 +59,6 @@ interface ShippingServiceInterface
      * @return MultiParcelV4
      */
     public function multiParcelV4(
-        AccountNumber $accountNumber,
-        Password $password,
         array $skybillValues,
         CustomerValue $customerValue,
         array $shippersValues,
@@ -83,8 +73,6 @@ interface ShippingServiceInterface
     ): MultiParcelV4;
 
     /**
-     * @param AccountNumber          $accountNumber
-     * @param Password               $password
      * @param SkyBillValue           $skybillValue
      * @param CustomerValue          $customerValue
      * @param ShipperValue           $shipperValue
@@ -97,8 +85,6 @@ interface ShippingServiceInterface
      * @return MonoParcelV7
      */
     public function singleParcelV7(
-        AccountNumber $accountNumber,
-        Password $password,
         SkyBillValue $skybillValue,
         CustomerValue $customerValue,
         ShipperValue $shipperValue,
@@ -111,8 +97,6 @@ interface ShippingServiceInterface
     ): MonoParcelV7;
 
     /**
-     * @param AccountNumber              $accountNumber
-     * @param Password                   $password
      * @param array<int, SkyBillValue>   $skybillValues
      * @param CustomerValue              $customerValue
      * @param array<int, ShipperValue>   $shippersValues
@@ -127,8 +111,6 @@ interface ShippingServiceInterface
      * @return MultiParcelV4
      */
     public function multiParcelV7(
-        AccountNumber $accountNumber,
-        Password $password,
         array $skybillValues,
         CustomerValue $customerValue,
         array $shippersValues,
@@ -143,8 +125,6 @@ interface ShippingServiceInterface
     ): MultiParcelV4;
 
     /**
-     * @param AccountNumber          $accountNumber
-     * @param Password               $password
      * @param SkyBillValue           $skybillValue
      * @param CustomerValue          $customerValue
      * @param ShipperValue           $shipperValue
@@ -157,8 +137,6 @@ interface ShippingServiceInterface
      * @return ReservationResult
      */
     public function singleParcelWithReservation(
-        AccountNumber $accountNumber,
-        Password $password,
         SkyBillValue $skybillValue,
         CustomerValue $customerValue,
         ShipperValue $shipperValue,
@@ -171,8 +149,6 @@ interface ShippingServiceInterface
     ): ReservationResult;
 
     /**
-     * @param AccountNumber              $accountNumber
-     * @param Password                   $password
      * @param array<int, SkyBillValue>   $skybillValues
      * @param CustomerValue              $customerValue
      * @param ShipperValue               $shipperValue
@@ -187,8 +163,6 @@ interface ShippingServiceInterface
      * @return ReservationMultiParcelResult
      */
     public function multiParcelWithReservation(
-        AccountNumber $accountNumber,
-        Password $password,
         array $skybillValues,
         CustomerValue $customerValue,
         ShipperValue $shipperValue,
@@ -203,8 +177,6 @@ interface ShippingServiceInterface
     ): ReservationMultiParcelResult;
 
     /**
-     * @param AccountNumber          $accountNumber
-     * @param Password               $password
      * @param SkyBillValue           $skybillValue
      * @param CustomerValue          $customerValue
      * @param ShipperValue           $shipperValue
@@ -216,8 +188,6 @@ interface ShippingServiceInterface
      * @return ReservationResult
      */
     public function shippingWithEsdOnly(
-        AccountNumber $accountNumber,
-        Password $password,
         SkyBillValue $skybillValue,
         CustomerValue $customerValue,
         ShipperValue $shipperValue,
@@ -229,8 +199,6 @@ interface ShippingServiceInterface
     ): ReservationResult;
 
     /**
-     * @param AccountNumber     $accountNumber
-     * @param Password          $password
      * @param SkyBillValue      $skybillValue
      * @param CustomerValue     $customerValue
      * @param ShipperValue      $shipperValue
@@ -241,8 +209,6 @@ interface ShippingServiceInterface
      * @return ReservationResult
      */
     public function shippingWithReservationAndEsd(
-        AccountNumber $accountNumber,
-        Password $password,
         SkyBillValue $skybillValue,
         CustomerValue $customerValue,
         ShipperValue $shipperValue,

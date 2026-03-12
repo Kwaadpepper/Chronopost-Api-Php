@@ -53,6 +53,8 @@ class PickupService implements PickupServiceInterface
      * @param \ChronopostShipping\ServiceType\Annuler|null      $annulerService
      */
     public function __construct(
+        #[\SensitiveParameter] private AccountNumber $accountNumber,
+        #[\SensitiveParameter] private Password $password,
         array $soapOptions = [],
         ?Faisabilite $faisabiliteService = null,
         ?Rechercher $rechercherService = null,
@@ -106,8 +108,6 @@ class PickupService implements PickupServiceInterface
     }
 
     public function searchConstraints(
-        AccountNumber $accountNumber,
-        Password $password,
         string $country,
         string $zipCode,
         string $city,
@@ -117,8 +117,8 @@ class PickupService implements PickupServiceInterface
                 country: $country,
                 zipCode: $zipCode,
                 city: $city,
-                account: $accountNumber->getAccountNumber(),
-                password: $password->getPassword(),
+                account: $this->accountNumber->getAccountNumber(),
+                password: $this->password->getPassword(),
             ),
         );
 
@@ -135,8 +135,6 @@ class PickupService implements PickupServiceInterface
     }
 
     public function createNationalPickup(
-        AccountNumber $accountNumber,
-        Password $password,
         HeaderValue $headerValue,
         string $datePassage,
         string $datePassageFermeture,
@@ -150,7 +148,7 @@ class PickupService implements PickupServiceInterface
     ): PickupCreationResult {
         $result = $this->creerService->creerEnlevementNational(new CreerEnlevementNational(
             headerValue: $headerValue,
-            password: $password->getPassword(),
+            password: $this->password->getPassword(),
             datePassage: $datePassage,
             datePassageFermeture: $datePassageFermeture,
             donneurDOrdre: $donneurDOrdre,
@@ -175,8 +173,6 @@ class PickupService implements PickupServiceInterface
     }
 
     public function createEuropeanPickup(
-        AccountNumber $accountNumber,
-        Password $password,
         HeaderValue $headerValue,
         string $datePassage,
         DonneurDOrdre $donneurDOrdre,
@@ -186,7 +182,7 @@ class PickupService implements PickupServiceInterface
     ): PickupCreationResult {
         $result = $this->creerService->creerEnlevementEurope(new CreerEnlevementEurope(
             headerValue: $headerValue,
-            password: $password->getPassword(),
+            password: $this->password->getPassword(),
             datePassage: $datePassage,
             donneurDOrdre: $donneurDOrdre,
             adresseEnlevement: $adresseEnlevement,
@@ -210,14 +206,12 @@ class PickupService implements PickupServiceInterface
      * @param string[] $esdNumbers
      */
     public function cancelPickups(
-        AccountNumber $accountNumber,
-        Password $password,
         array $esdNumbers,
         ?string $locale = null,
     ): CancelPickupResult {
         $result = $this->annulerService->annulerEnlevements(new AnnulerEnlevements(
-            accountNumber: $accountNumber->getAccountNumber(),
-            password: $password->getPassword(),
+            accountNumber: $this->accountNumber->getAccountNumber(),
+            password: $this->password->getPassword(),
             locale: $locale,
             esdNumber: $esdNumbers,
         ));

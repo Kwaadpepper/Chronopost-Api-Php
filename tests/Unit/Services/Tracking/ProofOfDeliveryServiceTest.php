@@ -41,7 +41,11 @@ class ProofOfDeliveryServiceTest extends TestCase
         $this->accountNumber = new AccountNumber('19869502');
         $this->password = new Password('255562');
 
-        $this->service = new ProofOfDeliveryService(searchService: $this->searchServiceMock);
+        $this->service = new ProofOfDeliveryService(
+            accountNumber: $this->accountNumber,
+            password: $this->password,
+            searchService: $this->searchServiceMock,
+        );
     }
 
     public function testGivenValidTrackingNumberWhenSearchPodThenReturnsProof(): void
@@ -63,7 +67,7 @@ class ProofOfDeliveryServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         // WHEN.
-        $result = $this->service->searchPod($this->accountNumber, $this->password, $trackingNumber);
+        $result = $this->service->searchPod($trackingNumber);
 
         // THEN.
         self::assertInstanceOf(ProofOfDelivery::class, $result);
@@ -90,7 +94,7 @@ class ProofOfDeliveryServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         // WHEN.
-        $result = $this->service->searchPod($this->accountNumber, $this->password, $trackingNumber);
+        $result = $this->service->searchPod($trackingNumber);
 
         // THEN.
         self::assertFalse($result->podPresent);
@@ -112,7 +116,7 @@ class ProofOfDeliveryServiceTest extends TestCase
 
         // WHEN / THEN.
         $this->expectException(ApiError::class);
-        $this->service->searchPod($this->accountNumber, $this->password, $trackingNumber);
+        $this->service->searchPod($trackingNumber);
     }
 
     public function testGivenErrorCodeWhenSearchPodThenThrowsTrackingException(): void
@@ -132,7 +136,7 @@ class ProofOfDeliveryServiceTest extends TestCase
         // WHEN / THEN.
         $this->expectException(TrackingException::class);
         $this->expectExceptionMessage('POD search failed');
-        $this->service->searchPod($this->accountNumber, $this->password, $trackingNumber);
+        $this->service->searchPod($trackingNumber);
     }
 
     public function testGivenSenderRefWhenSearchPodThenReturnsParcelsWithProof(): void
@@ -166,8 +170,6 @@ class ProofOfDeliveryServiceTest extends TestCase
 
         // WHEN.
         $result = $this->service->searchPodWithSenderRef(
-            $this->accountNumber,
-            $this->password,
             'MY-SENDER-REF',
         );
 
@@ -192,7 +194,7 @@ class ProofOfDeliveryServiceTest extends TestCase
 
         // WHEN / THEN.
         $this->expectException(ApiError::class);
-        $this->service->searchPodWithSenderRef($this->accountNumber, $this->password, 'REF');
+        $this->service->searchPodWithSenderRef('REF');
     }
 
     public function testGivenErrorCodeWhenSearchPodByRefThenThrowsTrackingException(): void
@@ -211,6 +213,6 @@ class ProofOfDeliveryServiceTest extends TestCase
         // WHEN / THEN.
         $this->expectException(TrackingException::class);
         $this->expectExceptionMessage('Sender ref not found');
-        $this->service->searchPodWithSenderRef($this->accountNumber, $this->password, 'REF');
+        $this->service->searchPodWithSenderRef('REF');
     }
 }

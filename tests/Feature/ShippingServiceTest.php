@@ -32,7 +32,10 @@ class ShippingServiceTest extends \PHPUnit\Framework\TestCase
     public function testCanInstantiateShippingService(): void
     {
         // WHEN.
-        new ShippingService();
+        new ShippingService(
+            new AccountNumber('19869502'),
+            new Password('255562'),
+        );
 
         // THEN.
         $this->expectNotToPerformAssertions();
@@ -104,12 +107,10 @@ class ShippingServiceTest extends \PHPUnit\Framework\TestCase
             ),
         );
 
-        $shippingService = new ShippingService();
+        $shippingService = new ShippingService($accountNumber, $password);
 
         // WHEN.
         $result           = $shippingService->singleParcelV4(
-            $accountNumber,
-            $password,
             $skybillValue,
             $customerValue,
             $shipperValue,

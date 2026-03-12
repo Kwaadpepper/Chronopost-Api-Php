@@ -44,10 +44,14 @@ class ShippingLabelServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->getMock = $this->createMock(Get::class);
-        $this->service = new ShippingLabelService(getService: $this->getMock);
-
         $this->accountNumber = new AccountNumber('19869502');
         $this->password      = new Password('255562');
+
+        $this->service = new ShippingLabelService(
+            accountNumber: $this->accountNumber,
+            password: $this->password,
+            getService: $this->getMock,
+        );
     }
 
     public function testGivenSkybillNumberWhenGetLabelThenReturnsTransportTicket(): void
@@ -62,8 +66,6 @@ class ShippingLabelServiceTest extends TestCase
 
         // WHEN.
         $label = $this->service->getSkybill(
-            $this->accountNumber,
-            $this->password,
             'SKY123456',
         );
 
@@ -85,8 +87,6 @@ class ShippingLabelServiceTest extends TestCase
 
         // WHEN.
         $label = $this->service->getReservedSkybill(
-            $this->accountNumber,
-            $this->password,
             'RES123',
         );
 
@@ -117,8 +117,6 @@ class ShippingLabelServiceTest extends TestCase
 
         // WHEN.
         $routing = $this->service->getRouting(
-            $this->accountNumber,
-            $this->password,
             'DEP01',
             'FR',
             '75001',
@@ -158,8 +156,6 @@ class ShippingLabelServiceTest extends TestCase
 
         // WHEN.
         $info = $this->service->getShippingInformation(
-            $this->accountNumber,
-            $this->password,
             new ShipperValue(),
             new RecipientValue(),
             new SkybillValueBase(),

@@ -43,6 +43,8 @@ class QuickCostService implements QuickCostServiceInterface
      * @param  array<string, mixed> $soapOptions Additional options for the soap client.
      */
     public function __construct(
+        #[\SensitiveParameter] private AccountNumber $accountNumber,
+        #[\SensitiveParameter] private Password $password,
         array $soapOptions = [],
         ?Quick $quickService = null,
         ?Get $getService = null,
@@ -68,8 +70,6 @@ class QuickCostService implements QuickCostServiceInterface
     /**
      * Get quick cost for a shipment.
      *
-     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber The account number.
-     * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      The password.
      * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode      $from          The sender's postal code.
      * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode      $to            The recipient's postal code.
      *
@@ -83,8 +83,6 @@ class QuickCostService implements QuickCostServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException If the API returns an error.
      */
     public function quickCostV3(
-        AccountNumber $accountNumber,
-        Password $password,
         PostCode $from,
         PostCode $to,
         float $weight,
@@ -92,8 +90,8 @@ class QuickCostService implements QuickCostServiceInterface
         ShippingType $shippingType,
     ): QuickCostV3 {
         $parameters = new QuickCostV3Input(
-            $accountNumber->getAccountNumber(),
-            $password->getPassword(),
+            $this->accountNumber->getAccountNumber(),
+            $this->password->getPassword(),
             $from->getPostCode(),
             $to->getPostCode(),
             (string) $weight,
@@ -132,8 +130,6 @@ class QuickCostService implements QuickCostServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\QuickCost\QuickCostException If the API returns an error.
      */
     public function getProducts(
-        AccountNumber $accountNumber,
-        Password $password,
         PostCode $from,
         PostCode $to,
         string $toCityName,
@@ -145,8 +141,8 @@ class QuickCostService implements QuickCostServiceInterface
         ?\DateTime $shippingDate = null,
     ): ProductCatalog {
         $parameters = new GetProductsInput(
-            $accountNumber->getAccountNumber(),
-            $password->getPassword(),
+            $this->accountNumber->getAccountNumber(),
+            $this->password->getPassword(),
             (string) $from->getCountryDelivery()->getCode(),
             $from->getPostCode(),
             (string) $to->getCountryDelivery()->getCode(),

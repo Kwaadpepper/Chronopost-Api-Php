@@ -48,7 +48,11 @@ class TrackSearchExtendedTest extends TestCase
         $this->accountNumber = new AccountNumber('19869502');
         $this->password = new Password('255562');
 
-        $this->service = new TrackSearchService(trackService: $this->trackServiceMock);
+        $this->service = new TrackSearchService(
+            accountNumber: $this->accountNumber,
+            password: $this->password,
+            trackService: $this->trackServiceMock,
+        );
     }
 
     public function testGivenSearchCriteriaWhenTrackSearchThenReturnsSearchTrackResults(): void
@@ -88,8 +92,6 @@ class TrackSearchExtendedTest extends TestCase
 
         // WHEN.
         $result = $this->service->trackSearch(
-            $this->accountNumber,
-            $this->password,
         );
 
         // THEN.
@@ -112,7 +114,7 @@ class TrackSearchExtendedTest extends TestCase
 
         // WHEN / THEN.
         $this->expectException(ApiError::class);
-        $this->service->trackSearch($this->accountNumber, $this->password);
+        $this->service->trackSearch();
     }
 
     public function testGivenErrorCodeWhenTrackSearchThenThrowsTrackingException(): void
@@ -131,7 +133,7 @@ class TrackSearchExtendedTest extends TestCase
         // WHEN / THEN.
         $this->expectException(TrackingException::class);
         $this->expectExceptionMessage('Invalid criteria');
-        $this->service->trackSearch($this->accountNumber, $this->password);
+        $this->service->trackSearch();
     }
 
     public function testGivenSenderReferenceWhenTrackThenReturnsSenderRefResult(): void
@@ -160,8 +162,6 @@ class TrackSearchExtendedTest extends TestCase
 
         // WHEN.
         $result = $this->service->trackWithSenderRef(
-            $this->accountNumber,
-            $this->password,
             'MY-SENDER-REF',
         );
 
@@ -185,7 +185,7 @@ class TrackSearchExtendedTest extends TestCase
 
         // WHEN / THEN.
         $this->expectException(ApiError::class);
-        $this->service->trackWithSenderRef($this->accountNumber, $this->password, 'REF');
+        $this->service->trackWithSenderRef('REF');
     }
 
     public function testGivenErrorCodeWhenTrackWithSenderRefThenThrowsTrackingException(): void
@@ -204,7 +204,7 @@ class TrackSearchExtendedTest extends TestCase
         // WHEN / THEN.
         $this->expectException(TrackingException::class);
         $this->expectExceptionMessage('Reference not found');
-        $this->service->trackWithSenderRef($this->accountNumber, $this->password, 'REF');
+        $this->service->trackWithSenderRef('REF');
     }
 
     public function testGivenEsdNumberWhenTrackEsdThenReturnsEsdTrackResult(): void

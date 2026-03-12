@@ -85,6 +85,8 @@ class ShippingService implements ShippingServiceInterface
      * @param \ChronopostShipping\ServiceType\Shipping|null $shippingService Injected shipping service for testing.
      */
     public function __construct(
+        #[\SensitiveParameter] private AccountNumber $accountNumber,
+        #[\SensitiveParameter] private Password $password,
         array $soapOptions = [],
         ?Shipping $shippingService = null,
     ) {
@@ -107,8 +109,6 @@ class ShippingService implements ShippingServiceInterface
     /**
      * Creates a single-parcel shipment with the provided values.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber                 $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                      $password
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue           $skybillValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue           $shipperValue
@@ -127,8 +127,6 @@ class ShippingService implements ShippingServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
      */
     public function singleParcelV4(
-        AccountNumber $accountNumber,
-        Password $password,
         SkyBillValue $skybillValue,
         CustomerValue $customerValue,
         ShipperValue $shipperValue,
@@ -140,8 +138,6 @@ class ShippingService implements ShippingServiceInterface
         ?SkyBillParameters $skyBillParameters = null,
     ): MultiParcelV4 {
         return $this->multiParcelV4(
-            accountNumber: $accountNumber,
-            password: $password,
             skybillValues: [$skybillValue],
             customerValue: $customerValue,
             shippersValues: [$shipperValue],
@@ -159,8 +155,6 @@ class ShippingService implements ShippingServiceInterface
     /**
      * Creates a multi-parcel shipment with the provided values.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber                 $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                      $password
      * @param array<int, SkyBillValue>                                                 $skybillValues
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
      * @param array<int, ShipperValue>                                                 $shippersValues
@@ -181,8 +175,6 @@ class ShippingService implements ShippingServiceInterface
      * @phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
      */
     public function multiParcelV4(
-        AccountNumber $accountNumber,
-        Password $password,
         array $skybillValues,
         CustomerValue $customerValue,
         array $shippersValues,
@@ -234,7 +226,7 @@ class ShippingService implements ShippingServiceInterface
         }
 
         $headerValue = new HeaderValue(
-            (int) ($accountNumber->getAccountNumber()),
+            (int) ($this->accountNumber->getAccountNumber()),
             'CHRFR',
             '',
         );
@@ -243,7 +235,7 @@ class ShippingService implements ShippingServiceInterface
 
         $parameters = new ShippingMultiParcelV4(
             skybillParamsValue: $this->mapParameters($skyBillParameters),
-            password: $password->getPassword(),
+            password: $this->password->getPassword(),
             version: '2.0',
             numberOfParcel: $numberOfParcel,
             multiParcel: $multiParcel ? 'Y' : 'N',
@@ -312,8 +304,6 @@ class ShippingService implements ShippingServiceInterface
     /**
      * Creates a single-parcel V7 shipment.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber                 $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                      $password
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue           $skybillValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue           $shipperValue
@@ -331,8 +321,6 @@ class ShippingService implements ShippingServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
      */
     public function singleParcelV7(
-        AccountNumber $accountNumber,
-        Password $password,
         SkyBillValue $skybillValue,
         CustomerValue $customerValue,
         ShipperValue $shipperValue,
@@ -344,7 +332,7 @@ class ShippingService implements ShippingServiceInterface
         ?SkyBillParameters $skyBillParameters = null,
     ): MonoParcelV7 {
         $headerValue = new HeaderValue(
-            (int) ($accountNumber->getAccountNumber()),
+            (int) ($this->accountNumber->getAccountNumber()),
             'CHRFR',
             '',
         );
@@ -360,7 +348,7 @@ class ShippingService implements ShippingServiceInterface
             refValue: $this->mapReferenceValueV1($referenceValue),
             skybillValue: $this->mapSkybillValueV3($skybillValue),
             skybillParamsValue: $this->mapParameters($skyBillParameters),
-            password: $password->getPassword(),
+            password: $this->password->getPassword(),
             modeRetour: (string) ($skyBillOutputMode->value),
             version: '2.0',
             scheduledValue: $scheduledValue ? $this->mapScheduledValue($scheduledValue) : null,
@@ -396,8 +384,6 @@ class ShippingService implements ShippingServiceInterface
     /**
      * Creates a multi-parcel V7 shipment.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber                 $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                      $password
      * @param array<int, SkyBillValue>                                                 $skybillValues
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
      * @param array<int, ShipperValue>                                                 $shippersValues
@@ -418,8 +404,6 @@ class ShippingService implements ShippingServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
      */
     public function multiParcelV7(
-        AccountNumber $accountNumber,
-        Password $password,
         array $skybillValues,
         CustomerValue $customerValue,
         array $shippersValues,
@@ -434,7 +418,7 @@ class ShippingService implements ShippingServiceInterface
     ): MultiParcelV4 {
         // phpcs:enable
         $headerValue = new HeaderValueV2();
-        $headerValue->setAccountNumber((int) ($accountNumber->getAccountNumber()));
+        $headerValue->setAccountNumber((int) ($this->accountNumber->getAccountNumber()));
         $headerValue->setIdEmit('CHRFR');
         $headerValue->setIdentWebPro('');
 
@@ -461,7 +445,7 @@ class ShippingService implements ShippingServiceInterface
                 $skybillValues,
             ),
             skybillParamsValue: $this->mapParameters($skyBillParameters),
-            password: $password->getPassword(),
+            password: $this->password->getPassword(),
             modeRetour: (string) ($skyBillOutputMode->value),
             numberOfParcel: $numberOfParcel,
             version: '2.0',
@@ -502,8 +486,6 @@ class ShippingService implements ShippingServiceInterface
     /**
      * Creates a single-parcel shipment with reservation.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber                 $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                      $password
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue           $skybillValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue           $shipperValue
@@ -521,8 +503,6 @@ class ShippingService implements ShippingServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
      */
     public function singleParcelWithReservation(
-        AccountNumber $accountNumber,
-        Password $password,
         SkyBillValue $skybillValue,
         CustomerValue $customerValue,
         ShipperValue $shipperValue,
@@ -534,7 +514,7 @@ class ShippingService implements ShippingServiceInterface
         ?SkyBillParameters $skyBillParameters = null,
     ): ReservationResult {
         $headerValue = new HeaderValue(
-            (int) ($accountNumber->getAccountNumber()),
+            (int) ($this->accountNumber->getAccountNumber()),
             'CHRFR',
             '',
         );
@@ -550,7 +530,7 @@ class ShippingService implements ShippingServiceInterface
             refValue: $this->mapReferenceValueV1($referenceValue),
             skybillValue: $this->mapSkybillValueV2($skybillValue),
             skybillParamsValue: $this->mapParametersV1($skyBillParameters),
-            password: $password->getPassword(),
+            password: $this->password->getPassword(),
             modeRetour: (string) ($skyBillOutputMode->value),
             version: '2.0',
             scheduledValue: $scheduledValue ? $this->mapScheduledValue($scheduledValue) : null,
@@ -586,8 +566,6 @@ class ShippingService implements ShippingServiceInterface
     /**
      * Creates a multi-parcel shipment with reservation.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber                 $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                      $password
      * @param array<int, SkyBillValue>                                                 $skybillValues
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue           $shipperValue
@@ -607,8 +585,6 @@ class ShippingService implements ShippingServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
      */
     public function multiParcelWithReservation(
-        AccountNumber $accountNumber,
-        Password $password,
         array $skybillValues,
         CustomerValue $customerValue,
         ShipperValue $shipperValue,
@@ -622,7 +598,7 @@ class ShippingService implements ShippingServiceInterface
         ?SkyBillParameters $skyBillParameters = null,
     ): ReservationMultiParcelResult {
         $headerValue = new HeaderValue(
-            (int) ($accountNumber->getAccountNumber()),
+            (int) ($this->accountNumber->getAccountNumber()),
             'CHRFR',
             '',
         );
@@ -647,7 +623,7 @@ class ShippingService implements ShippingServiceInterface
                 $skybillValues,
             ),
             skybillParamsValue: $this->mapParametersV1($skyBillParameters),
-            password: $password->getPassword(),
+            password: $this->password->getPassword(),
             modeRetour: (string) ($skyBillOutputMode->value),
             numberOfParcel: $numberOfParcel,
             version: '2.0',
@@ -687,8 +663,6 @@ class ShippingService implements ShippingServiceInterface
     /**
      * Creates a shipment with ESD only (no transport ticket).
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber                 $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                      $password
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue           $skybillValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue          $customerValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue           $shipperValue
@@ -705,8 +679,6 @@ class ShippingService implements ShippingServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\EsdException If the ESD operation fails.
      */
     public function shippingWithEsdOnly(
-        AccountNumber $accountNumber,
-        Password $password,
         SkyBillValue $skybillValue,
         CustomerValue $customerValue,
         ShipperValue $shipperValue,
@@ -717,7 +689,7 @@ class ShippingService implements ShippingServiceInterface
         ?SkyBillParameters $skyBillParameters = null,
     ): ReservationResult {
         $headerValue = new HeaderValue(
-            (int) ($accountNumber->getAccountNumber()),
+            (int) ($this->accountNumber->getAccountNumber()),
             'CHRFR',
             '',
         );
@@ -733,7 +705,7 @@ class ShippingService implements ShippingServiceInterface
             refValue: $this->mapReferenceValueV1($referenceValue),
             skybillValue: $this->mapSkybillValueBase($skybillValue),
             skybillParamsValue: $this->mapParametersV1($skyBillParameters),
-            password: $password->getPassword(),
+            password: $this->password->getPassword(),
             modeRetour: (string) ($skyBillOutputMode->value),
             version: '2.0',
         );
@@ -766,8 +738,6 @@ class ShippingService implements ShippingServiceInterface
     /**
      * Creates a shipment with reservation and ESD with client reference.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber         $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password              $password
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue   $skybillValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\CustomerValue  $customerValue
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue   $shipperValue
@@ -784,8 +754,6 @@ class ShippingService implements ShippingServiceInterface
      * @phpcs:disable Generic.Metrics.CyclomaticComplexity.TooHigh
      */
     public function shippingWithReservationAndEsd(
-        AccountNumber $accountNumber,
-        Password $password,
         SkyBillValue $skybillValue,
         CustomerValue $customerValue,
         ShipperValue $shipperValue,
@@ -814,9 +782,9 @@ class ShippingService implements ShippingServiceInterface
         $parameters->setNombreDePassageMaximum((string) ($esdValue->maximumPasses));
         $parameters->setLtAImprimerParChronopost($esdValue->ltShouldBePrintedByChronopost ? '1' : '0');
 
-        $parameters->setAccountNumber($accountNumber->getAccountNumber());
+        $parameters->setAccountNumber($this->accountNumber->getAccountNumber());
         $parameters->setHeader_idEmit('CHRFR');
-        $parameters->setPassword($password->getPassword());
+        $parameters->setPassword($this->password->getPassword());
 
         $parameters->setShipperCivility($shipperValue->civility->value);
         $parameters->setShipperName($shipperValue->name);

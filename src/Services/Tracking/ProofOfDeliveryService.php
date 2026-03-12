@@ -41,6 +41,8 @@ class ProofOfDeliveryService
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function __construct(
+        #[\SensitiveParameter] private AccountNumber $accountNumber,
+        #[\SensitiveParameter] private Password $password,
         array $soapOptions = [],
         ?Search $searchService = null,
     ) {
@@ -64,8 +66,6 @@ class ProofOfDeliveryService
     /**
      * Search for a proof of delivery by tracking number.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber         $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password              $password
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber        $trackingNumber
      * @param boolean                                                          $pdf
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale|null $locale
@@ -78,8 +78,6 @@ class ProofOfDeliveryService
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function searchPod(
-        AccountNumber $accountNumber,
-        Password $password,
         TrackingNumber $trackingNumber,
         bool $pdf = true,
         ?TrackingV2Locale $locale = null,
@@ -87,8 +85,8 @@ class ProofOfDeliveryService
         // phpcs:enable
         $locale     = $locale ?? TrackingV2Locale::create(Locale::FR);
         $parameters = new SearchPOD(
-            accountNumber: $accountNumber->getAccountNumber(),
-            password: $password->getPassword(),
+            accountNumber: $this->accountNumber->getAccountNumber(),
+            password: $this->password->getPassword(),
             language: (string) $locale,
             skybillNumber: (string) $trackingNumber,
             pdf: $pdf,
@@ -122,8 +120,6 @@ class ProofOfDeliveryService
     /**
      * Search for proof of delivery by sender reference.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber         $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password              $password
      * @param string                                                           $senderRef
      * @param boolean                                                          $pdf
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale|null $locale
@@ -136,8 +132,6 @@ class ProofOfDeliveryService
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function searchPodWithSenderRef(
-        AccountNumber $accountNumber,
-        Password $password,
         string $senderRef,
         bool $pdf = true,
         ?TrackingV2Locale $locale = null,
@@ -145,8 +139,8 @@ class ProofOfDeliveryService
         // phpcs:enable
         $locale     = $locale ?? TrackingV2Locale::create(Locale::FR);
         $parameters = new SearchPODWithSenderRef(
-            accountNumber: $accountNumber->getAccountNumber(),
-            password: $password->getPassword(),
+            accountNumber: $this->accountNumber->getAccountNumber(),
+            password: $this->password->getPassword(),
             language: (string) $locale,
             sendersRef: $senderRef,
             pdf: $pdf,

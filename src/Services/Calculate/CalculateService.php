@@ -42,6 +42,8 @@ class CalculateService implements CalculateServiceInterface
      * @param  array<string, mixed> $soapOptions Additional options for the soap client.
      */
     public function __construct(
+        #[\SensitiveParameter] private AccountNumber $accountNumber,
+        #[\SensitiveParameter] private Password $password,
         array $soapOptions = [],
         ?Calculate $calculateService = null,
     ) {
@@ -64,8 +66,6 @@ class CalculateService implements CalculateServiceInterface
      * Calculate available products for a shipment.
      */
     public function calculateProducts(
-        AccountNumber $accountNumber,
-        Password $password,
         PostCode $from,
         PostCode $to,
         string $toCityName,
@@ -77,8 +77,8 @@ class CalculateService implements CalculateServiceInterface
         ?\DateTime $shippingDate = null,
     ): ProductList {
         $parameters = new CalculateProducts(
-            $accountNumber->getAccountNumber(),
-            $password->getPassword(),
+            $this->accountNumber->getAccountNumber(),
+            $this->password->getPassword(),
             (string) $from->getCountryDelivery()->getCode(),
             $from->getPostCode(),
             (string) $to->getCountryDelivery()->getCode(),

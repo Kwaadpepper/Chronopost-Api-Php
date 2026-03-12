@@ -52,6 +52,8 @@ class TrackSearchService implements TrackingServiceInterface
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function __construct(
+        #[\SensitiveParameter] private AccountNumber $accountNumber,
+        #[\SensitiveParameter] private Password $password,
         array $soapOptions = [],
         ?Track $trackService = null,
     ) {
@@ -127,8 +129,6 @@ class TrackSearchService implements TrackingServiceInterface
     /**
      * Search tracking using multiple criteria.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber         $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password              $password
      * @param string|null                                                      $consigneesCountry
      * @param string|null                                                      $consigneesRef
      * @param string|null                                                      $consigneesZipCode
@@ -147,8 +147,6 @@ class TrackSearchService implements TrackingServiceInterface
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function trackSearch(
-        AccountNumber $accountNumber,
-        Password $password,
         ?string $consigneesCountry = null,
         ?string $consigneesRef = null,
         ?string $consigneesZipCode = null,
@@ -162,8 +160,8 @@ class TrackSearchService implements TrackingServiceInterface
         // phpcs:enable
         $locale     = $locale ?? TrackingV2Locale::create(Locale::FR);
         $parameters = new TrackSearch(
-            accountNumber: $accountNumber->getAccountNumber(),
-            password: $password->getPassword(),
+            accountNumber: $this->accountNumber->getAccountNumber(),
+            password: $this->password->getPassword(),
             language: (string) $locale,
             consigneesCountry: $consigneesCountry,
             consigneesRef: $consigneesRef,
@@ -203,8 +201,6 @@ class TrackSearchService implements TrackingServiceInterface
     /**
      * Track parcels using sender reference.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber         $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password              $password
      * @param string                                                           $senderRef
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale|null $locale
      *
@@ -216,16 +212,14 @@ class TrackSearchService implements TrackingServiceInterface
      * @phpcs:disable Generic.Files.LineLength.TooLong
      */
     public function trackWithSenderRef(
-        AccountNumber $accountNumber,
-        Password $password,
         string $senderRef,
         ?TrackingV2Locale $locale = null,
     ): SenderRefTrackResult {
         // phpcs:enable
         $locale     = $locale ?? TrackingV2Locale::create(Locale::FR);
         $parameters = new TrackWithSenderRef(
-            accountNumber: $accountNumber->getAccountNumber(),
-            password: $password->getPassword(),
+            accountNumber: $this->accountNumber->getAccountNumber(),
+            password: $this->password->getPassword(),
             language: (string) $locale,
             sendersRef: $senderRef,
         );

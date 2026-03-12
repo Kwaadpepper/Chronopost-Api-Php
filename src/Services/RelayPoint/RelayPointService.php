@@ -59,6 +59,8 @@ class RelayPointService implements RelaySearchServiceInterface
      * @param array<string, mixed> $soapOptions Additional options for the soap client.
      */
     public function __construct(
+        #[\SensitiveParameter] private AccountNumber $accountNumber,
+        #[\SensitiveParameter] private Password $password,
         array $soapOptions = [],
         ?Recherche $searchService = null,
     ) {
@@ -81,8 +83,6 @@ class RelayPointService implements RelaySearchServiceInterface
     /**
      * Find relay points using search criteria.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber            $accountNumber      The account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                 $password           The password.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode              $productCode        The product code.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AddressSearch            $addressSearch      The address search criteria.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\WantedShippingDate $wantedShippingDate The desired shipping date.
@@ -100,8 +100,6 @@ class RelayPointService implements RelaySearchServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function searchRelayPoint(
-        AccountNumber $accountNumber,
-        Password $password,
         ProductCode $productCode,
         AddressSearch $addressSearch,
         WantedShippingDate $wantedShippingDate,
@@ -116,8 +114,8 @@ class RelayPointService implements RelaySearchServiceInterface
         $maxResults = max(1, min(25, $maxResults ?? 25));
         $radiusInKm = max(1, min(50, $radiusInKm ?? 50));
         $parameter  = new RecherchePointChronopostInter(
-            $accountNumber->getAccountNumber(),
-            $password->getPassword(),
+            $this->accountNumber->getAccountNumber(),
+            $this->password->getPassword(),
             $addressSearch->address,
             $addressSearch->postalCode->getPostCode(),
             $addressSearch->city,
@@ -151,8 +149,6 @@ class RelayPointService implements RelaySearchServiceInterface
     /**
      * Find relay points by GPS coordinates.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber            $accountNumber      The account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password                 $password           The password.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Coordinates              $coordinates        GPS coordinates.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode              $productCode        The product code.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\WantedShippingDate $wantedShippingDate The desired shipping date.
@@ -168,8 +164,6 @@ class RelayPointService implements RelaySearchServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function searchRelayPointByCoordinates(
-        AccountNumber $accountNumber,
-        Password $password,
         Coordinates $coordinates,
         ProductCode $productCode,
         WantedShippingDate $wantedShippingDate,
@@ -182,8 +176,8 @@ class RelayPointService implements RelaySearchServiceInterface
         $maxResults = max(1, min(25, $maxResults ?? 25));
         $radiusInKm = max(1, min(50, $radiusInKm ?? 50));
         $parameter  = new RecherchePointChronopostParCoordonneesGeographiques(
-            $accountNumber->getAccountNumber(),
-            $password->getPassword(),
+            $this->accountNumber->getAccountNumber(),
+            $this->password->getPassword(),
             (string) $coordinates->latitude,
             (string) $coordinates->longitude,
             $relayPointType->value,
@@ -250,8 +244,6 @@ class RelayPointService implements RelaySearchServiceInterface
     /**
      * Get detailed information about a relay point.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber The account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      The password.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayId $relayId       The relay point identifier.
      *
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult
@@ -260,13 +252,11 @@ class RelayPointService implements RelaySearchServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function getRelayPointDetail(
-        AccountNumber $accountNumber,
-        Password $password,
         RelayId $relayId,
     ): RelaySearchResult {
         $parameter = new RechercheDetailPointChronopost(
-            $accountNumber->getAccountNumber(),
-            $password->getPassword(),
+            $this->accountNumber->getAccountNumber(),
+            $this->password->getPassword(),
             $relayId->id,
         );
 
@@ -287,8 +277,6 @@ class RelayPointService implements RelaySearchServiceInterface
     /**
      * Get detailed information about an international relay point.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber       $accountNumber The account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password            $password      The password.
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayId       $relayId       The relay point identifier.
      * @param \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost       $country       The country.
      * @param string                                                         $language      Language code (default 'FR').
@@ -300,16 +288,14 @@ class RelayPointService implements RelaySearchServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function getInternationalRelayPointDetail(
-        AccountNumber $accountNumber,
-        Password $password,
         RelayId $relayId,
         CountryForChronopost $country,
         string $language = 'FR',
         string $version = '2.0',
     ): RelaySearchResult {
         $parameter = new RechercheDetailPointChronopostInter(
-            $accountNumber->getAccountNumber(),
-            $password->getPassword(),
+            $this->accountNumber->getAccountNumber(),
+            $this->password->getPassword(),
             $relayId->id,
             $country->getCode(),
             $language,

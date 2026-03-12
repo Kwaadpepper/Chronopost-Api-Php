@@ -22,7 +22,10 @@ class QuickCostServiceTest extends TestCase
     public function testCanInstantiateQuickCostService(): void
     {
         // WHEN.
-        new QuickCostService();
+        new QuickCostService(
+            new AccountNumber('19869502'),
+            new Password('255562'),
+        );
 
         // THEN.
         $this->expectNotToPerformAssertions();
@@ -44,12 +47,10 @@ class QuickCostServiceTest extends TestCase
         $weight           = 12.50;
         $productCode      = new ProductCode('01');
         $shippingType     = ShippingType::MERCHANDISE;
-        $quickCostService = new QuickCostService();
+        $quickCostService = new QuickCostService($accountNumber, $password);
 
         // WHEN.
         $result = $quickCostService->quickCostV3(
-            $accountNumber,
-            $password,
             $from,
             $to,
             $weight,

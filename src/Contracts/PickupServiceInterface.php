@@ -15,8 +15,6 @@ use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\CancelPickupResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupConstraints;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupCreationResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Shipping\PickupFeasibility;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 
 interface PickupServiceInterface
 {
@@ -27,16 +25,12 @@ interface PickupServiceInterface
     ): PickupFeasibility;
 
     public function searchConstraints(
-        AccountNumber $accountNumber,
-        Password $password,
         string $country,
         string $zipCode,
         string $city,
     ): PickupConstraints;
 
     public function createNationalPickup(
-        AccountNumber $accountNumber,
-        Password $password,
         HeaderValue $headerValue,
         string $datePassage,
         string $datePassageFermeture,
@@ -50,8 +44,6 @@ interface PickupServiceInterface
     ): PickupCreationResult;
 
     public function createEuropeanPickup(
-        AccountNumber $accountNumber,
-        Password $password,
         HeaderValue $headerValue,
         string $datePassage,
         DonneurDOrdre $donneurDOrdre,
@@ -64,8 +56,6 @@ interface PickupServiceInterface
      * @param string[] $esdNumbers
      */
     public function cancelPickups(
-        AccountNumber $accountNumber,
-        Password $password,
         array $esdNumbers,
         ?string $locale = null,
     ): CancelPickupResult;

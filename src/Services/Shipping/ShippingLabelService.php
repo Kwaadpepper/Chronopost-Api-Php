@@ -46,8 +46,12 @@ class ShippingLabelService implements ShippingLabelServiceInterface
      * @param array<string, mixed>                     $soapOptions
      * @param \ChronopostShipping\ServiceType\Get|null $getService
      */
-    public function __construct(array $soapOptions = [], ?Get $getService = null)
-    {
+    public function __construct(
+        #[\SensitiveParameter] private AccountNumber $accountNumber,
+        #[\SensitiveParameter] private Password $password,
+        array $soapOptions = [],
+        ?Get $getService = null,
+    ) {
         if ($getService !== null) {
             $this->getService = $getService;
             return;
@@ -65,8 +69,6 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber Account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      Account password.
      * @param string                                                   $numberSearch  Skybill number.
      * @param string                                                   $mode          Label mode (e.g. PDF).
      * @param string|null                                              $key           Authentication key.
@@ -75,8 +77,6 @@ class ShippingLabelService implements ShippingLabelServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getSkybill(
-        AccountNumber $accountNumber,
-        Password $password,
         string $numberSearch,
         string $mode = 'PDF',
         ?string $key = null,
@@ -84,8 +84,8 @@ class ShippingLabelService implements ShippingLabelServiceInterface
         $result = $this->getService->getSkybill(new GetSkybill(
             numberSearch: $numberSearch,
             mode: $mode,
-            key: $key ?? $password->getPassword(),
-            account: $accountNumber->getAccountNumber(),
+            key: $key ?? $this->password->getPassword(),
+            account: $this->accountNumber->getAccountNumber(),
         ));
 
         $return = $this->extractReturnOrThrow(
@@ -101,16 +101,12 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber     Account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password          Account password.
      * @param string                                                   $reservationNumber Reservation number.
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the SOAP call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getReservedSkybill(
-        AccountNumber $accountNumber,
-        Password $password,
         string $reservationNumber,
     ): SkybillLabel {
         $result = $this->getService->getReservedSkybill(new GetReservedSkybill(
@@ -130,16 +126,12 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber     Account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password          Account password.
      * @param string                                                   $reservationNumber Reservation number.
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError If the SOAP call fails.
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getReservedSkybillWithType(
-        AccountNumber $accountNumber,
-        Password $password,
         string $reservationNumber,
     ): SkybillLabel {
         $result = $this->getService->getReservedSkybillWithType(new GetReservedSkybillWithType(
@@ -159,8 +151,6 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber     Account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password          Account password.
      * @param string                                                   $reservationNumber Reservation number.
      * @param string                                                   $mode              Label mode.
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel
@@ -168,8 +158,6 @@ class ShippingLabelService implements ShippingLabelServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getReservedSkybillWithTypeAndMode(
-        AccountNumber $accountNumber,
-        Password $password,
         string $reservationNumber,
         string $mode,
     ): SkybillLabel {
@@ -191,8 +179,6 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber Account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      Account password.
      * @param string                                                   $numberSearch  Search number.
      * @param string                                                   $mode          Label mode.
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel
@@ -200,16 +186,14 @@ class ShippingLabelService implements ShippingLabelServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getReservedSkybillWithTypeAndModeAuth(
-        AccountNumber $accountNumber,
-        Password $password,
         string $numberSearch,
         string $mode,
     ): SkybillLabel {
         $result = $this->getService->getReservedSkybillWithTypeAndModeAuth(new GetReservedSkybillWithTypeAndModeAuth(
             numberSearch: $numberSearch,
             mode: $mode,
-            accountNumber: (int) ($accountNumber->getAccountNumber()),
-            password: $password->getPassword(),
+            accountNumber: (int) ($this->accountNumber->getAccountNumber()),
+            password: $this->password->getPassword(),
         ));
 
         $return = $this->extractReturnOrThrow(
@@ -225,8 +209,6 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber     Account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password          Account password.
      * @param string                                                   $reservationNumber Reservation number.
      * @param string                                                   $mode              Label mode.
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Shipping\SkybillLabel
@@ -234,8 +216,6 @@ class ShippingLabelService implements ShippingLabelServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getReservedSkybillWithTypeAndModeByReservation(
-        AccountNumber $accountNumber,
-        Password $password,
         string $reservationNumber,
         string $mode,
     ): SkybillLabel {
@@ -259,8 +239,6 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber Account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      Account password.
      * @param string                                                   $shipperDepot  Shipper depot code.
      * @param string                                                   $countryCode   Destination country code.
      * @param string                                                   $zipCode       Destination zip code.
@@ -271,8 +249,6 @@ class ShippingLabelService implements ShippingLabelServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getRouting(
-        AccountNumber $accountNumber,
-        Password $password,
         string $shipperDepot,
         string $countryCode,
         string $zipCode,
@@ -280,8 +256,8 @@ class ShippingLabelService implements ShippingLabelServiceInterface
         ?string $ascode = null,
     ): RoutingInfo {
         $result = $this->getService->getRouting(new GetRouting(
-            accountNumber: $accountNumber->getAccountNumber(),
-            password: $password->getPassword(),
+            accountNumber: $this->accountNumber->getAccountNumber(),
+            password: $this->password->getPassword(),
             shipperDepot: $shipperDepot,
             countryCode: $countryCode,
             zipCode: $zipCode,
@@ -302,8 +278,6 @@ class ShippingLabelService implements ShippingLabelServiceInterface
     }
 
     /**
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber    Account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password         Account password.
      * @param \ChronopostShipping\StructType\ShipperValue              $shipperValue     Shipper payload.
      * @param \ChronopostShipping\StructType\RecipientValue            $recipientValue   Recipient payload.
      * @param \ChronopostShipping\StructType\SkybillValueBase          $skybillValueBase Skybill payload.
@@ -312,18 +286,16 @@ class ShippingLabelService implements ShippingLabelServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Shipping\ShippingException If the API returns an error.
      */
     public function getShippingInformation(
-        AccountNumber $accountNumber,
-        Password $password,
         ShipperValue $shipperValue,
         RecipientValue $recipientValue,
         SkybillValueBase $skybillValueBase,
     ): ShippingInformation {
         $parameters = new GetShippingInformation(
-            headerValue: new HeaderValue((int) ($accountNumber->getAccountNumber()), 'CHRFR', ''),
+            headerValue: new HeaderValue((int) ($this->accountNumber->getAccountNumber()), 'CHRFR', ''),
             shipperValue: $shipperValue,
             recipientValue: $recipientValue,
             skybillValueBase: $skybillValueBase,
-            password: $password->getPassword(),
+            password: $this->password->getPassword(),
         );
 
         $result = $this->getService->getShippingInformation($parameters);

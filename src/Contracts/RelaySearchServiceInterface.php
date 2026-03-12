@@ -6,10 +6,8 @@ namespace Kwaadpepper\ChronopostApiPhp\Contracts;
 
 use Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult;
 use Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AddressSearch;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Coordinates;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayId;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayPointType;
@@ -19,8 +17,6 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\WantedShippingDate;
 interface RelaySearchServiceInterface
 {
     public function searchRelayPoint(
-        AccountNumber $accountNumber,
-        Password $password,
         ProductCode $productCode,
         AddressSearch $addressSearch,
         WantedShippingDate $wantedShippingDate,
@@ -34,8 +30,6 @@ interface RelaySearchServiceInterface
     ): RelaySearchResult;
 
     public function searchRelayPointByCoordinates(
-        AccountNumber $accountNumber,
-        Password $password,
         Coordinates $coordinates,
         ProductCode $productCode,
         WantedShippingDate $wantedShippingDate,
@@ -54,14 +48,10 @@ interface RelaySearchServiceInterface
     ): array;
 
     public function getRelayPointDetail(
-        AccountNumber $accountNumber,
-        Password $password,
         RelayId $relayId,
     ): RelaySearchResult;
 
     public function getInternationalRelayPointDetail(
-        AccountNumber $accountNumber,
-        Password $password,
         RelayId $relayId,
         CountryForChronopost $country,
         string $language = 'FR',

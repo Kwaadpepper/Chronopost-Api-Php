@@ -7,8 +7,6 @@ namespace Kwaadpepper\ChronopostApiPhp\Contracts;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\EsdTrackResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SearchTrackResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SenderRefTrackResult;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
-use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingNumber;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale;
 
@@ -29,8 +27,6 @@ interface TrackingServiceInterface
      *
      * @phpcs:disable Generic.Files.LineLength.TooLong
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber         $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password              $password
      * @param string|null                                                      $consigneesCountry
      * @param string|null                                                      $consigneesRef
      * @param string|null                                                      $consigneesZipCode
@@ -44,8 +40,6 @@ interface TrackingServiceInterface
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SearchTrackResult
      */
     public function trackSearch(
-        AccountNumber $accountNumber,
-        Password $password,
         ?string $consigneesCountry = null,
         ?string $consigneesRef = null,
         ?string $consigneesZipCode = null,
@@ -60,16 +54,12 @@ interface TrackingServiceInterface
     /**
      * Track parcels using a sender reference.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber         $accountNumber
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password              $password
      * @param string                                                           $senderRef
      * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\TrackingV2Locale|null $locale
      *
      * @return \Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SenderRefTrackResult
      */
     public function trackWithSenderRef(
-        AccountNumber $accountNumber,
-        Password $password,
         string $senderRef,
         ?TrackingV2Locale $locale = null,
     ): SenderRefTrackResult;

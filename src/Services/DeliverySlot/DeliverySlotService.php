@@ -56,6 +56,8 @@ class DeliverySlotService implements DeliverySlotServiceInterface
      * @param array<string, mixed> $soapOptions Additional options for the soap client.
      */
     public function __construct(
+        #[\SensitiveParameter] private AccountNumber $accountNumber,
+        #[\SensitiveParameter] private Password $password,
         array $soapOptions = [],
         ?Search $searchService = null,
         ?Confirm $confirmService = null,
@@ -84,8 +86,6 @@ class DeliverySlotService implements DeliverySlotServiceInterface
     /**
      * Search for available delivery time slots.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber   The account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password        The password.
      * @param string                                                    $productType     The product type code.
      * @param string                                                    $recipientAddr1  Recipient address line 1.
      * @param string                                                    $recipientZip    Recipient postal code.
@@ -106,8 +106,6 @@ class DeliverySlotService implements DeliverySlotServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function searchDeliverySlots(
-        AccountNumber $accountNumber,
-        Password $password,
         string $productType,
         string $recipientAddr1,
         string $recipientZip,
@@ -122,8 +120,8 @@ class DeliverySlotService implements DeliverySlotServiceInterface
         ?int $weight = null,
         ?string $slotType = null,
     ): DeliverySlotSearchResult {
-        $this->searchService->setSoapHeaderAccountNumber($accountNumber->getAccountNumber());
-        $this->searchService->setSoapHeaderPassword($password->getPassword());
+        $this->searchService->setSoapHeaderAccountNumber($this->accountNumber->getAccountNumber());
+        $this->searchService->setSoapHeaderPassword($this->password->getPassword());
 
         $parameter = new SearchDeliverySlot(
             null,
@@ -178,8 +176,6 @@ class DeliverySlotService implements DeliverySlotServiceInterface
     /**
      * Confirm a delivery time slot.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber The account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      The password.
      * @param string                                                    $productType   The product type code.
      * @param string                                                    $codeSlot      The delivery slot code.
      * @param string                                                    $meshCode      The mesh code from search result.
@@ -194,8 +190,6 @@ class DeliverySlotService implements DeliverySlotServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function confirmDeliverySlot(
-        AccountNumber $accountNumber,
-        Password $password,
         string $productType,
         string $codeSlot,
         string $meshCode,
@@ -204,8 +198,8 @@ class DeliverySlotService implements DeliverySlotServiceInterface
         string $position,
         string $dateSelected,
     ): DeliverySlotConfirmation {
-        $this->confirmService->setSoapHeaderAccountNumber($accountNumber->getAccountNumber());
-        $this->confirmService->setSoapHeaderPassword($password->getPassword());
+        $this->confirmService->setSoapHeaderAccountNumber($this->accountNumber->getAccountNumber());
+        $this->confirmService->setSoapHeaderPassword($this->password->getPassword());
 
         $parameter = new ConfirmDeliverySlotV2(
             null,
@@ -248,8 +242,6 @@ class DeliverySlotService implements DeliverySlotServiceInterface
     /**
      * Geocode an address to get coordinates.
      *
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber $accountNumber The account number.
-     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      The password.
      * @param string                                                    $address1      Address line 1.
      * @param string                                                    $zipCode       Postal code.
      * @param string                                                    $city          City name.
@@ -261,15 +253,13 @@ class DeliverySlotService implements DeliverySlotServiceInterface
      * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
      */
     public function geocodeAddress(
-        AccountNumber $accountNumber,
-        Password $password,
         string $address1,
         string $zipCode,
         string $city,
         ?string $address2 = null,
     ): GeocodingResult {
-        $this->getService->setSoapHeaderAccountNumber($accountNumber->getAccountNumber());
-        $this->getService->setSoapHeaderPassword($password->getPassword());
+        $this->getService->setSoapHeaderAccountNumber($this->accountNumber->getAccountNumber());
+        $this->getService->setSoapHeaderPassword($this->password->getPassword());
 
         $parameter = new GetAdresseGeocodage(
             $address1,

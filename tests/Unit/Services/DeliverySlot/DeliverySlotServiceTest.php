@@ -50,6 +50,8 @@ class DeliverySlotServiceTest extends TestCase
         $this->password      = new Password('255562');
 
         $this->service = new DeliverySlotService(
+            accountNumber: $this->accountNumber,
+            password: $this->password,
             searchService: $this->searchMock,
             confirmService: $this->confirmMock,
             getService: $this->getMock,
@@ -145,8 +147,6 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($searchResponse);
 
         $result = $this->service->searchDeliverySlots(
-            $this->accountNumber,
-            $this->password,
             '2R',
             '1 rue de la Paix',
             '75001',
@@ -177,8 +177,6 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($searchResponse);
 
         $result = $this->service->searchDeliverySlots(
-            $this->accountNumber,
-            $this->password,
             '2R',
             '1 rue de la Paix',
             '75001',
@@ -204,8 +202,6 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($searchResponse);
 
         $result = $this->service->searchDeliverySlots(
-            $this->accountNumber,
-            $this->password,
             '2R',
             '1 rue de la Paix',
             '75001',
@@ -232,8 +228,6 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->searchDeliverySlots(
-            $this->accountNumber,
-            $this->password,
             '2R',
             '1 rue de la Paix',
             '75001',
@@ -256,8 +250,6 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->searchDeliverySlots(
-            $this->accountNumber,
-            $this->password,
             '2R',
             '1 rue de la Paix',
             '75001',
@@ -283,8 +275,6 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectExceptionCode(1);
 
         $this->service->searchDeliverySlots(
-            $this->accountNumber,
-            $this->password,
             '2R',
             '1 rue de la Paix',
             '75001',
@@ -316,8 +306,6 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($searchResponse);
 
         $this->service->searchDeliverySlots(
-            $this->accountNumber,
-            $this->password,
             '2R',
             '1 rue de la Paix',
             '75001',
@@ -362,8 +350,6 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($searchResponse);
 
         $result = $this->service->searchDeliverySlots(
-            $this->accountNumber,
-            $this->password,
             '2R',
             '1 rue de la Paix',
             '75001',
@@ -403,8 +389,6 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($confirmResponse);
 
         $result = $this->service->confirmDeliverySlot(
-            $this->accountNumber,
-            $this->password,
             '2R',
             'SLOT001',
             'MESH001',
@@ -431,8 +415,6 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->confirmDeliverySlot(
-            $this->accountNumber,
-            $this->password,
             '2R',
             'SLOT001',
             'MESH001',
@@ -455,8 +437,6 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->confirmDeliverySlot(
-            $this->accountNumber,
-            $this->password,
             '2R',
             'SLOT001',
             'MESH001',
@@ -482,8 +462,6 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectExceptionCode(99);
 
         $this->service->confirmDeliverySlot(
-            $this->accountNumber,
-            $this->password,
             '2R',
             'SLOT001',
             'MESH001',
@@ -515,8 +493,6 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($confirmResponse);
 
         $this->service->confirmDeliverySlot(
-            $this->accountNumber,
-            $this->password,
             '2R',
             'SLOT001',
             'MESH001',
@@ -540,8 +516,6 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($getResponse);
 
         $result = $this->service->geocodeAddress(
-            $this->accountNumber,
-            $this->password,
             '1 rue de la Paix',
             '75001',
             'Paris',
@@ -562,8 +536,6 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->geocodeAddress(
-            $this->accountNumber,
-            $this->password,
             '1 rue de la Paix',
             '75001',
             'Paris',
@@ -582,8 +554,6 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->geocodeAddress(
-            $this->accountNumber,
-            $this->password,
             '1 rue de la Paix',
             '75001',
             'Paris',
@@ -605,8 +575,6 @@ class DeliverySlotServiceTest extends TestCase
         $this->expectExceptionCode(5);
 
         $this->service->geocodeAddress(
-            $this->accountNumber,
-            $this->password,
             '1 rue de la Paix',
             '75001',
             'Paris',
@@ -634,8 +602,6 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($getResponse);
 
         $this->service->geocodeAddress(
-            $this->accountNumber,
-            $this->password,
             '1 rue de la Paix',
             '75001',
             'Paris',
@@ -654,8 +620,6 @@ class DeliverySlotServiceTest extends TestCase
             ->willReturn($getResponse);
 
         $result = $this->service->geocodeAddress(
-            $this->accountNumber,
-            $this->password,
             '1 rue de la Paix',
             '75001',
             'Paris',

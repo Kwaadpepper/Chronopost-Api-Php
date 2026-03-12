@@ -19,7 +19,10 @@ class TrackSearchServiceTest extends TestCase
     public function testCanInstantiateTrackSearchService(): void
     {
         // WHEN.
-        new TrackSearchService();
+        new TrackSearchService(
+            new AccountNumber('19869502'),
+            new Password('255562'),
+        );
 
         // THEN.
         $this->expectNotToPerformAssertions();
@@ -29,7 +32,10 @@ class TrackSearchServiceTest extends TestCase
     {
         // GIVEN.
         $trackingNumber     = new TrackingNumber('XY710284045JB');
-        $trackSearchService = new TrackSearchService();
+        $trackSearchService = new TrackSearchService(
+            new AccountNumber('19869502'),
+            new Password('255562'),
+        );
         // WHEN.
         $result = $trackSearchService->findUsingTrackingNumber($trackingNumber);
 

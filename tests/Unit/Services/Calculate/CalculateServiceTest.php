@@ -47,6 +47,8 @@ class CalculateServiceTest extends TestCase
         $this->to = new PostCode('69001', CountryForChronopost::FRANCE);
 
         $this->service = new CalculateService(
+            accountNumber: $this->accountNumber,
+            password: $this->password,
             calculateService: $this->calculateMock,
         );
     }
@@ -91,8 +93,6 @@ class CalculateServiceTest extends TestCase
             ->willReturn($soapResponse);
 
         $result = $this->service->calculateProducts(
-            $this->accountNumber,
-            $this->password,
             $this->from,
             $this->to,
             'Lyon',
@@ -117,8 +117,6 @@ class CalculateServiceTest extends TestCase
 
         $this->expectException(ApiError::class);
         $this->service->calculateProducts(
-            $this->accountNumber,
-            $this->password,
             $this->from,
             $this->to,
             'Lyon',
@@ -138,8 +136,6 @@ class CalculateServiceTest extends TestCase
 
         $this->expectException(CalculateException::class);
         $this->service->calculateProducts(
-            $this->accountNumber,
-            $this->password,
             $this->from,
             $this->to,
             'Lyon',

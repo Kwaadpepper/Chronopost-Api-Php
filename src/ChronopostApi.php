@@ -104,24 +104,24 @@ class ChronopostApi
      * @param  \Kwaadpepper\ChronopostApiPhp\ObjectValues\Password      $password      The password.
      */
     public function __construct(
-        #[\SensitiveParameter] private AccountNumber $accountNumber,
-        #[\SensitiveParameter] private Password $password,
+        #[\SensitiveParameter] AccountNumber $accountNumber,
+        #[\SensitiveParameter] Password $password,
     ) {
         $defaultSopapOptions = [
             SoapClientInterface::WSDL_LOGIN    => $accountNumber->getAccountNumber(),
             SoapClientInterface::WSDL_PASSWORD => $password->getPassword(),
         ];
 
-        $this->trackSearchService     = new TrackSearchService($defaultSopapOptions);
-        $this->trackCancelService     = new TrackCancelService($defaultSopapOptions);
-        $this->proofOfDeliveryService = new ProofOfDeliveryService($defaultSopapOptions);
-        $this->shippingService        = new ShippingService($defaultSopapOptions);
-        $this->shippingLabelService   = new ShippingLabelService($defaultSopapOptions);
-        $this->calculateService       = new CalculateService($defaultSopapOptions);
-        $this->quickCostService       = new QuickCostService($defaultSopapOptions);
-        $this->relayPointService      = new RelayPointService($defaultSopapOptions);
-        $this->pickupService          = new PickupService($defaultSopapOptions);
-        $this->deliverySlotService    = new DeliverySlotService($defaultSopapOptions);
+        $this->trackSearchService     = new TrackSearchService($accountNumber, $password, $defaultSopapOptions);
+        $this->trackCancelService     = new TrackCancelService($accountNumber, $password, $defaultSopapOptions);
+        $this->proofOfDeliveryService = new ProofOfDeliveryService($accountNumber, $password, $defaultSopapOptions);
+        $this->shippingService        = new ShippingService($accountNumber, $password, $defaultSopapOptions);
+        $this->shippingLabelService   = new ShippingLabelService($accountNumber, $password, $defaultSopapOptions);
+        $this->calculateService       = new CalculateService($accountNumber, $password, $defaultSopapOptions);
+        $this->quickCostService       = new QuickCostService($accountNumber, $password, $defaultSopapOptions);
+        $this->relayPointService      = new RelayPointService($accountNumber, $password, $defaultSopapOptions);
+        $this->pickupService          = new PickupService($accountNumber, $password, $defaultSopapOptions);
+        $this->deliverySlotService    = new DeliverySlotService($accountNumber, $password, $defaultSopapOptions);
     }
 
     /**
@@ -199,8 +199,6 @@ class ChronopostApi
         ?DateTime $shippingDate = null,
     ): ProductList {
         return $this->calculateService->calculateProducts(
-            $this->accountNumber,
-            $this->password,
             $from,
             $to,
             $toCityName,
@@ -234,8 +232,6 @@ class ChronopostApi
         ShippingType $shippingType,
     ): QuickCostV3 {
         return $this->quickCostService->quickCostV3(
-            $this->accountNumber,
-            $this->password,
             $from,
             $to,
             $weightInGrams / 1000,
@@ -264,8 +260,6 @@ class ChronopostApi
         ?SkyBillParameters $skyBillParameters = null,
     ): MultiParcelV4 {
         return $this->shippingService->multiParcelV4(
-            $this->accountNumber,
-            $this->password,
             skybillValues: [$skybillValue],
             customerValue: $customerValue,
             shippersValues: [$shipperValue],
@@ -313,8 +307,6 @@ class ChronopostApi
         }, $multiParcelParts);
 
         return $this->shippingService->multiParcelV4(
-            $this->accountNumber,
-            $this->password,
             customerValue: $customerValue,
             skybillValues: $skybillValues,
             shippersValues: [$shipperValue],
@@ -357,8 +349,6 @@ class ChronopostApi
         ?int $radiusInKm = null,
     ): RelaySearchResult {
         return $this->relayPointService->searchRelayPoint(
-            $this->accountNumber,
-            $this->password,
             $productCode,
             $addressSearch,
             $wantedShippingDate,
@@ -398,8 +388,6 @@ class ChronopostApi
         ?int $radiusInKm = null,
     ): RelaySearchResult {
         return $this->relayPointService->searchRelayPointByCoordinates(
-            $this->accountNumber,
-            $this->password,
             $coordinates,
             $productCode,
             $wantedShippingDate,
@@ -438,8 +426,6 @@ class ChronopostApi
     public function getRelayPointDetail(RelayId $relayId): RelaySearchResult
     {
         return $this->relayPointService->getRelayPointDetail(
-            $this->accountNumber,
-            $this->password,
             $relayId,
         );
     }
@@ -464,8 +450,6 @@ class ChronopostApi
         string $version = '2.0',
     ): RelaySearchResult {
         return $this->relayPointService->getInternationalRelayPointDetail(
-            $this->accountNumber,
-            $this->password,
             $relayId,
             $country,
             $language,
@@ -489,8 +473,6 @@ class ChronopostApi
     {
         // phpcs:enable
         return $this->trackCancelService->cancelSkybill(
-            $this->accountNumber,
-            $this->password,
             $trackingNumber,
         );
     }
@@ -511,8 +493,6 @@ class ChronopostApi
     {
         // phpcs:enable
         return $this->trackCancelService->cancelListSkybill(
-            $this->accountNumber,
-            $this->password,
             $trackingNumbers,
         );
     }
@@ -548,8 +528,6 @@ class ChronopostApi
     ): SearchTrackResult {
         // phpcs:enable
         return $this->trackSearchService->trackSearch(
-            $this->accountNumber,
-            $this->password,
             $consigneesCountry,
             $consigneesRef,
             $consigneesZipCode,
@@ -577,8 +555,6 @@ class ChronopostApi
     {
         // phpcs:enable
         return $this->trackSearchService->trackWithSenderRef(
-            $this->accountNumber,
-            $this->password,
             $senderRef,
         );
     }
@@ -620,8 +596,6 @@ class ChronopostApi
     ): ProofOfDelivery {
         // phpcs:enable
         return $this->proofOfDeliveryService->searchPod(
-            $this->accountNumber,
-            $this->password,
             $trackingNumber,
             $pdf,
         );
@@ -646,8 +620,6 @@ class ChronopostApi
     ): ProofOfDeliveryByRef {
         // phpcs:enable
         return $this->proofOfDeliveryService->searchPodWithSenderRef(
-            $this->accountNumber,
-            $this->password,
             $senderRef,
             $pdf,
         );
@@ -672,8 +644,6 @@ class ChronopostApi
         ?SkyBillParameters $skyBillParameters = null,
     ): MonoParcelV7 {
         return $this->shippingService->singleParcelV7(
-            $this->accountNumber,
-            $this->password,
             $skybillValue,
             $customerValue,
             $shipperValue,
@@ -713,8 +683,6 @@ class ChronopostApi
         ?SkyBillParameters $skyBillParameters = null,
     ): MultiParcelV4 {
         return $this->shippingService->multiParcelV7(
-            $this->accountNumber,
-            $this->password,
             $skybillValues,
             $customerValue,
             $shippersValues,
@@ -748,8 +716,6 @@ class ChronopostApi
         ?SkyBillParameters $skyBillParameters = null,
     ): ReservationResult {
         return $this->shippingService->singleParcelWithReservation(
-            $this->accountNumber,
-            $this->password,
             $skybillValue,
             $customerValue,
             $shipperValue,
@@ -787,8 +753,6 @@ class ChronopostApi
         ?SkyBillParameters $skyBillParameters = null,
     ): ReservationMultiParcelResult {
         return $this->shippingService->multiParcelWithReservation(
-            $this->accountNumber,
-            $this->password,
             $skybillValues,
             $customerValue,
             $shipperValue,
@@ -821,8 +785,6 @@ class ChronopostApi
         ?SkyBillParameters $skyBillParameters = null,
     ): ReservationResult {
         return $this->shippingService->shippingWithEsdOnly(
-            $this->accountNumber,
-            $this->password,
             $skybillValue,
             $customerValue,
             $shipperValue,
@@ -851,8 +813,6 @@ class ChronopostApi
         SkyBillOutputMode $skyBillOutputMode = SkyBillOutputMode::NO_MAIL_SENDING,
     ): ReservationResult {
         return $this->shippingService->shippingWithReservationAndEsd(
-            $this->accountNumber,
-            $this->password,
             $skybillValue,
             $customerValue,
             $shipperValue,
@@ -875,8 +835,6 @@ class ChronopostApi
         ?string $key = null,
     ): SkybillLabel {
         return $this->shippingLabelService->getSkybill(
-            $this->accountNumber,
-            $this->password,
             $numberSearch,
             $mode,
             $key,
@@ -894,8 +852,6 @@ class ChronopostApi
         string $mode = 'PDF',
     ): SkybillLabel {
         return $this->shippingLabelService->getReservedSkybillWithTypeAndModeByReservation(
-            $this->accountNumber,
-            $this->password,
             $reservationNumber,
             $mode,
         );
@@ -915,8 +871,6 @@ class ChronopostApi
         ?string $ascode = null,
     ): RoutingInfo {
         return $this->shippingLabelService->getRouting(
-            $this->accountNumber,
-            $this->password,
             $shipperDepot,
             $countryCode,
             $zipCode,
@@ -937,8 +891,6 @@ class ChronopostApi
         SkybillValueBase $skybillValueBase,
     ): ShippingInformation {
         return $this->shippingLabelService->getShippingInformation(
-            $this->accountNumber,
-            $this->password,
             $shipperValue,
             $recipientValue,
             $skybillValueBase,
@@ -975,8 +927,6 @@ class ChronopostApi
         string $city,
     ): PickupConstraints {
         return $this->pickupService->searchConstraints(
-            $this->accountNumber,
-            $this->password,
             $country,
             $zipCode,
             $city,
@@ -1005,8 +955,6 @@ class ChronopostApi
     ): PickupCreationResult {
         // phpcs:enable
         return $this->pickupService->createNationalPickup(
-            $this->accountNumber,
-            $this->password,
             $headerValue,
             $datePassage,
             $datePassageFermeture,
@@ -1038,8 +986,6 @@ class ChronopostApi
     ): PickupCreationResult {
         // phpcs:enable
         return $this->pickupService->createEuropeanPickup(
-            $this->accountNumber,
-            $this->password,
             $headerValue,
             $datePassage,
             $donneurDOrdre,
@@ -1062,8 +1008,6 @@ class ChronopostApi
         ?string $locale = null,
     ): CancelPickupResult {
         return $this->pickupService->cancelPickups(
-            $this->accountNumber,
-            $this->password,
             $esdNumbers,
             $locale,
         );
@@ -1148,8 +1092,6 @@ class ChronopostApi
         ?DateTime $shippingDate = null,
     ): ProductCatalog {
         return $this->quickCostService->getProducts(
-            $this->accountNumber,
-            $this->password,
             $from,
             $to,
             $toCityName,
@@ -1200,8 +1142,6 @@ class ChronopostApi
         ?string $slotType = null,
     ): DeliverySlotSearchResult {
         return $this->deliverySlotService->searchDeliverySlots(
-            $this->accountNumber,
-            $this->password,
             $productType,
             $recipientAddr1,
             $recipientZip,
@@ -1244,8 +1184,6 @@ class ChronopostApi
         string $dateSelected,
     ): DeliverySlotConfirmation {
         return $this->deliverySlotService->confirmDeliverySlot(
-            $this->accountNumber,
-            $this->password,
             $productType,
             $codeSlot,
             $meshCode,
@@ -1276,8 +1214,6 @@ class ChronopostApi
         ?string $address2 = null,
     ): GeocodingResult {
         return $this->deliverySlotService->geocodeAddress(
-            $this->accountNumber,
-            $this->password,
             $address1,
             $zipCode,
             $city,

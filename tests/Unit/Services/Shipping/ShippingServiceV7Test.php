@@ -114,7 +114,11 @@ class ShippingServiceV7Test extends TestCase
         );
         $this->referenceValue = new ReferenceValue();
 
-        $this->service = new ShippingService(shippingService: $this->shippingMock);
+        $this->service = new ShippingService(
+            accountNumber: $this->accountNumber,
+            password: $this->password,
+            shippingService: $this->shippingMock,
+        );
     }
 
     public function testGivenSingleParcelWhenShipV7ThenReturnsMonoParcelResult(): void
@@ -145,8 +149,6 @@ class ShippingServiceV7Test extends TestCase
 
         // WHEN.
         $result = $this->service->singleParcelV7(
-            $this->accountNumber,
-            $this->password,
             $this->skybillValue,
             $this->customerValue,
             $this->shipperValue,
@@ -200,8 +202,6 @@ class ShippingServiceV7Test extends TestCase
 
         // WHEN.
         $result = $this->service->singleParcelV7(
-            $this->accountNumber,
-            $this->password,
             $this->skybillValue,
             $this->customerValue,
             $this->shipperValue,
@@ -231,8 +231,6 @@ class ShippingServiceV7Test extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->singleParcelV7(
-            $this->accountNumber,
-            $this->password,
             $this->skybillValue,
             $this->customerValue,
             $this->shipperValue,
@@ -258,8 +256,6 @@ class ShippingServiceV7Test extends TestCase
         $this->expectException(ShippingException::class);
 
         $this->service->singleParcelV7(
-            $this->accountNumber,
-            $this->password,
             $this->skybillValue,
             $this->customerValue,
             $this->shipperValue,
@@ -301,8 +297,6 @@ class ShippingServiceV7Test extends TestCase
 
         // WHEN.
         $result = $this->service->multiParcelV7(
-            $this->accountNumber,
-            $this->password,
             [$this->skybillValue],
             $this->customerValue,
             [$this->shipperValue],
@@ -342,8 +336,6 @@ class ShippingServiceV7Test extends TestCase
 
         // WHEN.
         $result = $this->service->singleParcelWithReservation(
-            $this->accountNumber,
-            $this->password,
             $this->skybillValue,
             $this->customerValue,
             $this->shipperValue,
@@ -388,8 +380,6 @@ class ShippingServiceV7Test extends TestCase
 
         // WHEN.
         $result = $this->service->multiParcelWithReservation(
-            $this->accountNumber,
-            $this->password,
             [$this->skybillValue],
             $this->customerValue,
             $this->shipperValue,
@@ -437,8 +427,6 @@ class ShippingServiceV7Test extends TestCase
 
         // WHEN.
         $result = $this->service->shippingWithEsdOnly(
-            $this->accountNumber,
-            $this->password,
             $this->skybillValue,
             $this->customerValue,
             $this->shipperValue,
@@ -488,8 +476,6 @@ class ShippingServiceV7Test extends TestCase
 
         // WHEN.
         $result = $this->service->shippingWithReservationAndEsd(
-            $this->accountNumber,
-            $this->password,
             $this->skybillValue,
             $this->customerValue,
             $this->shipperValue,
@@ -519,8 +505,6 @@ class ShippingServiceV7Test extends TestCase
         $this->expectException(ApiError::class);
 
         $this->service->singleParcelV7(
-            $this->accountNumber,
-            $this->password,
             $this->skybillValue,
             $this->customerValue,
             $this->shipperValue,
