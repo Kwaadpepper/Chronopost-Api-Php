@@ -37,6 +37,7 @@ use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\ProofOfDelivery;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\ProofOfDeliveryByRef;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SearchTrackResult;
 use Kwaadpepper\ChronopostApiPhp\Dto\Tracking\SenderRefTrackResult;
+use Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost;
 use Kwaadpepper\ChronopostApiPhp\Enums\ShippingType;
 use Kwaadpepper\ChronopostApiPhp\Enums\SkyBillOutputMode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\AccountNumber;
@@ -49,9 +50,11 @@ use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ScheduledValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\ShipperValue;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillParameters;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Parcel\SkyBillValue;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Coordinates;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Password;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\PostCode;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode;
+use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayId;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayPointType;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayServiceType;
 use Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\WantedShippingDate;
@@ -357,6 +360,109 @@ class ChronopostApi
             $weight,
             $maxResults,
             $radiusInKm,
+        );
+    }
+
+    /**
+     * Find relay points by GPS coordinates.
+     *
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Coordinates              $coordinates        GPS coordinates.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\ProductCode              $productCode        The product code.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\WantedShippingDate $wantedShippingDate The desired shipping date.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayPointType     $relayPointType     The relay point type.
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayServiceType   $relayServiceType   The relay service type.
+     * @param float|null                                                          $weight             Weight in kg.
+     * @param integer|null                                                        $maxResults         Max results (1-25).
+     * @param integer|null                                                        $radiusInKm         Search radius (1-50 km).
+     *
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Relay\RelaySearchException
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     */
+    public function searchRelayPointByCoordinates(
+        Coordinates $coordinates,
+        ProductCode $productCode,
+        WantedShippingDate $wantedShippingDate,
+        RelayPointType $relayPointType = RelayPointType::ANY,
+        RelayServiceType $relayServiceType = RelayServiceType::ANY,
+        ?float $weight = null,
+        ?int $maxResults = null,
+        ?int $radiusInKm = null,
+    ): RelaySearchResult {
+        return $this->relayPointService->searchRelayPointByCoordinates(
+            $this->accountNumber,
+            $this->password,
+            $coordinates,
+            $productCode,
+            $wantedShippingDate,
+            $relayPointType,
+            $relayServiceType,
+            $weight,
+            $maxResults,
+            $radiusInKm,
+        );
+    }
+
+    /**
+     * Find a relay point by its unique identifier.
+     *
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayId $relayId The relay point identifier.
+     *
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelayPointBasic[]
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     */
+    public function searchRelayPointById(RelayId $relayId): array
+    {
+        return $this->relayPointService->searchRelayPointById($relayId);
+    }
+
+    /**
+     * Get detailed information about a relay point.
+     *
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayId $relayId The relay point identifier.
+     *
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Relay\RelaySearchException
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     */
+    public function getRelayPointDetail(RelayId $relayId): RelaySearchResult
+    {
+        return $this->relayPointService->getRelayPointDetail(
+            $this->accountNumber,
+            $this->password,
+            $relayId,
+        );
+    }
+
+    /**
+     * Get detailed information about an international relay point.
+     *
+     * @param \Kwaadpepper\ChronopostApiPhp\ObjectValues\Relay\RelayId      $relayId  The relay point identifier.
+     * @param \Kwaadpepper\ChronopostApiPhp\Enums\CountryForChronopost      $country  The country.
+     * @param string                                                        $language Language code (default 'FR').
+     * @param string                                                        $version  API version (default '2.0').
+     *
+     * @return \Kwaadpepper\ChronopostApiPhp\Dto\Relay\RelaySearchResult
+     *
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\Relay\RelaySearchException
+     * @throws \Kwaadpepper\ChronopostApiPhp\Exceptions\ApiError
+     */
+    public function getInternationalRelayPointDetail(
+        RelayId $relayId,
+        CountryForChronopost $country,
+        string $language = 'FR',
+        string $version = '2.0',
+    ): RelaySearchResult {
+        return $this->relayPointService->getInternationalRelayPointDetail(
+            $this->accountNumber,
+            $this->password,
+            $relayId,
+            $country,
+            $language,
+            $version,
         );
     }
 

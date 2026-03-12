@@ -25,4 +25,14 @@ class ChronopostApiRelaySearchMethodNamingTest extends TestCase
         $this->assertTrue($hasNewMethod, 'ChronopostApi must expose searchRelayPoint().');
         $this->assertFalse($hasLegacyTypoMethod, 'Legacy typo method seachRelayPoint() must be removed.');
     }
+
+    public function testGivenChronopostApiClassWhenInspectingThenPhase6MethodsExist(): void
+    {
+        $className = ChronopostApi::class;
+
+        $this->assertTrue(method_exists($className, 'searchRelayPointByCoordinates'));
+        $this->assertTrue(method_exists($className, 'searchRelayPointById'));
+        $this->assertTrue(method_exists($className, 'getRelayPointDetail'));
+        $this->assertTrue(method_exists($className, 'getInternationalRelayPointDetail'));
+    }
 }
