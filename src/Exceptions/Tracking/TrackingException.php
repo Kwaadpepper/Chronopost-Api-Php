@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Kwaadpepper\ChronopostApiPhp\Exceptions;
+namespace Kwaadpepper\ChronopostApiPhp\Exceptions\Tracking;
 
 /**
  * @phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
