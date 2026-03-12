@@ -15,10 +15,7 @@ parameters:
         -
             identifier: staticMethod.alreadyNarrowedType
             path: tests/*
-        # method_exists checks are intentional architectural assertions
-        -
-            identifier: function.alreadyNarrowedType
-            path: tests/*
+
         # class_implements returns array<string, class-string>, docblock narrowing is acceptable
         -
             identifier: varTag.nativeType
