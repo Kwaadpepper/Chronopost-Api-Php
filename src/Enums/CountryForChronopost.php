@@ -435,7 +435,7 @@ enum CountryForChronopost: int
             self::RWANDA                    => 'RW',
             self::SAINT_CHRISTOPHE_ET_NEVIS => 'KN',
             self::SAINT_DOMINGUE            => 'DO',
-            self::SAINT_MARTIN_FRANCAISE    => 'GP',
+            self::SAINT_MARTIN_FRANCAISE    => 'MF',
             self::SAINT_MARTIN_HOLLANDAISE  => 'AN',
             self::SAINT_PIERRE_ET_MIQUELON  => 'PM',
             self::SAINT_VINCENT_ILES        => 'VC',
