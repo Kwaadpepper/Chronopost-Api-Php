@@ -279,6 +279,7 @@ enum ChronopostProductCode: string
     public function isShop2Shop(): bool
     {
         return in_array($this, [
+            self::CHRONO_RELAIS_13,
             self::CHRONO_TO_SHOP_DIRECT_PETITPROS,
             self::CHRONO_TO_SHOP_DIRECT,
             self::CHRONO_TO_SHOP_DIRECT_EUROPE,

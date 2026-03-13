@@ -1,4 +1,11 @@
-##  (2026-03-12)
+##  (2026-03-13)
+
+### Bug Fixes
+
+* include CHRONO_RELAIS_13 (5A) in isShop2Shop() classification ([61cb025](https://github.com/Kwaadpepper/Chronopost-Api-Php/commit/61cb0257df3643701e2f0aa97d77c2d91f92a848))
+* SAINT_MARTIN_FRANCAISE getCode() returns 'MF' instead of 'GP' ([38028cb](https://github.com/Kwaadpepper/Chronopost-Api-Php/commit/38028cbbf5a2a1aa0d38903144e7223cbc44c751))
+
+## [4.0.1](https://github.com/Kwaadpepper/Chronopost-Api-Php/compare/4.0.0...4.0.1) (2026-03-12)
 
 ### Features
 

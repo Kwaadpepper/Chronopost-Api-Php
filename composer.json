@@ -53,6 +53,9 @@
         ],
         "phpstan-fix": [
             "@php vendor/bin/phpstan analyse -c phpstan.neon --error-format=checkstyle > phpstan-report.xml"
+        ],
+        "test": [
+            "@php vendor/bin/phpunit"
         ]
     },
     "config": {

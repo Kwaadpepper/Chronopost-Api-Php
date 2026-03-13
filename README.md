@@ -32,10 +32,10 @@ composer kwaadpepper/chronopost-api-php
 
 ## Tests
 
-To run the tests, use PHPUnit:
+To run the tests, use the Composer script:
 
 ```bash
-vendor/bin/phpunit
+composer test
 ```
 
 ## Changelog
